@@ -6,3 +6,4 @@ Miembros:
 3. Samuel López Suánez
 4. Miguel Martínez López
 5. Madris Boudaoud
+6. Diego Alejandro Machaca Huaranca
