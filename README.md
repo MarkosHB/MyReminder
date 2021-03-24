@@ -10,8 +10,8 @@ Miembros:
 
 Roles :
 
-Coordinadores  → Pablo y Marcos
-Arquitectos del producto (Product Owner)  → Marcos, Samuel y Madris
-Desarrolladores → Diego, Miguel, Katel, Tomas y Yussef
-Analistas (Scrum Master) → Pablo, Samuel y Madris
-Testers → Diego, Miguel, Katel y Yussef
+Coordinadores : Pablo y Marcos
+Arquitectos del producto (Product Owner) : Marcos, Samuel y Madris
+Desarrolladores : Diego, Miguel, Katel, Tomas y Yussef
+Analistas (Scrum Master) : Pablo, Samuel y Madris
+Testers : Diego, Miguel, Katel y Yussef
