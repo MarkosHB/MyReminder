@@ -7,6 +7,7 @@ Miembros:
 4. Miguel Martínez López
 5. Madris Boudaoud
 6. Diego Alejandro Machaca Huaranca
+7. Tomas Lemus
 
 Roles :
 
