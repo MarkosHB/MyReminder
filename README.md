@@ -1,6 +1,6 @@
 # g6-myreminder
 
-Miembros:
+## Miembros:
 1. Pablo Pérez Jiménez: Coordinador y Analista (Scrum Master)
 2. Marcos Hidalgo Baños
 3. Samuel López Suánez
@@ -9,10 +9,14 @@ Miembros:
 6. Diego Alejandro Machaca Huaranca
 7. Tomas Lemus
 
-Roles :
+## Roles :
 
 Coordinadores : Pablo y Marcos
+
 Arquitectos del producto (Product Owner) : Marcos, Samuel y Madris
+
 Desarrolladores : Diego, Miguel, Katel, Tomas y Yussef
+
 Analistas (Scrum Master) : Pablo, Samuel y Madris
+
 Testers : Diego, Miguel, Katel y Yussef
