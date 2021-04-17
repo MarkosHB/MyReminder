@@ -30,13 +30,13 @@
   <li> Arquitectos del producto (Product Owner) 
     <ul> Marcos - Tomas - Madris </ul>
   </li>
-  <li> Desarrolladores 
-    <ul> Diego - Samuel - Miguel - Katel - Yussef </ul>
-  </li>
   <li> Analistas 
     <ul> Pablo - Tomas - Madris </ul>
   </li>
-    <li> Testers
+  <li> Desarrolladores 
+    <ul> Diego - Samuel - Miguel - Katel - Yussef </ul>
+  </li>
+  <li> Testers
     <ul> Diego - Samuel - Miguel - Katel - Yussef </ul>
   </li>
 </ul>
