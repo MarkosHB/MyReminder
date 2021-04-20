@@ -16,7 +16,7 @@
   <li> Madris Boudaoud </li>
   <li> Diego Alejandro Machaca Huaranca </li>
   <li> Tomas Lemus </li>
-  <li> Yussef </li>
+  <li> Yussef Fares Eddine </li>
   <li> Katel </li>
 </ul>
  
