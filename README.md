@@ -26,7 +26,7 @@
   <li> Coordinadores
     <ul> Pablo - Marcos </ul>
   </li>
-  <li> Arquitectos del producto (Product Owner) 
+  <li> Arquitectos del producto 
     <ul> Marcos - Tomas - Madris </ul>
   </li>
   <li> Analistas 
