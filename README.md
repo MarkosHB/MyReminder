@@ -17,7 +17,6 @@
   <li> Diego Alejandro Machaca Huaranca </li>
   <li> Tomas  Lemus </li>
   <li> Yussef Fares Eddine </li>
-  <li> Katel </li>
 </ul>
  
   
@@ -34,9 +33,9 @@
     <ul> Pablo - Tomas - Madris </ul>
   </li>
   <li> Desarrolladores 
-    <ul> Diego - Samuel - Miguel - Katel - Yussef </ul>
+    <ul> Diego - Samuel - Miguel - Yussef </ul>
   </li>
   <li> Testers
-    <ul> Diego - Samuel - Miguel - Katel - Yussef </ul>
+    <ul> Diego - Samuel - Miguel - Yussef </ul>
   </li>
 </ul>
