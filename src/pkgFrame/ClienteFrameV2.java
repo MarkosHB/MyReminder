@@ -2,9 +2,11 @@ package FrameV2;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
-public class ClienteFrameV2 extends JFrame {
+public class ClienteFrameV2 extends JFrame implements ActionListener {
 
     //private Client client;
 
@@ -18,7 +20,6 @@ public class ClienteFrameV2 extends JFrame {
 
 
     //  panel 1
-    //private JPanel panel1;
     private JPanel panel1;
     private JLabel etiquetausuario;
     private JLabel etiquetacontraseña;
@@ -51,7 +52,6 @@ public class ClienteFrameV2 extends JFrame {
     private JButton botonconfirmarpanel3;
     private JButton botonvolveratraspanel3;
 
-
     // panel 4
     private JPanel panel4;
     private JTextField textousuariopanel4;
@@ -61,7 +61,17 @@ public class ClienteFrameV2 extends JFrame {
     private JButton botoncontinuarpanel4;
     private JButton botonvolveratraspanel4;
 
-
+    // panel 5
+    private JPanel panel5;
+    private JPanel panel5_1;    // calendario
+    private JPanel panel5_2;    // textaArea
+    private JLabel etiquetamyreminder;
+    private JLabel etiquetacalendario;
+    private JButton botoncrearevento;
+    private JButton botoncambiarvista;
+    private JButton botonlistadecontactos;
+    private JButton botonperfil;
+    private JButton botoncerrarsesion;
 
     // Constructor
     public ClienteFrameV2(String title, int posX, int posY/*, Client client*/) {
@@ -83,18 +93,22 @@ public class ClienteFrameV2 extends JFrame {
             public void run() {
                 CreateGUI();
 
+
             }
+
         });
 
     }
+
     // panel 1
     private void CreateGUI() {
+
         ////////////////////////////// Panel 1  /////////////////////////////////////
         panel1 = new JPanel();
         panel1.setBackground(Color.orange);
         panel1.setBounds(0,0,960,540);
         panel1.setLayout(null);
-        panel1.setVisible(false);
+        panel1.setVisible(true);
 
 
         //  etiqueta 1 usuario
@@ -117,22 +131,24 @@ public class ClienteFrameV2 extends JFrame {
         contraseñapanel1.setBounds(300, 180, 300, 30);
         panel1.add(contraseñapanel1);
 
-        //boton 1
-        botonrecuperarcontraseñapanel1 = new JButton("registrarse");
-        botonrecuperarcontraseñapanel1.setBounds(300, 290, 100, 40);
-        panel1.add(botonrecuperarcontraseñapanel1);
-
-
-        //boton 2
-        botonconfirmarpanel1 = new JButton("recuperar contraseña");
-        botonconfirmarpanel1.setBounds(300, 230, 160, 40);
-        panel1.add(botonconfirmarpanel1);
-
-        //boton 3
-        botonregistrarsepanel1 = new JButton("confirmar");
-        botonregistrarsepanel1.setBounds(500, 230, 100, 40);
-
+        //boton registrarse
+        botonregistrarsepanel1 = new JButton("registrarse");
+        botonregistrarsepanel1.setBounds(300, 290, 100, 40);
         panel1.add(botonregistrarsepanel1);
+        botonregistrarsepanel1.addActionListener(this);
+
+
+        //boton recuperar contraseña
+        botonrecuperarcontraseñapanel1 = new JButton("recuperar contraseña");
+        botonrecuperarcontraseñapanel1.setBounds(300, 230, 160, 40);
+        panel1.add(botonrecuperarcontraseñapanel1);
+        botonrecuperarcontraseñapanel1.addActionListener(this);
+
+        //boton confirmar
+        botonconfirmarpanel1 = new JButton("confirmar");
+        botonconfirmarpanel1.setBounds(500, 230, 100, 40);
+        panel1.add(botonconfirmarpanel1);
+        botonconfirmarpanel1.addActionListener(this);
 
         add(panel1);
         ////////////////////////////////////    Panel 2     //////////////////////////////
@@ -141,7 +157,7 @@ public class ClienteFrameV2 extends JFrame {
         panel2.setBackground(Color.orange);
         panel2.setBounds(0,0,960,540);
         panel2.setLayout(null);
-        panel2.setVisible(true);
+        panel2.setVisible(false);
 
 
         //  etiqueta 1 --> Nombre
@@ -184,15 +200,17 @@ public class ClienteFrameV2 extends JFrame {
         textocontraseñapanel2.setBounds(300, 320, 300, 30);
         panel2.add(textocontraseñapanel2);
 
-        //boton 4
+        //boton confirmar registro
         botonconfirmarregistropanel2 = new JButton("confirmar registro");
         botonconfirmarregistropanel2.setBounds(300, 380, 160, 40);
         panel2.add(botonconfirmarregistropanel2);
+        botonconfirmarregistropanel2.addActionListener(this);
 
-        //boton 3
+        //boton volver atras
         botonvolveratraspanel2 = new JButton("volver atras");
         botonvolveratraspanel2.setBounds(20, 440, 120, 40);
         panel2.add(botonvolveratraspanel2);
+        botonvolveratraspanel2.addActionListener(this);
 
         add(panel2);
 
@@ -222,14 +240,16 @@ public class ClienteFrameV2 extends JFrame {
         textodnipanel3.setBounds(300, 180, 300, 30);
         panel3.add(textodnipanel3);
 
-        //boton 5
+        //boton confirmar
         botonconfirmarpanel3 = new JButton("Confirmar");
         botonconfirmarpanel3.setBounds(380, 230, 160, 40);
         panel3.add(botonconfirmarpanel3);
-        //boton 6
+        botonconfirmarpanel3.addActionListener(this);
+        //boton volver atras
         botonvolveratraspanel3 = new JButton("volver atras");
         botonvolveratraspanel3.setBounds(20, 440, 150, 40);
         panel3.add(botonvolveratraspanel3);
+        botonvolveratraspanel3.addActionListener(this);
         add(panel3);
 
         ////////////////////////// PANEL 4  ///////////////////
@@ -257,31 +277,133 @@ public class ClienteFrameV2 extends JFrame {
         textocontraseñapanel4.setBounds(300, 180, 300, 30);
         panel4.add(textocontraseñapanel4);
 
-        //boton 7
+        //boton continuar
         botoncontinuarpanel4 = new JButton("Continuar");
         botoncontinuarpanel4.setBounds(380, 230, 160, 40);
         panel4.add(botoncontinuarpanel4);
-        //boton 8
+        botoncontinuarpanel4.addActionListener(this);
+
+        /*
+        //boton volver atras
         botonvolveratraspanel4 = new JButton("volver atras");
         botonvolveratraspanel4.setBounds(20, 440, 150, 40);
         panel4.add(botonvolveratraspanel4);
+         */
         add(panel4);
 
+        //////////////////////////////// Panel Cliente /////////////////////////////
+
+        panel5 = new JPanel();
+        panel5.setBackground(Color.BLACK);
+        panel5.setBounds(0,0,960,540);
+        panel5.setLayout(null);
+        panel5.setVisible(false);
+
+        panel5_1 = new JPanel();
+        panel5_1.setBackground(Color.lightGray);
+        panel5_1.setBounds(40,100, 550,320);
+        panel5_1.setLayout(null);
+        panel5_1.setVisible(true);
+
+        panel5_2 = new JPanel();
+        panel5_2.setBackground(Color.lightGray);
+        panel5_2.setBounds(630,100, 300,370);
+        panel5_2.setLayout(null);
+        panel5_2.setVisible(true);
 
 
+        panel5.add(panel5_1);
+        panel5.add(panel5_2);
+
+
+        // etiqueta calendario
+        etiquetacalendario = new JLabel("Calendario");
+        etiquetacalendario.setBounds(240, 40, 100, 50);
+        panel5_1.add(etiquetacalendario);
+
+        // etiqueta myreminder
+        etiquetamyreminder = new JLabel("Myreminder");
+        etiquetamyreminder.setBounds(280, 40, 100, 50);
+        panel5.add(etiquetamyreminder);
+
+        //boton Crear evento
+        botoncrearevento = new JButton("Crear Evento");
+        botoncrearevento.setBounds(40, 430, 130, 40);
+        panel5.add(botoncrearevento);
+
+
+        //boton cambiar vista
+        botoncambiarvista = new JButton("Cambiar Vista");
+        botoncambiarvista.setBounds(240, 430, 130, 40);
+        panel5.add(botoncambiarvista);
+
+
+        //boton lista de contactos
+        botonlistadecontactos= new JButton("Lista de conctactos");
+        botonlistadecontactos.setBounds(430, 430, 160, 40);
+        panel5.add(botonlistadecontactos);
+
+        //boton perfil
+        botonperfil= new JButton("Perfil");
+        botonperfil.setBounds(730, 40, 70, 40);
+        panel5.add(botonperfil);
+
+        //boton cerrar sesion
+        botoncerrarsesion = new JButton("Cerrar Sesión");
+        botoncerrarsesion.setBounds(810, 40, 120, 40);
+        panel5.add(botoncerrarsesion);
+        botoncerrarsesion.addActionListener(this);
+
+
+        add(panel5);
     }
-    /**
+
     @Override
     public void actionPerformed(ActionEvent e) {
+        ////////// PANEL 1  /////////////
         if(e.getSource() == botonregistrarsepanel1){
-            panel1.setVisible(true);
-            panel2.setVisible(false);
-        }
-        if(e.getSource() == botonvolveratraspanel2){
             panel1.setVisible(false);
             panel2.setVisible(true);
         }
+
+        if(e.getSource() == botonrecuperarcontraseñapanel1){
+            panel1.setVisible(false);
+            panel3.setVisible(true);
+        }
+        if(e.getSource() == botonconfirmarpanel1){
+            panel5.setVisible(true);
+            panel1.setVisible(false);
+        }
+        ////////// PANEL 2////////////
+        if(e.getSource() == botonconfirmarregistropanel2){
+            panel1.setVisible(true);
+            panel2.setVisible(false);
+        }
+        if(e.getSource() == botonvolveratraspanel2) {
+            panel1.setVisible(true);
+            panel2.setVisible(false);
+        }
+        //////// PANEL 3    //////////
+        if(e.getSource() == botonconfirmarpanel3){
+            panel4.setVisible(true);
+            panel3.setVisible(false);
+        }
+        if(e.getSource() == botonvolveratraspanel3){
+            panel1.setVisible(true);
+            panel3.setVisible(false);
+        }
+
+        //////// PANEL 4    /////////
+        if(e.getSource() == botoncontinuarpanel4){
+            panel1.setVisible(true);
+            panel4.setVisible(false);
+        }
+        /////// PANEL 5   ////////
+        if(e.getSource() == botoncerrarsesion){
+            panel1.setVisible(true);
+            panel5.setVisible(false);
+        }
+
     }
-    **/
 }
 
