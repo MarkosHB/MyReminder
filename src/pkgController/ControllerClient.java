@@ -2,9 +2,12 @@ package pkgController;
 
 import pkgClient.Client;
 import pkgFrame.ClientFrame;
+import pkgUtils.User;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 
 /**
@@ -18,13 +21,14 @@ public class ControllerClient implements ActionListener {
     private Client client;
 
     // Socket para el servidor, a través de él podemos enviarle mensajes
-    private PrintWriter output;
+    // private PrintWriter output;
+    // private ObjectOutputStream output;
 
     // Constructor
     public ControllerClient(ClientFrame frame, Client client) {
         this.frame = frame;
         this.client = client;
-        output = client.getWriter();
+        // this.output = client.getWriter();
     }
 
     /**
@@ -37,40 +41,21 @@ public class ControllerClient implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        User user;
+
         // IMPORTANTE! Usar este esqueleto para el proyecto
         switch (e.getActionCommand().toUpperCase()) {
-            // EJEMPLO DE USO (los 'case' deben ser implementados por nosotros)
-            case "MODO OSCURO":
-                /*
-                System.out.println("Client: " + client.getName() + " -> Dark mode\n");
-                // Puedo llamar a una función que haya definido en ClientFrame y así modificarlo
-                frame.darkMode();
-                */
+            case "SIGN UP":
+                // Sustituir por mail, name, password, dni
+                user = new User(frame.getName(), frame.getName(), frame.getName(), frame.getName());
+                client.signUp(user);
                 break;
-            case "ENVIAR":
-                /*
-                try {
-                    System.out.println("Client: " + client.getName() + " -> Send message");
-                    // Puedo obtener el valor de una variable mediante su GETTER
-                    if (!frame.getMessageText().equalsIgnoreCase("")) {
-                        // Puedo y debo llamar a funciones definidas abajo (más ordenado)
-                        sendMessage();
-                    }
-                } catch (Exception ignore) {
-                    System.out.println("Client: " + client.getName() + " -> Something went wrong\n");
-                }
-                */
+            case "SIGN IN":
+                user = new User(frame.getName(), frame.getName());
+                client.signIn(user);
                 break;
-            case "CAMBIAR INFORMACIÓN":
-                /*
-                // Puedo obtener el valor de una variable mediante su GETTER
-                if (!frame.getNameText().equalsIgnoreCase("")) {
-                    // IMPORTANTE! 'output' se usa para enviar la información al servidor
-                    output.println("CAMBIAR INFORMACIÓN");
-                    output.println(frame.getNameText());
-                    System.out.println("Client: " + client.getName() + " -> Change information");
-                }
-                */
+            case "CREATE EVENT":
+
                 break;
             default:
                 throw new RuntimeException("Unknown command!");

@@ -1,11 +1,11 @@
 package pkgClient;
 
 import pkgFrame.ClientFrame;
+import pkgUtils.Event;
 import pkgUtils.SocketUtils;
+import pkgUtils.User;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -28,10 +28,13 @@ public class Client extends NetworkClient implements Runnable {
      * private Chat chosenChat;
      */
     private String name;
+    private User user;
 
     // Socket -> Read / Write
-    private BufferedReader input;
-    private PrintWriter output;
+    //private BufferedReader input;
+    //private PrintWriter output;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
     // Contacts starts empty
     public Client(String name, int posX, int posY) {
@@ -46,6 +49,7 @@ public class Client extends NetworkClient implements Runnable {
          * chosenChat = null;
          */
         this.name = name;
+        this.user = null;
 
         this.posX = posX;
         this.posY = posY;
@@ -62,37 +66,37 @@ public class Client extends NetworkClient implements Runnable {
         String line;
 
         // Number and name are send to server (ejemplo)
-        input = SocketUtils.getReader(client);
         output = SocketUtils.getWriter(client);
+        input = SocketUtils.getReader(client);
         // output.println(number + " " + name);
 
-        // IMPORTANTE! Usar este esqueleto para el proyecto
+        // PRUEBA (Parece que va guay, cambiar los input.readLine() por input.readObject())
+        signUp(new User("my email", name, "my password", "my dni"));
+
         try {
-            while ((line = input.readLine()) != null) {
+            while ((line = (String) input.readObject()) != null) {
                 if (!line.equalsIgnoreCase("")) {
                     switch (line.toUpperCase()) {
-                        // EJEMPLO DE USO (los 'case' deben ser implementados por nosotros)
-                        case "NUEVO CONTACTO":
-                            line = input.readLine();
-                            /*
-                            if (line.equalsIgnoreCase("OK")) {
-                                line = input.readLine();
-                                System.out.println("Client: " + name + " -> New contact OK\n");
-                                if (frame.getNameNewContact().equalsIgnoreCase("")) {
-                                    addContact(frame.getNumberNewContact(), line);
-                                } else {
-                                    addContact(frame.getNumberNewContact(), frame.getNameNewContact());
-                                }
-                                synchronizeContacts();
-                                synchronizeChats();
-                            } else {
-                                System.out.println("Client: " + name + " -> New contact NOT FOUND\n");
-                            }
-                            frame.clearNewContact();
-                            */
+                        case "SIGN UP: OK":
+                            System.out.println("Sign up: OK");
+                            // PRUEBA
+                            signIn(user);
+                            break;
+                        case "SIGN IN: OK":
+                            System.out.println("Sign in: OK");
+                            user = (User) input.readObject();
+                            System.out.println(user);
+                            break;
+                        case "INVITATION":
+                            System.out.println("Invitation");
+                            Event event = (Event) input.readObject();
+                            user.putEvent(event);
+                            System.out.println(event);
+                            frame.showInvitation(event);
                             break;
                         default:
-                            throw new RuntimeException("Unknown command!");
+                            System.out.println(line);
+                            //throw new RuntimeException("Unknown command!");
                     }
                 }
             }
@@ -104,7 +108,8 @@ public class Client extends NetworkClient implements Runnable {
 
     @Override
     public void run() {
-        frame = new ClientFrame(name, posX, posY, this);
+        // COMENTADO SOLO PARA PRUEBAS
+        // frame = new ClientFrame(name, posX, posY, this);
         connect();
     }
 
@@ -112,14 +117,45 @@ public class Client extends NetworkClient implements Runnable {
     // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
 
+    public void signUp(User user) {
+        try {
+            this.user = user;
+            output.writeObject("Sign up");
+            output.writeObject(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void signIn(User user) {
+        try {
+            output.writeObject("Sign in");
+            output.writeObject(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // -----------------------------------------------------------------------------------
     // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
 
+    /*
     public PrintWriter getWriter() {
         return output;
+    }
+    */
+
+    public ObjectOutputStream getWriter() {
+        return output;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 }
