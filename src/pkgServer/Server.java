@@ -25,6 +25,7 @@ public class Server extends MultiThreadServer implements Runnable {
         super(8080);
         this.name = name;
         users = new ConcurrentSkipListMap<>();
+        users.put("admin", new User("admin@uma.es", "admin", "1234", "0", true));
         mails = new ConcurrentSkipListMap<>();
         socketWriter = new ConcurrentSkipListMap<>();
 

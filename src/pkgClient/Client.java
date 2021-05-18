@@ -71,20 +71,20 @@ public class Client extends NetworkClient implements Runnable {
         // output.println(number + " " + name);
 
         // PRUEBA (Parece que va guay, cambiar los input.readLine() por input.readObject())
-        signUp(new User("my email", name, "my password", "my dni"));
+        // signUp(new User("my email", name, "my password", "my dni"));
 
         try {
             while ((line = (String) input.readObject()) != null) {
                 if (!line.equalsIgnoreCase("")) {
                     switch (line.toUpperCase()) {
                         case "SIGN UP: OK":
+                            frame.showSignIn();
                             System.out.println("Sign up: OK");
-                            // PRUEBA
-                            signIn(user);
                             break;
                         case "SIGN IN: OK":
                             System.out.println("Sign in: OK");
                             user = (User) input.readObject();
+                            frame.showMainPanel();
                             System.out.println(user);
                             break;
                         case "INVITATION":
@@ -92,7 +92,6 @@ public class Client extends NetworkClient implements Runnable {
                             Event event = (Event) input.readObject();
                             user.putEvent(event);
                             System.out.println(event);
-                            frame.showInvitation(event);
                             break;
                         default:
                             System.out.println(line);
@@ -109,7 +108,7 @@ public class Client extends NetworkClient implements Runnable {
     @Override
     public void run() {
         // COMENTADO SOLO PARA PRUEBAS
-        // frame = new ClientFrame(name, posX, posY, this);
+        frame = new ClientFrame(name, posX, posY, this);
         connect();
     }
 
