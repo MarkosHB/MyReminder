@@ -2,8 +2,8 @@
 <h1> MyReminder - Grupo 6 </h1>
 <p>
   👋 Hola! Aqui encontrarás el repositorio de la aplicación de citas y eventos MyReminder, diseñada por alumnos de la Universidad de Málaga en la asignatura de Ingeniería del Software. 
-
 </p>
+<img src="./Logo & Presentación/MyReminderLogo.png" height = "200px" width = "200px" class="center"> 
 
 
 <!-- *** SECCION PRESEMTACION *** -->
