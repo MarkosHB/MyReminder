@@ -1,0 +1,104 @@
+import com.toedter.calendar.JCalendar;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class Calendario extends JFrame implements ActionListener{
+
+    //private Client client;
+
+    // Posición de la ventana
+    private final int posX;
+    private final int posY;
+
+    // Tamaño de la ventana
+    private final int sizeX;
+    private final int sizeY;
+
+
+    //  panel 1
+    private JButton j;
+    private JCalendar calendario;
+    private JPanel panel1;
+    private JPanel panel2;
+    private JButton boton;
+    private JTextField datos;
+
+
+    // Constructor
+    public Calendario(String title, int posX, int posY/*, Client client*/) {
+
+        super(title);
+        this.posX = posX;
+        this.posY = posY;
+        this.sizeX = 960;
+        this.sizeY = 540;
+        //this.client = client;
+
+
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                CreateGUI();
+
+            }
+        });
+
+    }
+
+    // panel 1
+    private void CreateGUI() {
+        panel1 = new JPanel();
+        panel1.setBackground(Color.CYAN);
+        panel1.setBounds(0, 0, 490, 540);
+        panel1.setLayout(null);
+        panel1.setVisible(true);
+
+        panel2 = new JPanel();
+        panel2.setBounds(510, 100, 250, 240);
+        panel1.add(panel2);
+        panel2.setVisible(false);
+
+
+        calendario = new JCalendar();
+        calendario.setBounds(100, 100, 400, 240);
+        panel1.add(calendario);
+
+
+        boton = new JButton("Crear evento");
+        boton.setBounds(100, 350, 200, 50);
+        panel1.add(boton);
+        boton.addActionListener(this);
+
+
+        datos = new JTextField("Introducir los datos");
+        datos.setBounds(20, 20, 200, 40);
+        panel2.add(datos);
+
+
+        ////////////////////// vamos a implementar el calendario ///////////////////
+
+        add(panel1);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(this.sizeX, this.sizeY);
+        setLocation(this.posX, this.posY);
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == boton){
+            panel2.setVisible(true);
+            String año = Integer.toString(calendario.getCalendar().get(java.util.Calendar.YEAR));
+            String mes = Integer.toString(calendario.getCalendar().get(java.util.Calendar.MONTH) + 1);
+            String dia = Integer.toString(calendario.getCalendar().get(java.util.Calendar.DATE));
+            datos.setText(dia + " de " + mes + " del " + año);
+        }
+
+    }
+    
+}
+///////
