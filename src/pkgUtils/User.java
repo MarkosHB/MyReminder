@@ -2,6 +2,7 @@ package pkgUtils;
 
 import java.io.Serializable;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.PriorityBlockingQueue;
 
 public class User implements Serializable {
 
@@ -11,6 +12,7 @@ public class User implements Serializable {
     private String dni;
     private boolean admin;
     private ConcurrentSkipListMap<String, Event> events;
+    private PriorityBlockingQueue<Event> events2;
 
     public User(String mail, String name, String password, String dni, boolean admin) {
         this.mail = mail;
@@ -106,6 +108,10 @@ public class User implements Serializable {
 
     public boolean correctPassword(String password) {
         return password.equals(this.password);
+    }
+
+    public boolean isCorrect() {
+        return (!mail.equals("") && !name.equals("") && !password.equals("") && !dni.equals(""));
     }
 
 }

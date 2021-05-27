@@ -55,23 +55,30 @@ public class ClientController implements ActionListener {
                 break;
             case "SIGN UP":
                 user = new User(frame.getMailTextSignUp(), frame.getUserTextSignUp(), frame.getPasswordTextSignUp(), frame.getDniTextSignUp());
-                client.signUp(user);
-                //frame.showSignIn();
-                System.out.println("Sign up: " + user);
+                if (user.isCorrect()) {
+                    client.signUp(user);
+                    System.out.println("Sign up: " + user);
+                } else {
+                    System.out.println("Sign up: USER ISN'T CORRECT");
+                }
                 break;
             case "SIGN IN":
                 user = new User(frame.getUserTextSignIn(), frame.getPasswordTextSignIn());
-                client.signIn(user);
-                //frame.showMainPanel();
                 System.out.println("Sign in: " + user);
+                client.signIn(user);
                 break;
             case "CREATE EVENT":
-
+                frame.showCreateEventPanel();
+                System.out.println("Create event panel");
+                break;
+            case "MESSAGES":
+                frame.showMessagesPanel();
+                System.out.println("Messages panel");
                 break;
             case "LOG OUT":
+                System.out.println("Log out: " + client.getUser());
                 client.setUser(null);
                 frame.showSignIn();
-                System.out.println("Log out");
                 break;
             default:
                 throw new RuntimeException("Unknown command!");

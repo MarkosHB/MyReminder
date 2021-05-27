@@ -82,10 +82,9 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Sign up: OK");
                             break;
                         case "SIGN IN: OK":
-                            System.out.println("Sign in: OK");
                             user = (User) input.readObject();
                             frame.showMainPanel();
-                            System.out.println(user);
+                            System.out.println("Sign in: OK -- " + user);
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");

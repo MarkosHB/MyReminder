@@ -1,11 +1,13 @@
 package pkgFrame;
 
+import javafx.scene.control.DatePicker;
 import pkgClient.Client;
 import pkgController.ClientController;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -66,6 +68,7 @@ public class ClientFrame extends JFrame {
     private JButton signUpButton;
     private JButton goBackButton;
 
+
     // Forgotten Password Panel
     private JPanel forgottenPasswordPanel;
     private JLabel etiquetaemailpanel3;
@@ -100,6 +103,23 @@ public class ClientFrame extends JFrame {
     private JButton profileButton;
     private JButton logOutButton;
     private JScrollPane auxiliarPanel;
+
+
+    // Creave Event Panel
+    private JPanel createEventPanel;
+
+    private JLabel createEventTitleLabel;
+    private JTextField createEventTitleText;
+    private JLabel createEventDescriptionLabel;
+    private JTextArea createEventDescriptionText;
+    private JScrollPane createEventDescriptionScroll;
+    private JLabel createEventDateLabel;
+    private JTextField createEventDateText;
+
+    private JPanel createEventButtons;
+    private JButton confirmCreateEvent;
+    private JButton cancelCreateEvent;
+
     // -------------------------- TERMINA NUEVO --------------------------
 
     /**
@@ -157,7 +177,7 @@ public class ClientFrame extends JFrame {
         signInPanel = new JPanel(new BorderLayout());
 
         // myReminderLabel = new JLabel("MyReminder");
-        ImageIcon image = new ImageIcon("images/sendImage.png");
+        ImageIcon image = new ImageIcon("images/myReminder.png");
         Icon icon = new ImageIcon(image.getImage().getScaledInstance(260, 260, Image.SCALE_DEFAULT));
         signInLabel = new JLabel(icon);
         signInPanel.add(signInLabel, BorderLayout.NORTH);
@@ -248,7 +268,32 @@ public class ClientFrame extends JFrame {
         // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         Icon icon3 = new ImageIcon(image.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         mainLabel = new JLabel(icon3);
-        calendarPanel = new JScrollPane();
+        JPanel eventsPanel = new JPanel();
+        eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
+        // Prueba
+        ArrayList<JPanel> mensajes = new ArrayList<>();
+        JPanel fila = new JPanel(new FlowLayout());
+        JLabel labelPrueba = new JLabel("Texto de prueba");
+        fila.add(labelPrueba);
+        JButton botonPrueba = new JButton("Aceptar");
+        fila.add(botonPrueba);
+        JButton botonPrueba2 = new JButton("Denegar");
+        fila.add(botonPrueba2);
+        JPanel fila2 = new JPanel(new FlowLayout());
+        JLabel labelPrueba2 = new JLabel("Texto de prueba 2");
+        fila2.add(labelPrueba2);
+        JButton botonPrueba3 = new JButton("Aceptar");
+        fila2.add(botonPrueba3);
+        JButton botonPrueba4 = new JButton("Denegar");
+        fila2.add(botonPrueba4);
+        mensajes.add(fila);
+        mensajes.add(fila2);
+        for (JPanel mensaje: mensajes) {
+            eventsPanel.add(mensaje);
+        }
+        eventsPanel.add(fila);
+        calendarPanel = new JScrollPane(eventsPanel);
+        // TERMINA prueba
         buttonsMainPanel = new JPanel(new GridLayout(1, 3));
         createEventButton = new JButton("Create event");
         contactsButton = new JButton("Contacts");
@@ -267,12 +312,43 @@ public class ClientFrame extends JFrame {
         logOutButton = new JButton("Log out");
         infoPanel.add(profileButton);
         infoPanel.add(logOutButton);
+        // Prueba -- Añadir
+        ArrayList<JPanel> mensajes2 = new ArrayList<>();
+        // TERMINA prueba
         auxiliarPanel = new JScrollPane();
+        // Con esto se cambia el tamaño del EAST
+        eastPanel.setPreferredSize(new Dimension(240, 800));
         eastPanel.add(infoPanel, BorderLayout.NORTH);
         eastPanel.add(auxiliarPanel, BorderLayout.CENTER);
         mainPanel.add(eastPanel, BorderLayout.EAST);
 
         //add(mainPanel);
+
+        // Create Event Panel
+        createEventPanel = new JPanel();
+        createEventPanel.setLayout(new BoxLayout(createEventPanel, BoxLayout.Y_AXIS));
+
+        createEventTitleLabel = new JLabel("Title");
+        createEventTitleText = new JTextField(10);
+        createEventDescriptionLabel = new JLabel("Description");
+        createEventDescriptionText = new JTextArea("", 30, 10);
+        createEventDescriptionScroll = new JScrollPane(createEventDescriptionText);
+        createEventDateLabel = new JLabel("Date");
+        createEventDateText = new JTextField(10);
+
+        createEventButtons = new JPanel(new GridLayout(1, 2));
+        confirmCreateEvent = new JButton("Confirm");
+        cancelCreateEvent = new JButton("Cancel");
+        createEventButtons.add(confirmCreateEvent);
+        createEventButtons.add(cancelCreateEvent);
+
+        createEventPanel.add(createEventTitleLabel);
+        createEventPanel.add(createEventTitleText);
+        createEventPanel.add(createEventDescriptionLabel);
+        createEventPanel.add(createEventDescriptionScroll);
+        createEventPanel.add(createEventDateLabel);
+        createEventPanel.add(createEventDateText);
+        createEventPanel.add(createEventButtons);
 
         //////////////////////////  PANEL 3 ///////////////////////////////
 
@@ -524,6 +600,7 @@ public class ClientFrame extends JFrame {
     // -----------------------------------------------------------------------------------
 
     public void showSignIn() {
+        signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
         remove(signUpPanel);
@@ -534,6 +611,7 @@ public class ClientFrame extends JFrame {
 
     public void showSignUp() {
         signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
         remove(signInPanel);
         remove(mainPanel);
@@ -544,9 +622,28 @@ public class ClientFrame extends JFrame {
     public void showMainPanel() {
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
+        mainPanel.setVisible(false);
         remove(signInPanel);
         remove(signUpPanel);
         add(mainPanel);
+        mainPanel.setVisible(true);
+    }
+
+    public void showCreateEventPanel() {
+        signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
+        mainPanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        eastPanel.add(createEventPanel, BorderLayout.CENTER);
+        mainPanel.setVisible(true);
+    }
+
+    public void showMessagesPanel() {
+        signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
+        mainPanel.setVisible(false);
+        eastPanel.remove(createEventPanel);
+        eastPanel.add(auxiliarPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
 

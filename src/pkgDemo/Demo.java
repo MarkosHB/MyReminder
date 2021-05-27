@@ -10,8 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Demo {
 
-    // Introduzco manualmente el algoritmo de cifrado por lo que sé que no dará error
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) {
 
         ScheduledExecutorService service = new ScheduledThreadPoolExecutor(4 + 1);
         service.schedule(new Server("Server"), 0, TimeUnit.SECONDS);

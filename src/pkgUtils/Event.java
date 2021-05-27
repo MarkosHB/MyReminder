@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-public class Event implements Serializable {
+public class Event implements Serializable, Comparable {
 
     private String id;
     private String title;
     private Date date;
+    // private Date alarm;
     private String description;
     private String owner;
     private ConcurrentSkipListMap<String, Boolean> guests; // Name and: true if accepted, false if pending
@@ -100,4 +101,9 @@ public class Event implements Serializable {
         return "EVENT: " + title + " -> date = " + date + ", owner = " + owner + ", guests = " + guests;
     }
 
+    @Override
+    public int compareTo(Object o) {
+        Event e = (Event) o;
+        return (this.date.compareTo(e.date));
+    }
 }
