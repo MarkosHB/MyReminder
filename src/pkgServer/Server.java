@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class Server extends MultiThreadServer implements Runnable {
 
     private String name;
-    private ConcurrentSkipListMap<String, User> users;
-    private ConcurrentSkipListMap<String, String> mails;
+    private ConcurrentSkipListMap<String, User> users;      // Name -> User
+    private ConcurrentSkipListMap<String, String> mails;    // Mail -> Name
 
     // Socket -> Write (One per user)
     // private ConcurrentSkipListMap<String, PrintWriter> socketWriter;
@@ -94,6 +94,18 @@ public class Server extends MultiThreadServer implements Runnable {
                             event = (Event) input.readObject();
                             answerInvitation(event, output);
                             break;
+                        case "FORGOTTEN PASSWORD":
+                            User aux;
+                            user = (User) input.readObject();
+                            String name;
+                            if (mails.containsKey(user.getMail())) {
+                                name = mails.get(user.getMail());
+                                aux = users.get(name);
+                                if (user.getDni().equals(aux.getDni())) {
+                                    aux.setPassword(user.getPassword());
+                                }
+                            }
+                            break;
                         default:
                             throw new RuntimeException("Unknown command!");
                     }
@@ -152,6 +164,7 @@ public class Server extends MultiThreadServer implements Runnable {
         User user = users.get(event.getOwner());
         user.putEvent(event);
         output.writeObject("Create event: OK");
+        output.writeObject(event);
         // Compruebo los invitados, actualizo sus eventos y les envío un mensaje si están activos
         for (String guestName: event.getGuests().keySet()) {
             if (users.containsKey(guestName)) {

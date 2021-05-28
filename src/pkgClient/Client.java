@@ -64,6 +64,7 @@ public class Client extends NetworkClient implements Runnable {
     protected void handleConnection(Socket client) throws IOException {
 
         String line;
+        Event event;
 
         // Number and name are send to server (ejemplo)
         output = SocketUtils.getWriter(client);
@@ -86,9 +87,16 @@ public class Client extends NetworkClient implements Runnable {
                             frame.showMainPanel();
                             System.out.println("Sign in: OK -- " + user);
                             break;
+                        case "CREATE EVENT: OK":
+                            event = (Event) input.readObject();
+                            user.putEvent(event);
+                            frame.showMessagesPanel();
+                            frame.addEvent(event);
+                            System.out.println("Create event: OK -- " + event);
+                            break;
                         case "INVITATION":
                             System.out.println("Invitation");
-                            Event event = (Event) input.readObject();
+                            event = (Event) input.readObject();
                             user.putEvent(event);
                             System.out.println(event);
                             break;
@@ -129,6 +137,15 @@ public class Client extends NetworkClient implements Runnable {
         try {
             output.writeObject("Sign in");
             output.writeObject(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void createEvent(Event event) {
+        try {
+            output.writeObject("Create event");
+            output.writeObject(event);
         } catch (IOException e) {
             e.printStackTrace();
         }

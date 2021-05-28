@@ -3,12 +3,18 @@ package pkgFrame;
 import javafx.scene.control.DatePicker;
 import pkgClient.Client;
 import pkgController.ClientController;
+import pkgUtils.Event;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 /**
  * Clase para la ventana del cliente
@@ -18,6 +24,7 @@ import java.util.Arrays;
 public class ClientFrame extends JFrame {
 
     private Client client;
+    private ClientController controller;
 
     // Posición de la ventana
     private final int posX;
@@ -97,15 +104,22 @@ public class ClientFrame extends JFrame {
     private JPanel buttonsMainPanel;
     private JButton createEventButton;
     private JButton messagesButton;
-    private JButton contactsButton;
+    private JButton changeViewButton;
     private JPanel eastPanel;
     private JPanel infoPanel;
     private JButton profileButton;
     private JButton logOutButton;
     private JScrollPane auxiliarPanel;
 
+    private JPanel eventsPanel;
+    private ArrayDeque<JPanel> eventsList;
+    private ArrayDeque<JLabel> eventDate;
+    private ArrayDeque<JLabel> eventTitle;
+    private ArrayDeque<JButton> eventButton;
+    private ButtonGroup eventButtons;
 
-    // Creave Event Panel
+
+    // Create Event Panel
     private JPanel createEventPanel;
 
     private JLabel createEventTitleLabel;
@@ -115,6 +129,8 @@ public class ClientFrame extends JFrame {
     private JScrollPane createEventDescriptionScroll;
     private JLabel createEventDateLabel;
     private JTextField createEventDateText;
+    private JLabel createEventAlarmLabel;
+    private JTextField createEventAlarmText;
 
     private JPanel createEventButtons;
     private JButton confirmCreateEvent;
@@ -262,12 +278,22 @@ public class ClientFrame extends JFrame {
         // -------------------------- Forgotten Password Panel --------------------------
 
         // -------------------------- Main Panel --------------------------
+        // PRUEBA DE EVENTOS
+        eventsPanel = new JPanel();
+        eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
+        eventsList = new ArrayDeque<>();
+        eventDate = new ArrayDeque<>();
+        eventTitle = new ArrayDeque<>();
+        eventButton = new ArrayDeque<>();
+        // TERMINA PRUEBA
+
         mainPanel = new JPanel(new BorderLayout());
 
         centerPanel = new JPanel(new BorderLayout());
         // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         Icon icon3 = new ImageIcon(image.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         mainLabel = new JLabel(icon3);
+        /*
         JPanel eventsPanel = new JPanel();
         eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
         // Prueba
@@ -294,12 +320,14 @@ public class ClientFrame extends JFrame {
         eventsPanel.add(fila);
         calendarPanel = new JScrollPane(eventsPanel);
         // TERMINA prueba
+        */
+        calendarPanel = new JScrollPane(eventsPanel);
         buttonsMainPanel = new JPanel(new GridLayout(1, 3));
         createEventButton = new JButton("Create event");
-        contactsButton = new JButton("Contacts");
+        changeViewButton = new JButton("Change view");
         messagesButton = new JButton("Messages");
         buttonsMainPanel.add(createEventButton);
-        buttonsMainPanel.add(contactsButton);
+        buttonsMainPanel.add(changeViewButton);
         buttonsMainPanel.add(messagesButton);
         centerPanel.add(mainLabel, BorderLayout.NORTH);
         centerPanel.add(calendarPanel, BorderLayout.CENTER);
@@ -334,11 +362,16 @@ public class ClientFrame extends JFrame {
         createEventDescriptionText = new JTextArea("", 30, 10);
         createEventDescriptionScroll = new JScrollPane(createEventDescriptionText);
         createEventDateLabel = new JLabel("Date");
-        createEventDateText = new JTextField(10);
+        //createEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
+        createEventDateText = new JTextField("30/06/2021 10:00", 10); // PRUEBAS
+        createEventAlarmLabel = new JLabel("Alarm");
+        createEventAlarmText = new JTextField("DD/MM/YYYY hh:mm", 10);
 
         createEventButtons = new JPanel(new GridLayout(1, 2));
         confirmCreateEvent = new JButton("Confirm");
+        confirmCreateEvent.setActionCommand("Confirm create event");
         cancelCreateEvent = new JButton("Cancel");
+        cancelCreateEvent.setActionCommand("Cancel create event");
         createEventButtons.add(confirmCreateEvent);
         createEventButtons.add(cancelCreateEvent);
 
@@ -348,7 +381,10 @@ public class ClientFrame extends JFrame {
         createEventPanel.add(createEventDescriptionScroll);
         createEventPanel.add(createEventDateLabel);
         createEventPanel.add(createEventDateText);
+        createEventPanel.add(createEventAlarmLabel);
+        createEventPanel.add(createEventAlarmText);
         createEventPanel.add(createEventButtons);
+
 
         //////////////////////////  PANEL 3 ///////////////////////////////
 
@@ -499,60 +535,8 @@ public class ClientFrame extends JFrame {
         */
         // -------------------------- TERMINA NUEVO --------------------------
 
-        /**
-         * Los paneles pueden y deben agruparse, ej.: (Importante añadir finalmente al Frame)
-         *
-         * CREACIÓN DE PANEL PARA UNA CONVERSACIÓN DE WHATSAPP (antes deben haberse declarado las variables)
-         *
-         * // Se crea el panel para la conversación
-         * chatActualPanel = new JPanel();
-         * chatActualPanel.setLayout(new BoxLayout(chatActualPanel, BoxLayout.Y_AXIS));
-         *
-         * // Se crea la etiqueta que por defecto mostrará que no hay conversaciones
-         * chatLabel = new JLabel("No hay conversaciones");
-         *
-         * // Se crea el área que mostrará la conversación
-         * conversationArea = new JTextArea("", 30, 10);
-         * conversationArea.setEditable(false);
-         * // Quiero que sea de tipo Scroll
-         * scrollConversation = new JScrollPane(conversationArea);
-         *
-         * // Se crea un sub-panel para enviar el mensaje del usuario
-         * messagePanel = new JPanel();
-         * messagePanel.setLayout(new BorderLayout());
-         *
-         * // Se crea el área donde irá el texto a enviar
-         * messageText = new JTextArea("", 3, 10);
-         * // Quiero que sea de tipo Scroll
-         * scrollMessage = new JScrollPane(messageText);
-         * // Se crea un botón para enviar el mensaje
-         * sendMessageButton = new JButton("Enviar");
-         * // Se le puede añadir una imagen al botón de la siguiente forma:
-         * // (Importante en ese caso añadir setActionCommand("Enviar") para el controller)
-         * // (Si se crea mediante JButton("Enviar"), el setActionCommand no es necesario)
-         * //ImageIcon image = new ImageIcon("images/sendImage.png");
-         * //Icon icon = new ImageIcon(image.getImage().getScaledInstance(40, 40, Image.SCALE_DEFAULT));
-         * //sendMessageButton = new JButton(icon);
-         * //sendMessageButton.setActionCommand("Enviar");
-         *
-         * // Se añade en el sub-panel el mensaje a enviar en el centro (BorderLayout.CENTER)
-         * messagePanel.add(scrollMessage, BorderLayout.CENTER);
-         * // Se añade en el sub-panel el botón de enviar a la derecha (BorderLayout.EAST)
-         * messagePanel.add(sendMessageButton, BorderLayout.EAST);
-         *
-         * // Se añade en el panel principal la etiqueta
-         * chatActualPanel.add(chatLabel);
-         * // Se añade en el panel principal la conversación
-         * chatActualPanel.add(scrollConversation);
-         * // Se añade en el panel principal el sub-panel para enviar el mensaje del usuario
-         * chatActualPanel.add(messagePanel);
-         *
-         * // Se añade el panel principal en el centro del Frame (GUI)
-         * add(chatActualPanel, BorderLayout.CENTER);
-         */
-
         // Creamos el controlador y activamos los botones
-        ClientController controller = new ClientController(this, client);
+        controller = new ClientController(this, client);
         this.controller(controller);
 
         // Mostramos la ventana
@@ -565,16 +549,6 @@ public class ClientFrame extends JFrame {
 
     /**
      * Activa los botones y permite que sean tratados por el controlador
-     *
-     * Se invocará en createGUI de la siguiente forma:
-     * ControllerClient myController = new ControllerClient(this, client);
-     * this.controller(myController);
-     *
-     * En esta función activaremos los botones deseados de la siguiente forma:
-     * button.addActionListener(myController);
-     *
-     * Repetimos la línea anterior para cada botón que deseamos activar
-     *
      * @param myController controlador que tratará las pulsaciones de los botones
      */
     private void controller(ActionListener myController) {
@@ -587,8 +561,11 @@ public class ClientFrame extends JFrame {
         goBackButton.addActionListener(myController);
 
         createEventButton.addActionListener(myController);
-        contactsButton.addActionListener(myController);
+        changeViewButton.addActionListener(myController);
         messagesButton.addActionListener(myController);
+
+        confirmCreateEvent.addActionListener(myController);
+        cancelCreateEvent.addActionListener(myController);
 
         profileButton.addActionListener(myController);
         logOutButton.addActionListener(myController);
@@ -647,6 +624,30 @@ public class ClientFrame extends JFrame {
         mainPanel.setVisible(true);
     }
 
+    public void addEvent(Event event) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        mainPanel.setVisible(false);
+        eventsPanel.setVisible(false);
+        //JPanel panel = new JPanel(new FlowLayout());
+        JPanel panel = new JPanel(new GridLayout(1, 3));
+        eventDate.addFirst(new JLabel(formatter.format(event.getDate())));
+        eventTitle.addFirst(new JLabel(event.getTitle()));
+        eventButton.addFirst(new JButton("More info"));
+        //eventButton.getFirst().addActionListener(controller);
+        panel.add(eventDate.peekFirst());
+        panel.add(eventTitle.peekFirst());
+        panel.add(eventButton.peekFirst());
+        eventsList.addFirst(panel);
+        eventsPanel.add(eventsList.peekFirst());
+        eventsPanel.setVisible(true);
+        mainPanel.setVisible(true);
+    }
+
+    public void changeView() {
+        mainPanel.setVisible(false);
+        mainPanel.setVisible(true);
+    }
+
     // -----------------------------------------------------------------------------------
     // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
@@ -673,6 +674,19 @@ public class ClientFrame extends JFrame {
 
     public String getDniTextSignUp() {
         return dniTextSignUpPanel.getText();
+    }
+
+    public String getCreateEventTitle() {
+        return createEventTitleText.getText();
+    }
+
+    public String getCreateEventDescription() {
+        return createEventDescriptionText.getText();
+    }
+
+    public Date getCreateEventDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return formatter.parse(createEventDateText.getText());
     }
 
 }

@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.text.ParseException;
 
 /**
  * Clase para el controlador del cliente
@@ -20,6 +21,8 @@ public class ClientController implements ActionListener {
 
     private ClientFrame frame;
     private Client client;
+
+    private int cont = 0;
 
     // Socket para el servidor, a través de él podemos enviarle mensajes
     // private PrintWriter output;
@@ -43,6 +46,7 @@ public class ClientController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         User user;
+        Event event;
 
         switch (e.getActionCommand().toUpperCase()) {
             case "SIGN UP PANEL":
@@ -71,9 +75,26 @@ public class ClientController implements ActionListener {
                 frame.showCreateEventPanel();
                 System.out.println("Create event panel");
                 break;
+            case "CONFIRM CREATE EVENT":
+                try {
+                    event = new Event(client.getUser().getName() + cont++, frame.getCreateEventTitle(),
+                            frame.getCreateEventDate(), frame.getCreateEventDescription(), client.getUser().getName());
+                    System.out.println("Create event: " + event);
+                    client.createEvent(event);
+                } catch (ParseException ex) {
+                    System.out.println("Create event: Error. Date format incorrect");
+                }
+                break;
+            case "CANCEL CREATE EVENT":
+                frame.showMessagesPanel();
+                System.out.println("Cancel create event");
+                break;
             case "MESSAGES":
                 frame.showMessagesPanel();
                 System.out.println("Messages panel");
+                break;
+            case "CHANGE VIEW":
+                frame.changeView();
                 break;
             case "LOG OUT":
                 System.out.println("Log out: " + client.getUser());
