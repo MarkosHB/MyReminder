@@ -103,7 +103,8 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "USER: " + name + " -> e-mail = " + mail + ", password = " + password;
+        return "USER: " + name + " -> e-mail = " + mail + ", password = " + password +
+                ", events = " + events;
     }
 
     public boolean correctPassword(String password) {

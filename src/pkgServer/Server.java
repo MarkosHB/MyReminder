@@ -12,8 +12,10 @@ import java.util.concurrent.ConcurrentSkipListMap;
 public class Server extends MultiThreadServer implements Runnable {
 
     private String name;
-    private ConcurrentSkipListMap<String, User> users;      // Name -> User
-    private ConcurrentSkipListMap<String, String> mails;    // Mail -> Name
+    //private ConcurrentSkipListMap<String, User> users;      // Name -> User
+    //private ConcurrentSkipListMap<String, String> mails;    // Mail -> Name
+
+    private Database db;    // Esto sustituye a users y mails
 
     // Socket -> Write (One per user)
     // private ConcurrentSkipListMap<String, PrintWriter> socketWriter;
@@ -24,10 +26,13 @@ public class Server extends MultiThreadServer implements Runnable {
 
         super(8080);
         this.name = name;
-        users = new ConcurrentSkipListMap<>();
-        users.put("admin", new User("admin@uma.es", "admin", "1234", "0", true));
-        mails = new ConcurrentSkipListMap<>();
+        //users = new ConcurrentSkipListMap<>();
+        //users.put("admin", new User("admin@uma.es", "admin", "1234", "0", true));
+        //mails = new ConcurrentSkipListMap<>();
         socketWriter = new ConcurrentSkipListMap<>();
+
+        db = Database.getInstance();    // Esto sustituye a users y mails
+        db.addUser("admin", new User("admin@uma.es", "admin", "1234", "0", true));
 
     }
 
@@ -98,9 +103,12 @@ public class Server extends MultiThreadServer implements Runnable {
                             User aux;
                             user = (User) input.readObject();
                             String name;
-                            if (mails.containsKey(user.getMail())) {
-                                name = mails.get(user.getMail());
-                                aux = users.get(name);
+                            //if (mails.containsKey(user.getMail())) {
+                            if (db.containsMail(user.getMail())) {
+                                //name = mails.get(user.getMail());
+                                name = db.getUserName(user.getMail());
+                                //aux = users.get(name);
+                                aux = db.getUser(name);
                                 if (user.getDni().equals(aux.getDni())) {
                                     aux.setPassword(user.getPassword());
                                 }
@@ -131,22 +139,27 @@ public class Server extends MultiThreadServer implements Runnable {
 
     private void signUp(User user, ObjectOutputStream output) throws IOException {
         // Compruebo que el mail y el nombre de usuario utilizado no existan
-        if (mails.containsKey(user.getMail()) || users.containsKey(user.getName())) {
+        //if (mails.containsKey(user.getMail()) || users.containsKey(user.getName())) {
+        if (db.containsMail(user.getMail()) || db.containsUserName(user.getName())) {
             output.writeObject("Sign up: Error. User already exists");
         } else {
             // Introduzco el usuario y el mail
-            users.put(user.getName(), user);
-            mails.put(user.getMail(), user.getName());
+            //users.put(user.getName(), user);
+            db.addUser(user.getName(), user);
+            //mails.put(user.getMail(), user.getName());
+            db.addMail(user.getMail(), user.getName());
             output.writeObject("Sign up: OK");
         }
     }
 
     private void signIn(User user, ObjectOutputStream output) throws IOException {
         // Compruebo que el nombre de usuario existe
-        if (!users.containsKey(user.getName())) {
+        //if (!users.containsKey(user.getName())) {
+        if (!db.containsUserName(user.getName())) {
             output.writeObject("Sign in: Error. User doesn't exist");
         } else {
-            User userAux = users.get(user.getName());
+            //User userAux = users.get(user.getName());
+            User userAux = db.getUser(user.getName());
             // Compruebo que la contraseña coincide
             if (user.correctPassword(userAux.getPassword())) {
                 // Introduzco el Writer y le envío la información completa del usuario
@@ -161,14 +174,17 @@ public class Server extends MultiThreadServer implements Runnable {
 
     private void createEvent(Event event, ObjectOutputStream output) throws IOException {
         // Introduzco el evento
-        User user = users.get(event.getOwner());
+        //User user = users.get(event.getOwner());
+        User user = db.getUser(event.getOwner());
         user.putEvent(event);
         output.writeObject("Create event: OK");
         output.writeObject(event);
         // Compruebo los invitados, actualizo sus eventos y les envío un mensaje si están activos
         for (String guestName: event.getGuests().keySet()) {
-            if (users.containsKey(guestName)) {
-                user = users.get(guestName);
+            //if (users.containsKey(guestName)) {
+            if (db.containsUserName(guestName)) {
+                //user = users.get(guestName);
+                user = db.getUser(guestName);
                 user.putEvent(event);
                 if (socketWriter.containsKey(guestName)) {
                     // Se puede enviar el evento y que el cliente lo actualice
@@ -186,7 +202,8 @@ public class Server extends MultiThreadServer implements Runnable {
 
     private void sendInvitation(Event event, ObjectOutputStream output) throws IOException {
         // Comparo los nuevos invitados con los que había anteriormente
-        Event eventAux = users.get(event.getOwner()).getEvent(event.getId());
+        //Event eventAux = users.get(event.getOwner()).getEvent(event.getId());
+        Event eventAux = db.getUser(event.getOwner()).getEvent(event.getId());
         for (String guestName: event.getGuests().keySet()) {
             // Si hay algun invitado nuevo le envio un mensaje si está activo
             if (!eventAux.containsGuest(guestName)) {
@@ -208,9 +225,11 @@ public class Server extends MultiThreadServer implements Runnable {
 
     private void answerInvitation(Event event, ObjectOutputStream output) throws IOException {
         // Actualizo el evento del propietario y de los invitados
-        users.get(event.getOwner()).putEvent(event);
+        //users.get(event.getOwner()).putEvent(event);
+        db.getUser(event.getOwner()).putEvent(event);
         for (String guestName: event.getGuests().keySet()) {
-            users.get(guestName).putEvent(event);
+            //users.get(guestName).putEvent(event);
+            db.getUser(guestName).putEvent(event);
             // Si hay algun invitado activo le envio un mensaje
             if (socketWriter.containsKey(guestName)) {
                 // Se puede enviar el evento y que el cliente lo actualice

@@ -1,6 +1,5 @@
 package pkgFrame;
 
-import javafx.scene.control.DatePicker;
 import pkgClient.Client;
 import pkgController.ClientController;
 import pkgUtils.Event;
@@ -8,12 +7,10 @@ import pkgUtils.Event;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -116,6 +113,7 @@ public class ClientFrame extends JFrame {
     private ArrayDeque<JLabel> eventDate;
     private ArrayDeque<JLabel> eventTitle;
     private ArrayDeque<JButton> eventButton;
+    private ArrayDeque<JButton> deleteEventButton;
     private ButtonGroup eventButtons;
 
 
@@ -285,6 +283,7 @@ public class ClientFrame extends JFrame {
         eventDate = new ArrayDeque<>();
         eventTitle = new ArrayDeque<>();
         eventButton = new ArrayDeque<>();
+        deleteEventButton = new ArrayDeque<>();
         // TERMINA PRUEBA
 
         mainPanel = new JPanel(new BorderLayout());
@@ -629,14 +628,16 @@ public class ClientFrame extends JFrame {
         mainPanel.setVisible(false);
         eventsPanel.setVisible(false);
         //JPanel panel = new JPanel(new FlowLayout());
-        JPanel panel = new JPanel(new GridLayout(1, 3));
+        JPanel panel = new JPanel(new GridLayout(1, 4));
         eventDate.addFirst(new JLabel(formatter.format(event.getDate())));
         eventTitle.addFirst(new JLabel(event.getTitle()));
         eventButton.addFirst(new JButton("More info"));
+        deleteEventButton.addFirst(new JButton("Delete"));
         //eventButton.getFirst().addActionListener(controller);
         panel.add(eventDate.peekFirst());
         panel.add(eventTitle.peekFirst());
         panel.add(eventButton.peekFirst());
+        panel.add(deleteEventButton.peekFirst());
         eventsList.addFirst(panel);
         eventsPanel.add(eventsList.peekFirst());
         eventsPanel.setVisible(true);
