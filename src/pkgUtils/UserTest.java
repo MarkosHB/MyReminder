@@ -12,11 +12,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class UserTest {
-	public static User TestUser = null;
-	public static User TestUser2 = null;
+	public static User TestUser;
+	public static User TestUser2;
 	public static ConcurrentSkipListMap<String, Event> TestGuests = new ConcurrentSkipListMap<String, Event>();
-	public static Event TestEvent1 = null;
-	public static Event TestEvent2 = null;
+	public static Event TestEvent1;
+	public static Event TestEvent2;
 
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
