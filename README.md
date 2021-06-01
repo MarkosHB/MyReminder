@@ -43,5 +43,25 @@
   </li>
 </ul>
 
+---
+
+<!-- *** Por hacer *** -->
+<h3> Trabajo asignado última semana </h3>
+<ul>
+  <li> Implementar el servidor
+    --> Tom - Madris 
+  </li>
+  <li> Lista de contactos 
+    --> Diego - Miguel 
+  </li>
+  <li> Testeo del sistema
+    --> Yussef - Samuel 
+  </li>
+  <li> Auxilio y Exposición
+    --> Pablo - Marcos 
+  </li>
+</ul>
+
+
 
 
