@@ -112,7 +112,9 @@ public class ClientController implements ActionListener {
     // -----------------------------------------------------------------------------------
     // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
-
+    public void setFrame(ClientFrame fr) { //Usado en las pruebas unitarias
+    	this.frame = fr;
+    }
 
 
 }
