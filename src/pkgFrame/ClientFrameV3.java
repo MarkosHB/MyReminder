@@ -769,5 +769,9 @@ public class ClientFrame extends JFrame {
         return formatter.parse(createEventDateText.getText());
     }
     // Falta añadir algunas Funciones de forgotten password panel y confirm forgotten password panel
+   
+    public ClientController getController() { //Usado en las pruebas
+    	return controller;
+    }
 
 }
