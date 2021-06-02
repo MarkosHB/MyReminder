@@ -172,5 +172,9 @@ public class Client extends NetworkClient implements Runnable {
     public void setUser(User user) {
         this.user = user;
     }
+    
+    public ClientController getController() { //Usado en tests
+    	return this.frame.getController();
+    }
 
 }
