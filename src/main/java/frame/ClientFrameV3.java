@@ -520,7 +520,7 @@ public class ClientFrameV3 extends JFrame {
         // -------------------------- TERMINA NUEVO --------------------------
 
         // Creamos el controlador y activamos los botones
-        controller = new ClientController(this, client);
+        //controller = new ClientController(this, client);
         this.controller(controller);
 
         // Mostramos la ventana

@@ -1,7 +1,7 @@
 package controller;
 
 import client.Client;
-import frame.ClientFrameV3;
+import frame.ClientFrame;
 import utils.Event;
 import utils.User;
 
@@ -19,7 +19,7 @@ import java.text.ParseException;
  */
 public class ClientController implements ActionListener {
 
-    private ClientFrameV3 frame;
+    private ClientFrame frame;
     private Client client;
 
     private int cont = 0;
@@ -35,8 +35,8 @@ public class ClientController implements ActionListener {
     // // this.output = client.getWriter();
     // }
 
-    public ClientController(ClientFrameV3 clientFrameV3, Client client2) {
-        this.frame = clientFrameV3;
+    public ClientController(ClientFrame clientFrame, Client client) {
+        this.frame = clientFrame;
         this.client = client;
     }
 
@@ -53,8 +53,9 @@ public class ClientController implements ActionListener {
 
         User user;
         Event event;
+        String command;
 
-        switch (e.getActionCommand().toUpperCase()) {
+        switch (command = e.getActionCommand().toUpperCase()) {
             case "SIGN UP PANEL":
                 frame.showSignUp();
                 System.out.println("Sign up panel");
@@ -109,14 +110,27 @@ public class ClientController implements ActionListener {
                 frame.showSignIn();
                 break;
             default:
-                throw new RuntimeException("Unknown command!");
+                System.out.println(command);
+                if (command.contains("MORE INFO")) {
+                    String id = command.split(": ")[1];
+                    System.out.println("More info: Event " + client.getUser().getEvent(id).getTitle());
+                    client.getUser().getEvent(id);
+                    frame.showEventDetails();
+                } else if (command.contains("DELETE")) {
+                    String id = command.split(": ")[1];
+                    System.out.println("Delete: Event " + client.getUser().getEvent(id).getTitle());
+                    client.getUser().removeEvent(id);
+                    // Hay que informar al servidor
+                    frame.showEvents();
+                } else {
+                    throw new RuntimeException("Unknown command!");
+                }
         }
 
     }
 
     // -----------------------------------------------------------------------------------
-    // -------------------------------- FUNCIONES CREADAS
-    // --------------------------------
+    // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
 
 }

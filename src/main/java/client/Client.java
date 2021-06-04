@@ -1,6 +1,6 @@
 package client;
 
-import frame.ClientFrameV3;
+import frame.ClientFrame;
 import utils.Event;
 import utils.SocketUtils;
 import utils.User;
@@ -19,7 +19,7 @@ public class Client extends NetworkClient implements Runnable {
 
     private final int posX;
     private final int posY;
-    private ClientFrameV3 frame;
+    private ClientFrame frame;
 
     /**
      * EJEMPLO DE VARIABLES PARA WHATSAPP: private final Long number; private String
@@ -89,7 +89,7 @@ public class Client extends NetworkClient implements Runnable {
                             event = (Event) input.readObject();
                             user.putEvent(event);
                             frame.showMessagesPanel();
-                            frame.addEvent(event);
+                            frame.showEvents();
                             System.out.println("Create event: OK -- " + event);
                             break;
                         case "INVITATION":
@@ -113,13 +113,12 @@ public class Client extends NetworkClient implements Runnable {
     @Override
     public void run() {
         // COMENTADO SOLO PARA PRUEBAS
-        frame = new ClientFrameV3(name, posX, posY, this);
+        frame = new ClientFrame(name, posX, posY, this);
         connect();
     }
 
     // -----------------------------------------------------------------------------------
-    // -------------------------------- FUNCIONES CREADAS
-    // --------------------------------
+    // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
 
     public void signUp(User user) {
@@ -151,8 +150,7 @@ public class Client extends NetworkClient implements Runnable {
     }
 
     // -----------------------------------------------------------------------------------
-    // --------------------------- GETTERS, SETTERS AND CLEARS
-    // ---------------------------
+    // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
 
     /*

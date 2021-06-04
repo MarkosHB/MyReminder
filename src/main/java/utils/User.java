@@ -12,7 +12,8 @@ public class User implements Serializable {
     private String dni;
     private boolean admin;
     private ConcurrentSkipListMap<String, Event> events;
-    private PriorityBlockingQueue<Event> events2;
+    // private PriorityBlockingQueue<Event> events2;
+    private PriorityBlockingQueue<Event> messages;
 
     public User(String mail, String name, String password, String dni, boolean admin) {
         this.mail = mail;
@@ -97,8 +98,8 @@ public class User implements Serializable {
         this.events.put(event.getId(), event);
     }
 
-    public void removeEvent(Event event) {
-        this.events.remove(event.getId());
+    public void removeEvent(String id) {
+        this.events.remove(id);
     }
 
     @Override

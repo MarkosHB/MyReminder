@@ -516,8 +516,7 @@ public class ClientFrame extends JFrame {
     }
 
     // -----------------------------------------------------------------------------------
-    // -------------------------------- FUNCIONES CREADAS
-    // --------------------------------
+    // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
 
     public void showSignIn() {
@@ -559,6 +558,16 @@ public class ClientFrame extends JFrame {
         mainPanel.setVisible(true);
     }
 
+    public void showEventDetails() {
+        signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
+        mainPanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        // Poner que se muestre otro panel que debo crear
+        eastPanel.add(createEventPanel, BorderLayout.CENTER);
+        mainPanel.setVisible(true);
+    }
+
     public void showMessagesPanel() {
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
@@ -568,23 +577,37 @@ public class ClientFrame extends JFrame {
         mainPanel.setVisible(true);
     }
 
-    public void addEvent(Event event) {
+    public void showMessages() {
+
+    }
+
+    public void showEvents() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mainPanel.setVisible(false);
         eventsPanel.setVisible(false);
-        // JPanel panel = new JPanel(new FlowLayout());
-        JPanel panel = new JPanel(new GridLayout(1, 4));
-        eventDate.addFirst(new JLabel(formatter.format(event.getDate())));
-        eventTitle.addFirst(new JLabel(event.getTitle()));
-        eventButton.addFirst(new JButton("More info"));
-        deleteEventButton.addFirst(new JButton("Delete"));
-        // eventButton.getFirst().addActionListener(controller);
-        panel.add(eventDate.peekFirst());
-        panel.add(eventTitle.peekFirst());
-        panel.add(eventButton.peekFirst());
-        panel.add(deleteEventButton.peekFirst());
-        eventsList.addFirst(panel);
-        eventsPanel.add(eventsList.peekFirst());
+        eventsPanel.removeAll();
+        JPanel panel;
+        //eventDate.clear();
+        //eventTitle.clear();
+        //eventButton.clear();
+        Event[] events = client.getUser().getEvents().values().toArray(new Event[0]);
+        for (int i = 0; i < client.getUser().getEvents().size(); i++) {
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 20, 5));
+            panel.add(new JLabel(formatter.format(events[i].getDate())));
+            panel.add(new JLabel(events[i].getTitle()));
+            JButton button = new JButton("More info");
+            button.setActionCommand("More info: " + events[i].getId());
+            button.addActionListener(controller);
+            panel.add(button);
+            button = new JButton("Delete");
+            button.setActionCommand("Delete: " + events[i].getId());
+            button.addActionListener(controller);
+            panel.add(button);
+            //panel.add(new JButton("More info"));
+            //panel.add(new JButton("Delete"));
+            eventsPanel.add(panel);
+        }
+
         eventsPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
@@ -595,8 +618,7 @@ public class ClientFrame extends JFrame {
     }
 
     // -----------------------------------------------------------------------------------
-    // --------------------------- GETTERS, SETTERS AND CLEARS
-    // ---------------------------
+    // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
 
     public String getUserTextSignIn() {
