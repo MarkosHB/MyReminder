@@ -54,6 +54,9 @@
   <li> Lista de contactos 
     --> Diego - Miguel 
   </li>
+  <li> Alarma
+    --> Pablo
+  </li>
   <li> Testeo del sistema
     --> Yussef - Samuel 
   </li>
