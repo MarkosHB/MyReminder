@@ -7,6 +7,7 @@ import utils.User;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public class Server extends MultiThreadServer implements Runnable {
@@ -33,6 +34,7 @@ public class Server extends MultiThreadServer implements Runnable {
 
         db = Database.getInstance(); // Esto sustituye a users y mails
         db.addUser("admin", new User("admin@uma.es", "admin", "1234", "0", true));
+        db.addUser("pablo", new User("pablo@uma.es", "pablo", "1234", "1", true));
 
     }
 
@@ -84,6 +86,9 @@ public class Server extends MultiThreadServer implements Runnable {
                         case "SIGN IN":
                             user = (User) input.readObject();
                             signIn(user, output);
+                            break;
+                        case "GET USERS":
+                            sendUsers(output);
                             break;
                         case "CREATE EVENT":
                             event = (Event) input.readObject();
@@ -168,6 +173,12 @@ public class Server extends MultiThreadServer implements Runnable {
                 output.writeObject("Sign in: Error. Incorrect password");
             }
         }
+    }
+
+    private void sendUsers(ObjectOutputStream output) throws IOException {
+        System.out.println("Server sending users: " + db.getUsers());
+        output.writeObject("Get users: OK");
+        output.writeObject(db.getUsers());
     }
 
     private void createEvent(Event event, ObjectOutputStream output) throws IOException {

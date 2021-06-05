@@ -3,25 +3,27 @@ package frame;
 import client.Client;
 import controller.ClientController;
 import utils.Event;
+import utils.User;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Clase para la ventana del cliente En ella crearemos la ventana y las
  * respectivas funciones asociadas a esta (El tratamiento de las pulsaciones de
  * los botones se realizará en otra clase)
  */
-public class ClientFrame extends JFrame {
+public abstract class ClientFrame extends JFrame {
 
-    private Client client;
-    private ClientController controller;
+    Client client;
+    ClientController controller;
 
     // Posición de la ventana
     private final int posX;
@@ -33,7 +35,7 @@ public class ClientFrame extends JFrame {
 
     // -------------------------- NUEVO --------------------------
     // Sign In Panel
-    private JPanel signInPanel;
+    JPanel signInPanel;
     private JLabel signInLabel;
 
     private JPanel centerSignInPanel;
@@ -50,7 +52,7 @@ public class ClientFrame extends JFrame {
     private JButton signUpButtonInitialPanel;
 
     // Sign Up Panel
-    private JPanel signUpPanel;
+    JPanel signUpPanel;
     private JLabel signUpLabel;
 
     private JPanel centerSignUpPanel;
@@ -90,7 +92,7 @@ public class ClientFrame extends JFrame {
     private JButton botonvolveratraspanel4;
 
     // Main Panel
-    private JPanel mainPanel;
+    JPanel mainPanel;
     private JLabel mainLabel;
 
     private JPanel centerPanel;
@@ -99,20 +101,27 @@ public class ClientFrame extends JFrame {
     private JPanel buttonsMainPanel;
     private JButton createEventButton;
     private JButton messagesButton;
-    private JButton changeViewButton;
+    private JButton listContactsButton;
     private JPanel eastPanel;
     private JPanel infoPanel;
-    private JButton profileButton;
+    private JButton adminButton;
     private JButton logOutButton;
+    //private JPanel auxiliarPanel;
     private JScrollPane auxiliarPanel;
 
+    private JLabel messagesLabel;
+    private JPanel messagesPanel;
+    private JScrollPane inboxPanel;
+
     private JPanel eventsPanel;
+    /*
     private ArrayDeque<JPanel> eventsList;
     private ArrayDeque<JLabel> eventDate;
     private ArrayDeque<JLabel> eventTitle;
     private ArrayDeque<JButton> eventButton;
     private ArrayDeque<JButton> deleteEventButton;
     private ButtonGroup eventButtons;
+    */
 
     // Create Event Panel
     private JPanel createEventPanel;
@@ -131,27 +140,11 @@ public class ClientFrame extends JFrame {
     private JButton confirmCreateEvent;
     private JButton cancelCreateEvent;
 
-    // -------------------------- TERMINA NUEVO --------------------------
+    private JPanel adminPanel;
+    private JPanel usersPanel;
+    private JScrollPane usersScrollPanel;
 
-    /**
-     * EJEMPLOS DE DECLARACIÓN DE ALGUNAS VARIABLES QUE USAREMOS Panel se crea con
-     * JPanel, ej.: private JPanel panel; Label se crea con JLabel, ej.: private
-     * JLabel label; TextField se crea con JTextField, ej.: private JTextField
-     * textField; TextArea se crea con JTextArea, ej.: private JTextArea textArea;
-     * Button se crea con JButton, ej.: private JButton button; CheckBox se crea con
-     * JCheckBox, ej: private JCheckBox checkBox; RadioButton se crea con
-     * JRadioButton, ej.: private JRadioButton radioButton; ButtonGroup se crea con
-     * ButtonGroup, ej.: private ButtonGroup buttonGroup; ScrollPane se crea con
-     * JScrollPane, ej.: private JScrollPane scrollPane;
-     *
-     * IMPORTANTE PONER NOMBRES IDENTIFICATIVOS SEGÚN FINALIDAD, ej.: Botón para
-     * guardar eventos: private JButton saveEventButton;
-     *
-     * DECLARACIONES PARA UNA CONVERSACIÓN DE WHATSAPP (otro ejemplo más
-     * descriptivo) private JPanel chatActualPanel; private JLabel chatLabel;
-     * private JTextArea conversationArea; private JPanel messagePanel; private
-     * JTextArea messageText; private JButton sendMessageButton;
-     */
+    // -------------------------- TERMINA NUEVO --------------------------
 
     // Constructor
     public ClientFrame(String title, int posX, int posY, Client client) {
@@ -274,11 +267,13 @@ public class ClientFrame extends JFrame {
         // PRUEBA DE EVENTOS
         eventsPanel = new JPanel();
         eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
+        /*
         eventsList = new ArrayDeque<>();
         eventDate = new ArrayDeque<>();
         eventTitle = new ArrayDeque<>();
         eventButton = new ArrayDeque<>();
         deleteEventButton = new ArrayDeque<>();
+        */
         // TERMINA PRUEBA
 
         mainPanel = new JPanel(new BorderLayout());
@@ -305,10 +300,10 @@ public class ClientFrame extends JFrame {
         calendarPanel = new JScrollPane(eventsPanel);
         buttonsMainPanel = new JPanel(new GridLayout(1, 3));
         createEventButton = new JButton("Create event");
-        changeViewButton = new JButton("Change view");
+        listContactsButton = new JButton("List contacts");
         messagesButton = new JButton("Messages");
         buttonsMainPanel.add(createEventButton);
-        buttonsMainPanel.add(changeViewButton);
+        buttonsMainPanel.add(listContactsButton);
         buttonsMainPanel.add(messagesButton);
         centerPanel.add(mainLabel, BorderLayout.NORTH);
         centerPanel.add(calendarPanel, BorderLayout.CENTER);
@@ -317,9 +312,9 @@ public class ClientFrame extends JFrame {
 
         eastPanel = new JPanel(new BorderLayout());
         infoPanel = new JPanel(new FlowLayout());
-        profileButton = new JButton("Profile");
+        adminButton = new JButton("Admin");
         logOutButton = new JButton("Log out");
-        infoPanel.add(profileButton);
+        infoPanel.add(adminButton);
         infoPanel.add(logOutButton);
         // Prueba -- Añadir
         ArrayList<JPanel> mensajes2 = new ArrayList<>();
@@ -346,7 +341,7 @@ public class ClientFrame extends JFrame {
         // createEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
         createEventDateText = new JTextField("30/06/2021 10:00", 10); // PRUEBAS
         createEventAlarmLabel = new JLabel("Alarm");
-        createEventAlarmText = new JTextField("DD/MM/YYYY hh:mm", 10);
+        createEventAlarmText = new JTextField("05/06/2021 21:30", 10);
 
         createEventButtons = new JPanel(new GridLayout(1, 2));
         confirmCreateEvent = new JButton("Confirm");
@@ -365,6 +360,14 @@ public class ClientFrame extends JFrame {
         createEventPanel.add(createEventAlarmLabel);
         createEventPanel.add(createEventAlarmText);
         createEventPanel.add(createEventButtons);
+
+        adminPanel = new JPanel(new BorderLayout());
+        adminPanel.add(new JLabel("Users:"), BorderLayout.NORTH);
+
+        usersPanel = new JPanel();
+        usersPanel.setLayout(new BoxLayout(usersPanel, BoxLayout.Y_AXIS));
+        usersScrollPanel = new JScrollPane(usersPanel);
+        adminPanel.add(usersScrollPanel, BorderLayout.CENTER);
 
         ////////////////////////// PANEL 3 ///////////////////////////////
 
@@ -478,8 +481,9 @@ public class ClientFrame extends JFrame {
         // -------------------------- TERMINA NUEVO --------------------------
 
         // Creamos el controlador y activamos los botones
-        controller = new ClientController(this, client);
-        this.controller(controller);
+        //controller = new ClientController(this, client);
+        //this.controller(controller);
+        assignController();
 
         // Mostramos la ventana
         setSize(this.sizeX, this.sizeY);
@@ -489,12 +493,14 @@ public class ClientFrame extends JFrame {
 
     }
 
+    abstract void assignController();
+
     /**
      * Activa los botones y permite que sean tratados por el controlador
      * 
      * @param myController controlador que tratará las pulsaciones de los botones
      */
-    private void controller(ActionListener myController) {
+    void controller(ActionListener myController) {
 
         signInButton.addActionListener(myController);
         signUpButtonInitialPanel.addActionListener(myController);
@@ -504,13 +510,13 @@ public class ClientFrame extends JFrame {
         goBackButton.addActionListener(myController);
 
         createEventButton.addActionListener(myController);
-        changeViewButton.addActionListener(myController);
+        listContactsButton.addActionListener(myController);
         messagesButton.addActionListener(myController);
 
         confirmCreateEvent.addActionListener(myController);
         cancelCreateEvent.addActionListener(myController);
 
-        profileButton.addActionListener(myController);
+        adminButton.addActionListener(myController);
         logOutButton.addActionListener(myController);
 
     }
@@ -543,6 +549,11 @@ public class ClientFrame extends JFrame {
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
+        infoPanel.removeAll();
+        if (client.getUser().isAdmin()) {
+            infoPanel.add(adminButton);
+        }
+        infoPanel.add(logOutButton);
         remove(signInPanel);
         remove(signUpPanel);
         add(mainPanel);
@@ -578,7 +589,9 @@ public class ClientFrame extends JFrame {
     }
 
     public void showMessages() {
-
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        mainPanel.setVisible(false);
+        eventsPanel.setVisible(false);
     }
 
     public void showEvents() {
@@ -612,8 +625,26 @@ public class ClientFrame extends JFrame {
         mainPanel.setVisible(true);
     }
 
-    public void changeView() {
+    public void showAdminFrame() {
         mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        JPanel panel;
+        //eventDate.clear();
+        //eventTitle.clear();
+        //eventButton.clear();
+        ArrayList<String> users = new ArrayList<>(client.getUsers().keySet());
+        for (String user : users) {
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
+            panel.add(new JLabel(user));
+            JButton button = new JButton("Delete");
+            button.setActionCommand("Delete: " + client.getUsers());
+            button.addActionListener(controller);
+            panel.add(button);
+            usersPanel.add(panel);
+        }
+
+        eastPanel.add(adminPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
 
@@ -656,6 +687,11 @@ public class ClientFrame extends JFrame {
     public Date getCreateEventDate() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.parse(createEventDateText.getText());
+    }
+
+    public Date getCreateEventAlarm() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return formatter.parse(createEventAlarmText.getText());
     }
 
     public void showConfirmForgottenPassword() {

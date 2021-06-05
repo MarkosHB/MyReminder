@@ -1,0 +1,4 @@
+MY_PATH=`dirname $0`              # Path relativo
+MY_PATH=`( cd $MY_PATH && pwd )`  # Path absoluto
+cd $MY_PATH
+java -Djdk.tls.client.protocols=TLSv1.2 -jar $MY_PATH/out/artifacts/g6_myreminder_jar/g6-myreminder.jar

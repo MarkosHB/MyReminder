@@ -15,10 +15,11 @@ public class Event implements Serializable, Comparable {
     private String owner;
     private ConcurrentSkipListMap<String, Boolean> guests; // Name and: true if accepted, false if pending
 
-    public Event(String id, String title, Date date, String description, String owner, ArrayList<String> guests) {
+    public Event(String id, String title, Date date, Date alarm, String description, String owner, ArrayList<String> guests) {
         this.id = id.toUpperCase();
         this.title = title;
         this.date = date;
+        this.alarm = alarm;
         this.description = description;
         this.owner = owner;
         this.guests = new ConcurrentSkipListMap<>();
@@ -27,10 +28,11 @@ public class Event implements Serializable, Comparable {
         }
     }
 
-    public Event(String id, String title, Date date, String description, String owner) {
+    public Event(String id, String title, Date date, Date alarm, String description, String owner) {
         this.id = id.toUpperCase();
         this.title = title;
         this.date = date;
+        this.alarm = alarm;
         this.description = description;
         this.owner = owner;
         this.guests = new ConcurrentSkipListMap<>();

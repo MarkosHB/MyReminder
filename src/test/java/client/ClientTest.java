@@ -44,7 +44,7 @@ class ClientTest {
 	@BeforeEach
 	void setUp() throws Exception {
 		TestUser = new User("user2@uma.es", "user2", "pass2", "x123456", false);
-		TestEvent = new Event("001", "Evento1", new Date(), "Evento descripcion", "admin");
+		TestEvent = new Event("001", "Evento1", new Date(), new Date(), "Evento descripcion", "admin");
 	}
 
 	@AfterEach

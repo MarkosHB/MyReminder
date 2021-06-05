@@ -17,7 +17,7 @@ public class Demo {
         service.schedule(new Server("Server"), 0, TimeUnit.SECONDS);
         //service.schedule(new ServerWithMongoTemplate("Server"), 0, TimeUnit.SECONDS);
         service.schedule(new Client("Client 1", 0, 10), 2, TimeUnit.SECONDS);
-        // service.schedule(new Client("Client 2", 800, 10), 3, TimeUnit.SECONDS);
+        service.schedule(new Client("Client 2", 0, 520), 3, TimeUnit.SECONDS);
         // service.schedule(new Client("Client 3", 0, 500), 4, TimeUnit.SECONDS);
         // service.schedule(new Client("Client 4", 800, 500), 5, TimeUnit.SECONDS);
 

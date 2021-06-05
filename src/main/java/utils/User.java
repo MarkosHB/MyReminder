@@ -1,6 +1,7 @@
 package utils;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
@@ -13,7 +14,8 @@ public class User implements Serializable {
     private boolean admin;
     private ConcurrentSkipListMap<String, Event> events;
     // private PriorityBlockingQueue<Event> events2;
-    private PriorityBlockingQueue<Event> messages;
+    private ArrayDeque<Message> messages;
+    // Podria crear la clase Message y ponerle un campo que sea leido
 
     public User(String mail, String name, String password, String dni, boolean admin) {
         this.mail = mail;
@@ -40,6 +42,7 @@ public class User implements Serializable {
         this.dni = null;
         this.admin = false;
         this.events = new ConcurrentSkipListMap<>();
+        this.messages = new ArrayDeque<>();
     }
 
     public String getMail() {

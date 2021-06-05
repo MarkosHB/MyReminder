@@ -17,7 +17,7 @@ import java.text.ParseException;
  * respectivas funciones asociadas a este Es decir, se hará el tratamiento de
  * las pulsaciones de los botones de la ventana
  */
-public class ClientController implements ActionListener {
+public abstract class ClientController implements ActionListener {
 
     private ClientFrame frame;
     private Client client;
@@ -51,6 +51,9 @@ public class ClientController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        control(e);
+
+        /*
         User user;
         Event event;
         String command;
@@ -86,7 +89,8 @@ public class ClientController implements ActionListener {
             case "CONFIRM CREATE EVENT":
                 try {
                     event = new Event(client.getUser().getName() + cont++, frame.getCreateEventTitle(),
-                            frame.getCreateEventDate(), frame.getCreateEventDescription(), client.getUser().getName());
+                            frame.getCreateEventDate(), frame.getCreateEventAlarm(),
+                            frame.getCreateEventDescription(), client.getUser().getName());
                     System.out.println("Create event: " + event);
                     client.createEvent(event);
                 } catch (ParseException ex) {
@@ -126,11 +130,129 @@ public class ClientController implements ActionListener {
                     throw new RuntimeException("Unknown command!");
                 }
         }
+        */
 
     }
 
     // -----------------------------------------------------------------------------------
     // -------------------------------- FUNCIONES CREADAS --------------------------------
     // -----------------------------------------------------------------------------------
+
+    private void control(ActionEvent e) {
+        String command;
+
+        switch (command = e.getActionCommand().toUpperCase()) {
+            case "SIGN UP PANEL":
+                showSignUp();
+                break;
+            case "GO BACK":
+                goBack();
+                break;
+            case "SIGN UP":
+                signUp();
+                break;
+            case "SIGN IN":
+                signIn();
+                break;
+            case "CREATE EVENT":
+                showCreateEvent();
+                break;
+            case "CONFIRM CREATE EVENT":
+                createEvent();
+                break;
+            case "CANCEL CREATE EVENT":
+                cancelCreateEvent();
+                break;
+            case "MESSAGES":
+                showMessages();
+                break;
+            case "ADMIN":
+                showAdmin();
+                break;
+            case "LOG OUT":
+                logOut();
+                break;
+            default:
+                System.out.println(command);
+                if (command.contains("MORE INFO")) {
+                    String id = command.split(": ")[1];
+                    System.out.println("More info: Event " + client.getUser().getEvent(id).getTitle());
+                    client.getUser().getEvent(id);
+                    frame.showEventDetails();
+                } else if (command.contains("DELETE")) {
+                    String id = command.split(": ")[1];
+                    System.out.println("Delete: Event " + client.getUser().getEvent(id).getTitle());
+                    client.getUser().removeEvent(id);
+                    // Hay que informar al servidor
+                    frame.showEvents();
+                } else {
+                    throw new RuntimeException("Unknown command!");
+                }
+        }
+    }
+
+    public void showSignUp() {
+        frame.showSignUp();
+        System.out.println("Sign up panel");
+    }
+
+    public void goBack() {
+        frame.showSignIn();
+        System.out.println("Go back");
+    }
+
+    public void signUp() {
+        User user = new User(frame.getMailTextSignUp(), frame.getUserTextSignUp(), frame.getPasswordTextSignUp(),
+                frame.getDniTextSignUp());
+        if (user.isCorrect()) {
+            client.signUp(user);
+            System.out.println("Sign up: " + user);
+        } else {
+            System.out.println("Sign up: USER ISN'T CORRECT");
+        }
+    }
+
+    public void signIn() {
+        User user = new User(frame.getUserTextSignIn(), frame.getPasswordTextSignIn());
+        System.out.println("Sign in: " + user);
+        client.signIn(user);
+    }
+
+    public void showCreateEvent() {
+        frame.showCreateEventPanel();
+        System.out.println("Create event panel");
+    }
+
+    public void createEvent() {
+        try {
+            Event event = new Event(client.getUser().getName() + cont++, frame.getCreateEventTitle(),
+                    frame.getCreateEventDate(), frame.getCreateEventAlarm(),
+                    frame.getCreateEventDescription(), client.getUser().getName());
+            System.out.println("Create event: " + event);
+            client.createEvent(event);
+        } catch (ParseException ex) {
+            System.out.println("Create event: Error. Date format incorrect");
+        }
+    }
+
+    public void cancelCreateEvent() {
+        frame.showMessagesPanel();
+        System.out.println("Cancel create event");
+    }
+
+    public void showMessages() {
+        frame.showMessagesPanel();
+        System.out.println("Messages panel");
+    }
+
+    public void showAdmin() {
+        client.receiveUsers();
+    }
+
+    public void logOut() {
+        System.out.println("Log out: " + client.getUser());
+        client.setUser(null);
+        frame.showSignIn();
+    }
 
 }

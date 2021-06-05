@@ -1,14 +1,17 @@
 package client;
 
 import frame.ClientFrame;
+import frame.ClientPCFrame;
+import utils.*;
+/*
 import utils.Event;
 import utils.SocketUtils;
 import utils.User;
-
+*/
 import java.io.*;
 import java.net.Socket;
-
-import controller.ClientController;
+import java.util.ArrayList;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * Clase para el cliente En ella crearemos el cliente y las respectivas
@@ -28,6 +31,7 @@ public class Client extends NetworkClient implements Runnable {
      */
     private String name;
     private User user;
+    private ConcurrentSkipListMap<String, User> users;
 
     // Socket -> Read / Write
     // private BufferedReader input;
@@ -47,6 +51,7 @@ public class Client extends NetworkClient implements Runnable {
          */
         this.name = name;
         this.user = null;
+        this.users = null;
 
         this.posX = posX;
         this.posY = posY;
@@ -68,6 +73,8 @@ public class Client extends NetworkClient implements Runnable {
         input = SocketUtils.getReader(client);
         // output.println(number + " " + name);
 
+        new Thread(new Alarm(this, frame)).start();
+
         // PRUEBA (Parece que va guay, cambiar los input.readLine() por
         // input.readObject())
         // signUp(new User("my email", name, "my password", "my dni"));
@@ -84,6 +91,11 @@ public class Client extends NetworkClient implements Runnable {
                             user = (User) input.readObject();
                             frame.showMainPanel();
                             System.out.println("Sign in: OK -- " + user);
+                            break;
+                        case "GET USERS: OK":
+                            users = (ConcurrentSkipListMap) input.readObject();
+                            frame.showAdminFrame();
+                            System.out.println("Get users: OK -- " + users);
                             break;
                         case "CREATE EVENT: OK":
                             event = (Event) input.readObject();
@@ -113,7 +125,7 @@ public class Client extends NetworkClient implements Runnable {
     @Override
     public void run() {
         // COMENTADO SOLO PARA PRUEBAS
-        frame = new ClientFrame(name, posX, posY, this);
+        frame = new ClientPCFrame(name, posX, posY, this);
         connect();
     }
 
@@ -149,6 +161,14 @@ public class Client extends NetworkClient implements Runnable {
         }
     }
 
+    public void receiveUsers() {
+        try {
+            output.writeObject("Get users");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     // -----------------------------------------------------------------------------------
     // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
@@ -167,6 +187,10 @@ public class Client extends NetworkClient implements Runnable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public ConcurrentSkipListMap getUsers() {
+        return users;
     }
 
     // public ClientController getController() { //Usado en tests
