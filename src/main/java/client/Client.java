@@ -89,6 +89,14 @@ public class Client extends NetworkClient implements Runnable {
                             frame.showAdminFrame();
                             System.out.println("Delete user: OK");
                             break;
+                        case "DELETE EVENT":
+                            System.out.println(user);
+                            event = new Event((Event) input.readUnshared());
+                            user.removeEvent(event.getId());
+                            System.out.println(user);
+                            frame.showEvents();
+                            System.out.println("Guest deleting event");
+                            break;
                         case "GET USERS: OK":
                             users = (ConcurrentSkipListMap) input.readUnshared();
                             frame.showAdminFrame();
@@ -201,6 +209,15 @@ public class Client extends NetworkClient implements Runnable {
     public void inviteGuests(Event event) {
         try {
             output.writeObject("Invitation");
+            output.writeUnshared(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteEvent(Event event) {
+        try {
+            output.writeObject("Delete event");
             output.writeUnshared(event);
         } catch (IOException e) {
             e.printStackTrace();

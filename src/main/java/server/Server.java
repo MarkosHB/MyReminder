@@ -126,15 +126,22 @@ public class Server extends MultiThreadServer implements Runnable {
                             event = (Event) input.readUnshared();
                             sendInvitation(event, output);
                             break;
+                            /*
                         case "ANSWER INVITATION":
                             event = (Event) input.readObject();
                             answerInvitation(event, output);
                             break;
+                            */
                         case "DELETE USER":
                             System.out.println("Deleting user");
                             db.removeUser(((String) input.readObject()).toLowerCase());
                             output.writeObject("Delete user: OK");
                             output.writeUnshared(db.getUsers());
+                            break;
+                        case "DELETE EVENT":
+                            System.out.println("Deleting event");
+                            Event e = new Event((Event) input.readObject());
+                            deleteEvent(e);
                             break;
                         case "FORGOTTEN PASSWORD":
                             User aux;
@@ -248,13 +255,9 @@ public class Server extends MultiThreadServer implements Runnable {
         // Comparo los nuevos invitados con los que había anteriormente
         // Event eventAux = users.get(event.getOwner()).getEvent(event.getId());
         Event eventAux = db.getUser(event.getOwner()).getEvent(event.getId());
-        System.out.println("SERVER1: " + eventAux);
-        System.out.println("SERVER2: " + event);
         for (String guestName : event.getGuests().keySet()) {
-            System.out.println("SERVER3: " + guestName);
             db.getUser(guestName).putEvent(event);
             db.getUser(guestName).addMessage("INVITATION: " + event.getTitle());
-            System.out.println("SERVER4: " +  db.getUser(guestName));
             // Si hay algun invitado nuevo le envio un mensaje si está activo
             if (!eventAux.containsGuest(guestName)) {
                 if (socketWriter.containsKey(guestName)) {
@@ -262,11 +265,6 @@ public class Server extends MultiThreadServer implements Runnable {
                     socketWriter.get(guestName).writeObject("Invitation");
                     socketWriter.get(guestName).writeUnshared(event);
                     //socketWriter.get(guestName).writeUnshared(db.getUser(guestName));
-                    /*
-                     * // Tambien se puede enviar el usuario completo actualizado y el cliente
-                     * simplemente lo copia socketWriter.get(name).writeObject("Invitation");
-                     * socketWriter.get(name).writeObject(user);
-                     */
                 }
             }
         }
@@ -274,6 +272,24 @@ public class Server extends MultiThreadServer implements Runnable {
         eventAux.setGuests(event.getGuests());
     }
 
+    public void deleteEvent(Event event) throws IOException {
+        // Comparo los nuevos invitados con los que había anteriormente
+        System.out.println("SERVER1: " + event);
+        for (String guestName : event.getGuests().keySet()) {
+            db.getUser(guestName).removeEvent(event.getId());
+            // Si hay algun invitado le envio un mensaje si está activo
+            if (socketWriter.containsKey(guestName)) {
+                // Se puede enviar el evento y que el cliente lo actualice
+                socketWriter.get(guestName).writeObject("Delete event");
+                System.out.println("SERVER2: " + db.getUser(guestName));
+                socketWriter.get(guestName).writeUnshared(event);
+                //socketWriter.get(guestName).writeUnshared(db.getUser(guestName));
+            }
+        }
+        // Actualizo los invitados
+    }
+
+    /*
     private void answerInvitation(Event event, ObjectOutputStream output) throws IOException {
         // Actualizo el evento del propietario y de los invitados
         // users.get(event.getOwner()).putEvent(event);
@@ -286,14 +302,10 @@ public class Server extends MultiThreadServer implements Runnable {
                 // Se puede enviar el evento y que el cliente lo actualice
                 socketWriter.get(guestName).writeObject("Invitation");
                 socketWriter.get(guestName).writeObject(event);
-                /*
-                 * // Tambien se puede enviar el usuario completo actualizado y el cliente
-                 * simplemente lo copia socketWriter.get(name).writeObject("Invitation");
-                 * socketWriter.get(name).writeObject(user);
-                 */
             }
         }
     }
+    */
 
     // -----------------------------------------------------------------------------------
     // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------

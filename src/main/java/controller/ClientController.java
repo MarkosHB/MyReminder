@@ -224,7 +224,9 @@ public abstract class ClientController implements ActionListener {
                 } else if (command.contains("DELETE EVENT")) {
                     String id = command.split(": ")[1];
                     System.out.println("Delete: Event " + client.getUser().getEvent(id).getTitle());
+                    Event aux = new Event(client.getUser().getEvent(id));
                     client.getUser().removeEvent(id);
+                    client.deleteEvent(aux);
                     // Hay que informar al servidor
                     frame.showEvents();
                 } else if (command.contains("DELETE USER")) {
