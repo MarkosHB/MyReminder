@@ -32,7 +32,6 @@ public abstract class ClientFrame extends JFrame {
     private final int sizeX;
     private final int sizeY;
 
-    // -------------------------- NUEVO --------------------------
     // Sign In Panel
     JPanel signInPanel;
     private JLabel signInLabel;
@@ -76,33 +75,20 @@ public abstract class ClientFrame extends JFrame {
     private JPanel forgottenPasswordPanel;
     private JLabel forgottenPasswordPanelLabel;
 
-    private JPanel centerforgottenPasswordPanel;
-    private JPanel emailforgottenPasswordPanel;
-    private JLabel emailLabelforgottenPasswordPanel;
-    private JTextField emailtextforgottenPasswordPanel;
-    private JPanel dniforgottenPasswordPanel;
-    private JLabel dniLabelforgottenPasswordPanel;
-    private JTextField dnitextforgottenPasswordPanel;
+    private JPanel centerForgottenPasswordPanel;
+    private JPanel mailForgottenPasswordPanel;
+    private JLabel mailLabelForgottenPasswordPanel;
+    private JTextField mailTextForgottenPasswordPanel;
+    private JPanel dniForgottenPasswordPanel;
+    private JLabel dniLabelForgottenPasswordPanel;
+    private JTextField dniTextForgottenPasswordPanel;
+    private JPanel passwordForgottenPasswordPanel;
+    private JLabel passwordLabelForgottenPasswordPanel;
+    private JPasswordField passwordTextForgottenPasswordPanel;
 
-    private JPanel southforgottenPasswordPanel;
-    private JButton acceptforgottenPasswordButton;
-    private JButton goBackforgottenPasswordButton;
-
-    // confirm forgotten password
-    private JPanel confirmforgottenPasswordPanel;
-    private JLabel confirmforgottenPasswordPanelLabel;
-
-    private JPanel centerconfirmforgottenPasswordPanel;
-    private JPanel emailconfirmforgottenPasswordPanel;
-    private JLabel emailLabelconfirmforgottenPasswordPanel;
-    private JTextField emailtextconfirmforgottenPasswordPanel;
-    private JPanel dniconfirmforgottenPasswordPanel;
-    private JLabel dniLabelconfirmforgottenPasswordPanel;
-    private JTextField dnitextconfirmforgottenPasswordPanel;
-
-    private JPanel southconfirmforgottenPasswordPanel;
-    private JButton acceptconfirmforgottenPasswordButton;
-    private JButton goBackconfirmforgottenPasswordButton;
+    private JPanel southForgottenPasswordPanel;
+    private JButton acceptForgottenPasswordButton;
+    private JButton goBackForgottenPasswordButton;
 
     // Main Panel
     JPanel mainPanel;
@@ -284,65 +270,47 @@ public abstract class ClientFrame extends JFrame {
         southSignUpPanel.add(goBackButton);
         signUpPanel.add(southSignUpPanel, BorderLayout.SOUTH);
 
-        /* --------------------------- UNIFICAR EN UNO --------------------------- */
         // -------------------------- Forgotten Password Panel --------------------------
         forgottenPasswordPanel = new JPanel(new BorderLayout());
 
-        centerforgottenPasswordPanel = new JPanel(new GridLayout(2, 1));
-        emailforgottenPasswordPanel = new JPanel(new FlowLayout());
-        emailLabelforgottenPasswordPanel = new JLabel("Email: ");
-        emailtextforgottenPasswordPanel = new JTextField(10);
-        emailforgottenPasswordPanel.add(emailLabelforgottenPasswordPanel);
-        emailforgottenPasswordPanel.add(emailtextforgottenPasswordPanel);
-        dniforgottenPasswordPanel = new JPanel(new FlowLayout());
-        dniLabelforgottenPasswordPanel = new JLabel("DNI: ");
-        dnitextforgottenPasswordPanel = new JPasswordField(10);
-        dniforgottenPasswordPanel.add(dniLabelforgottenPasswordPanel);
-        dniforgottenPasswordPanel.add(dnitextforgottenPasswordPanel);
+        Icon icon4 = new ImageIcon(image.getImage().getScaledInstance(200, 200, Image.SCALE_DEFAULT));
+        forgottenPasswordPanelLabel = new JLabel(icon4);
+        forgottenPasswordPanel.add(forgottenPasswordPanelLabel, BorderLayout.NORTH);
 
-        centerforgottenPasswordPanel.add(emailforgottenPasswordPanel);
-        centerforgottenPasswordPanel.add(dniforgottenPasswordPanel);
-        forgottenPasswordPanel.add(centerforgottenPasswordPanel, BorderLayout.CENTER);
+        centerForgottenPasswordPanel = new JPanel(new GridLayout(3, 1));
 
-        southforgottenPasswordPanel = new JPanel(new GridLayout(1, 2));
-        acceptforgottenPasswordButton = new JButton("Confirm Password");
-        acceptforgottenPasswordButton.setActionCommand("Confirm forgotten password");
-        goBackforgottenPasswordButton = new JButton("Go back");
-        goBackforgottenPasswordButton.setActionCommand("Go back sing in");
+        mailForgottenPasswordPanel = new JPanel(new FlowLayout());
+        mailLabelForgottenPasswordPanel = new JLabel("Mail: ");
+        mailTextForgottenPasswordPanel = new JTextField(10);
+        mailForgottenPasswordPanel.add(mailLabelForgottenPasswordPanel);
+        mailForgottenPasswordPanel.add(mailTextForgottenPasswordPanel);
 
-        southforgottenPasswordPanel.add(acceptforgottenPasswordButton);
-        southforgottenPasswordPanel.add(goBackforgottenPasswordButton);
-        forgottenPasswordPanel.add(southforgottenPasswordPanel, BorderLayout.SOUTH);
+        dniForgottenPasswordPanel = new JPanel(new FlowLayout());
+        dniLabelForgottenPasswordPanel = new JLabel("DNI: ");
+        dniTextForgottenPasswordPanel = new JTextField(10);
+        dniForgottenPasswordPanel.add(dniLabelForgottenPasswordPanel);
+        dniForgottenPasswordPanel.add(dniTextForgottenPasswordPanel);
 
-        // ------------------- Accept Forgotten Password Panel -------------
-        confirmforgottenPasswordPanel = new JPanel(new BorderLayout());
+        passwordForgottenPasswordPanel = new JPanel(new FlowLayout());
+        passwordLabelForgottenPasswordPanel = new JLabel("Password: ");
+        passwordTextForgottenPasswordPanel = new JPasswordField(10);
+        passwordForgottenPasswordPanel.add(passwordLabelForgottenPasswordPanel);
+        passwordForgottenPasswordPanel.add(passwordTextForgottenPasswordPanel);
 
-        centerconfirmforgottenPasswordPanel = new JPanel(new GridLayout(2, 1));
-        emailconfirmforgottenPasswordPanel = new JPanel(new FlowLayout());
-        emailLabelconfirmforgottenPasswordPanel = new JLabel("Email/User: ");
-        emailtextconfirmforgottenPasswordPanel = new JTextField(10);
-        emailconfirmforgottenPasswordPanel.add(emailLabelconfirmforgottenPasswordPanel);
-        emailconfirmforgottenPasswordPanel.add(emailtextconfirmforgottenPasswordPanel);
-        dniconfirmforgottenPasswordPanel = new JPanel(new FlowLayout());
-        dniLabelconfirmforgottenPasswordPanel = new JLabel("New password: ");
-        dnitextconfirmforgottenPasswordPanel = new JPasswordField(10);
-        dniconfirmforgottenPasswordPanel.add(dniLabelconfirmforgottenPasswordPanel);
-        dniconfirmforgottenPasswordPanel.add(dnitextconfirmforgottenPasswordPanel);
+        centerForgottenPasswordPanel.add(mailForgottenPasswordPanel);
+        centerForgottenPasswordPanel.add(dniForgottenPasswordPanel);
+        centerForgottenPasswordPanel.add(passwordForgottenPasswordPanel);
+        forgottenPasswordPanel.add(centerForgottenPasswordPanel, BorderLayout.CENTER);
 
-        centerconfirmforgottenPasswordPanel.add(emailconfirmforgottenPasswordPanel);
-        centerconfirmforgottenPasswordPanel.add(dniconfirmforgottenPasswordPanel);
-        confirmforgottenPasswordPanel.add(centerconfirmforgottenPasswordPanel, BorderLayout.CENTER);
+        southForgottenPasswordPanel = new JPanel(new GridLayout(1, 2));
+        acceptForgottenPasswordButton = new JButton("Confirm password");
+        acceptForgottenPasswordButton.setActionCommand("Confirm forgotten password");
+        goBackForgottenPasswordButton = new JButton("Go back");
+        goBackForgottenPasswordButton.setActionCommand("Go back forgotten password");
 
-        southconfirmforgottenPasswordPanel = new JPanel(new GridLayout(1, 2));
-        acceptconfirmforgottenPasswordButton = new JButton("Confirm new password");
-        acceptconfirmforgottenPasswordButton.setActionCommand("new password panel");
-        goBackconfirmforgottenPasswordButton = new JButton("Go back");
-        goBackconfirmforgottenPasswordButton.setActionCommand("Go back forgotten password");
-
-        southconfirmforgottenPasswordPanel.add(acceptconfirmforgottenPasswordButton);
-        southconfirmforgottenPasswordPanel.add(goBackconfirmforgottenPasswordButton);
-        confirmforgottenPasswordPanel.add(southconfirmforgottenPasswordPanel, BorderLayout.SOUTH);
-        /* --------------------------- UNIFICAR EN UNO --------------------------- */
+        southForgottenPasswordPanel.add(acceptForgottenPasswordButton);
+        southForgottenPasswordPanel.add(goBackForgottenPasswordButton);
+        forgottenPasswordPanel.add(southForgottenPasswordPanel, BorderLayout.SOUTH);
 
         // -------------------------- Main Panel --------------------------
         eventsPanel = new JPanel();
@@ -530,11 +498,13 @@ public abstract class ClientFrame extends JFrame {
         adminButton.addActionListener(myController);
         logOutButton.addActionListener(myController);
 
-        acceptforgottenPasswordButton.addActionListener(myController);
-        goBackforgottenPasswordButton.addActionListener(myController);
+        acceptForgottenPasswordButton.addActionListener(myController);
+        goBackForgottenPasswordButton.addActionListener(myController);
 
+        /*
         acceptconfirmforgottenPasswordButton.addActionListener(myController);
         goBackconfirmforgottenPasswordButton.addActionListener(myController);
+        */
 
         confirmUpdateEvent.addActionListener(myController);
         cancelUpdateEvent.addActionListener(myController);
@@ -553,9 +523,11 @@ public abstract class ClientFrame extends JFrame {
     public void showSignIn() {
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
+        forgottenPasswordPanel.setVisible(false);
         mainPanel.setVisible(false);
         remove(signUpPanel);
         remove(mainPanel);
+        remove(forgottenPasswordPanel);
         userTextSignInPanel.setText("");
         passwordTextSignInPanel.setText("");
         add(signInPanel);
@@ -568,6 +540,7 @@ public abstract class ClientFrame extends JFrame {
         mainPanel.setVisible(false);
         remove(signInPanel);
         remove(mainPanel);
+        remove(forgottenPasswordPanel);
         mailTextSignUpPanel.setText("");
         userTextSignUpPanel.setText("");
         passwordTextSignUpPanel.setText("");
@@ -589,6 +562,7 @@ public abstract class ClientFrame extends JFrame {
         infoPanel.add(logOutButton);
         remove(signInPanel);
         remove(signUpPanel);
+        remove(forgottenPasswordPanel);
         add(mainPanel);
         mainPanel.setVisible(true);
     }
@@ -779,26 +753,16 @@ public abstract class ClientFrame extends JFrame {
     */
 
     public void showForgottenPassword() {
+        signUpPanel.setVisible(false);
         signInPanel.setVisible(false);
+        remove(signUpPanel);
         remove(signInPanel);
+        remove(mainPanel);
+        mailTextForgottenPasswordPanel.setText("");
+        dniTextForgottenPasswordPanel.setText("");
+        passwordTextForgottenPasswordPanel.setText("");
         add(forgottenPasswordPanel);
         forgottenPasswordPanel.setVisible(true);
-    }
-
-    public void showConfirmForgottenPassword() {
-        signInPanel.setVisible(false);
-        signUpPanel.setVisible(false);
-        // -----------------
-        forgottenPasswordPanel.setVisible(false);
-        confirmforgottenPasswordPanel.setVisible(false);
-        // -----------------
-        mainPanel.setVisible(false);
-        remove(signInPanel);
-        remove(signUpPanel);
-        remove(forgottenPasswordPanel);
-        remove(mainPanel);
-        add(confirmforgottenPasswordPanel);
-        confirmforgottenPasswordPanel.setVisible(true);
     }
 
     public void showListContacts() {
@@ -895,6 +859,18 @@ public abstract class ClientFrame extends JFrame {
 
     public String getDniTextSignUp() {
         return dniTextSignUpPanel.getText();
+    }
+
+    public String getMailTextForgottenPasswordPanel() {
+        return mailTextForgottenPasswordPanel.getText();
+    }
+
+    public String getDniTextForgottenPasswordPanel() {
+        return dniTextForgottenPasswordPanel.getText();
+    }
+
+    public String getPasswordTextForgottenPasswordPanel() {
+        return new String(passwordTextForgottenPasswordPanel.getPassword());
     }
 
     public String getCreateEventTitle() {

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="g6-myreminder:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/g6_myreminder_jar</output-path>
+    <root id="archive" name="g6-myreminder.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/resources/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="g6-myreminder" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/mongodb/mongo-java-driver/3.12.8/mongo-java-driver-3.12.8.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/toedter/jcalendar/1.4/jcalendar-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

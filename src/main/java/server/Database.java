@@ -50,6 +50,11 @@ public class Database {
         mails.put(user.getMail(), user.getName());
     }
 
+    public void removeUser(User user) {
+        users.remove(user.getName());
+        mails.remove(user.getMail());
+    }
+
     public void removeUser(String key) {
         users.remove(key);
     }

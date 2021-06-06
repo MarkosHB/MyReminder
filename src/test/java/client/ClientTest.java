@@ -68,4 +68,5 @@ class ClientTest {
 		resultEvent = db.getUser(TestEvent.getOwner()).getEvent(TestEvent.getId()); // Obtiene evento almacenado
 		assertEquals(TestEvent.getId(), resultEvent.getId(), "No se cre� el evento");
 	}
+
 }

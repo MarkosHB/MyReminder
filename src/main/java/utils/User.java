@@ -24,7 +24,7 @@ public class User implements Serializable, Comparable {
         this.password = user.password;
         this.dni = user.dni;
         this.admin = user.admin;
-        this.events = new ConcurrentSkipListMap<>();
+        this.events = user.events;
         this.messages = new PriorityBlockingQueue<>(user.messages);
         this.contacts = new PriorityBlockingQueue<>(user.contacts);
     }
@@ -47,6 +47,15 @@ public class User implements Serializable, Comparable {
         this.events = new ConcurrentSkipListMap<>();
     }
 
+    public User(String mail, String password, String dni) {
+        this.mail = mail;
+        this.name = null;
+        this.password = password;
+        this.dni = dni;
+        this.admin = false;
+        this.events = new ConcurrentSkipListMap<>();
+    }
+
     public User(String name, String password) {
         this.mail = null;
         this.name = name;
@@ -54,7 +63,6 @@ public class User implements Serializable, Comparable {
         this.dni = null;
         this.admin = false;
         this.events = new ConcurrentSkipListMap<>();
-        //this.messages = new ArrayDeque<>();
         this.messages = new PriorityBlockingQueue<>();
     }
 

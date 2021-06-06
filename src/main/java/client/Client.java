@@ -78,7 +78,7 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Sign up: OK");
                             break;
                         case "SIGN IN: OK":
-                            user = (User) input.readUnshared();
+                            user = new User((User) input.readUnshared());
                             frame.showMainPanel();
                             frame.showEvents();
                             frame.showMessages();
@@ -122,7 +122,7 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Create event: OK -- " + event);
                             break;
                         case "CHECK CONTACT: OK":
-                            user.addContact(((String) input.readObject()).toLowerCase());
+                            user.addContact(((String) input.readObject()));
                             frame.showListContacts();
                             System.out.println("Check contact: OK");
                             break;
@@ -137,9 +137,20 @@ public class Client extends NetworkClient implements Runnable {
                             //user = (User) input.readUnshared();
                             //user.putEvent(event);
                             break;
+                        case "DELETE YOURSELF":
+                            user = null;
+                            frame.showSignIn();
+                            break;
+                        case "FORGOTTEN PASSWORD: OK":
+                            user = new User((User) input.readUnshared());
+                            frame.showMainPanel();
+                            frame.showEvents();
+                            frame.showMessages();
+                            System.out.println("Forgotten password: OK -- " + user);
+                            break;
                         default:
                             System.out.println(line);
-                            // throw new RuntimeException("Unknown command!");
+                            //throw new RuntimeException("Unknown command!");
                     }
                 }
             }
@@ -206,13 +217,15 @@ public class Client extends NetworkClient implements Runnable {
     }
 
     public void removeContact(String contact) {
-        user.removeContact(contact.toLowerCase());
+        user.removeContact(contact);
     }
 
     public void addContact(String contact) {
         try {
-            output.writeObject("Check Contact");
-            output.writeObject(contact);
+            if (!user.getContacts().contains(contact)) {
+                output.writeObject("Check Contact");
+                output.writeObject(contact);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -240,6 +253,15 @@ public class Client extends NetworkClient implements Runnable {
         try {
             output.writeObject("Update event");
             output.writeUnshared(event);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void forgottenPassword(User user) {
+        try {
+            output.writeObject("Forgotten password");
+            output.writeUnshared(user);
         } catch (IOException e) {
             e.printStackTrace();
         }

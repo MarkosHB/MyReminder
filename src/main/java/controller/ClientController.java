@@ -138,9 +138,9 @@ public abstract class ClientController implements ActionListener {
     // -----------------------------------------------------------------------------------
 
     private void control(ActionEvent e) {
-        String command;
+        String command, line;
 
-        switch (command = e.getActionCommand().toUpperCase()) {
+        switch (command = (line = e.getActionCommand()).toUpperCase()) {
             case "SIGN UP PANEL":
                 showSignUp();
                 break;
@@ -175,12 +175,6 @@ public abstract class ClientController implements ActionListener {
             case "INVITE USER":
                 frame.showInvitationPanel();
                 break;
-            case "CONFIRM INVITE USER":
-                //inviteUser();
-                break;
-            case "CANCEL INVITE USER":
-                //ancelInviteUser();
-                break;
             case "MESSAGES":
                 showMessages();
                 break;
@@ -197,32 +191,26 @@ public abstract class ClientController implements ActionListener {
                 frame.showForgottenPassword();
                 System.out.println("Forgotten password panel");
                 break;
-            // ----- need to loop confirm (true/false)
             case "CONFIRM FORGOTTEN PASSWORD":
-                frame.showConfirmForgottenPassword();
-                System.out.println("confirm password -> Accept password");
+                confirmForgottenPassword();
+                break;
+            case "GO BACK FORGOTTEN PASSWORD":
+                frame.showSignIn();
+                System.out.println("Go back forgotten password");
                 break;
             case "GO BACK SING IN":
                 frame.showSignIn();
                 System.out.println("Go back sing in");
                 break;
-            case "NEW PASSWORD PANEL":
-                frame.showSignIn();
-                System.out.println("Accept password");
-                break;
-            case "GO BACK FORGOTTEN PASSWORD":
-                frame.showForgottenPassword();
-                System.out.println("Sign in panel");
-                break;
             default:
                 System.out.println(command);
                 if (command.contains("MORE INFO")) {
-                    String id = command.split(": ")[1];
+                    String id = line.split(": ")[1];
                     System.out.println("More info: Event " + client.getUser().getEvent(id).getTitle());
                     //client.getUser().getEvent(id);
                     frame.showEventDetails(client.getUser().getEvent(id));
                 } else if (command.contains("DELETE EVENT")) {
-                    String id = command.split(": ")[1];
+                    String id = line.split(": ")[1];
                     System.out.println("Delete: Event " + client.getUser().getEvent(id).getTitle());
                     Event aux = new Event(client.getUser().getEvent(id));
                     client.getUser().removeEvent(id);
@@ -230,16 +218,16 @@ public abstract class ClientController implements ActionListener {
                     // Hay que informar al servidor
                     frame.showEvents();
                 } else if (command.contains("DELETE USER")) {
-                    String name = command.split(": ")[1];
+                    String name = line.split(": ")[1];
                     System.out.println("Delete: User " + name);
                     client.deleteUser(name);
                 } else if (command.contains("DELETE CONTACT")) {
-                    String name = command.split(": ")[1];
+                    String name = line.split(": ")[1];
                     System.out.println("Delete: Contact " + name);
                     client.removeContact(name);
                     frame.showListContacts();
                 } else if (command.contains("UPDATE EVENT")) {
-                    String id = command.split(": ")[1];
+                    String id = line.split(": ")[1];
                     System.out.println("Update: Event " + id);
                     try {
                         client.getUser().getEvent(id).setTitle(frame.getShowEventTitleText());
@@ -345,7 +333,13 @@ public abstract class ClientController implements ActionListener {
             client.getUser().putEvent(frame.getActualEvent());
             client.inviteGuests(new Event(frame.getActualEvent()));
         }
+    }
 
+    public void confirmForgottenPassword() {
+        User user = new User(frame.getMailTextForgottenPasswordPanel(),
+                frame.getPasswordTextForgottenPasswordPanel(), frame.getDniTextForgottenPasswordPanel());
+        client.forgottenPassword(user);
+        System.out.println("Confirm forgotten password: " + user);
     }
 
 }
