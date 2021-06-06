@@ -48,20 +48,26 @@
 <!-- *** Por hacer *** -->
 <h3> Trabajo asignado última semana </h3>
 <ul>
-  <li> Implementar el servidor
-    --> Tom - Madris 
+  <li> Conexión con base de datos real
+    --> Tom y Madris
   </li>
-  <li> Lista de contactos 
-    --> Diego - Miguel 
+  <li> Lista de contactos -HECHO-
+    --> Diego y Miguel + Ayuda de Pablo
   </li>
-  <li> Alarma
+  <li> Invitaciones
+    --> Diego, Miguel y Pablo
+  </li>
+  <li> Alarmas *HECHO*
+    --> Pablo
+  </li>
+  <li> Patrón de diseño (Template Method) -HECHO-
     --> Pablo
   </li>
   <li> Testeo del sistema
-    --> Yussef - Samuel 
+    --> Samuel y Yussef
   </li>
-  <li> Auxilio y Exposición
-    --> Pablo - Marcos 
+  <li> Diapositivas -HECHO-
+    --> Marcos 
   </li>
 </ul>
 
