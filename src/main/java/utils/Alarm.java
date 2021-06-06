@@ -24,11 +24,9 @@ public class Alarm implements Runnable {
         while(true) {
             try {
                 Thread.sleep(60000);
-                Event[] events = client.getUser().getEvents().values().toArray(new Event[0]);
-                for (Event event : events) {
+                for (Event event : client.getUser().getEvents().values()) {
                     try {
-                        if ((new Date().getTime() - event.getAlarm().getTime()) < (60 * 1000)) {
-                            //client.getUser().addMessage();
+                        if (new Date().getMinutes() == event.getAlarm().getMinutes()) {
                             System.out.println("ALARMA: " + event.getTitle());
                             client.getUser().addMessage("ALARMA: " + event.getTitle());
                             event.setAlarm(null);

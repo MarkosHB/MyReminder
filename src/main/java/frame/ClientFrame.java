@@ -494,6 +494,9 @@ public abstract class ClientFrame extends JFrame {
         acceptconfirmforgottenPasswordButton.addActionListener(myController);
         goBackconfirmforgottenPasswordButton.addActionListener(myController);
 
+        confirmUpdateEvent.addActionListener(myController);
+        cancelUpdateEvent.addActionListener(myController);
+
     }
 
     // -----------------------------------------------------------------------------------
@@ -543,45 +546,56 @@ public abstract class ClientFrame extends JFrame {
 
     public void showCreateEventPanel() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        signInPanel.setVisible(false);
-        signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        adminPanel.setVisible(false);
+        inboxPanel.setVisible(false);
+        showEventPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(inboxPanel);
+        eastPanel.remove(showEventPanel);
         createEventTitleText.setText("");
         createEventDescriptionText.setText("");
         createEventDateText.setText(formatter.format(new Date()));
         createEventAlarmText.setText(formatter.format(new Date()));
         eastPanel.add(createEventPanel, BorderLayout.CENTER);
+        createEventPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
 
     public void showEventDetails(Event event) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        signInPanel.setVisible(false);
-        signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        adminPanel.setVisible(false);
+        inboxPanel.setVisible(false);
+        createEventPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(inboxPanel);
         eastPanel.remove(createEventPanel);
+        confirmUpdateEvent.setActionCommand("Update event: " + event.getId());
         showEventTitleText.setText(event.getTitle());
         showEventDescriptionText.setText(event.getDescription());
         showEventDateText.setText(formatter.format(event.getDate()));
         showEventAlarmText.setText(formatter.format(event.getAlarm()));
         eastPanel.add(showEventPanel, BorderLayout.CENTER);
+        showEventPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
 
     public void showMessages() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mainPanel.setVisible(false);
-        eventsPanel.setVisible(false);
         auxiliarPanel.setVisible(false);
+        createEventPanel.setVisible(false);
+        adminPanel.setVisible(false);
+        showEventPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(createEventPanel);
         eastPanel.remove(adminPanel);
+        eastPanel.remove(showEventPanel);
         messagesPanel.removeAll();
         JPanel panel;
         //eventDate.clear();
@@ -596,15 +610,20 @@ public abstract class ClientFrame extends JFrame {
         }
 
         eastPanel.add(inboxPanel, BorderLayout.CENTER);
+        inboxPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
 
     public void showAdminFrame() {
         mainPanel.setVisible(false);
         auxiliarPanel.setVisible(false);
+        createEventPanel.setVisible(false);
+        inboxPanel.setVisible(false);
+        showEventPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(createEventPanel);
         eastPanel.remove(inboxPanel);
+        eastPanel.remove(showEventPanel);
         usersPanel.removeAll();
         JPanel panel;
         //eventDate.clear();
@@ -622,6 +641,7 @@ public abstract class ClientFrame extends JFrame {
         }
 
         eastPanel.add(adminPanel, BorderLayout.CENTER);
+        adminPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
 

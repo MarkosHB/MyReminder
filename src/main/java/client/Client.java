@@ -80,6 +80,7 @@ public class Client extends NetworkClient implements Runnable {
                         case "SIGN IN: OK":
                             user = (User) input.readObject();
                             frame.showMainPanel();
+                            frame.showEvents();
                             System.out.println("Sign in: OK -- " + user);
                             break;
                         case "DELETE USER: OK":

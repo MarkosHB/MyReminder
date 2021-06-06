@@ -160,11 +160,23 @@ public abstract class ClientController implements ActionListener {
             case "CANCEL CREATE EVENT":
                 cancelCreateEvent();
                 break;
+            case "INVITE USER":
+                //showContactsPanel();
+                break;
+            case "CONFIRM INVITE USER":
+                //inviteUser();
+                break;
+            case "CANCEL INVITE USER":
+                //ancelInviteUser();
+                break;
             case "MESSAGES":
                 showMessages();
                 break;
             case "ADMIN":
                 showAdmin();
+                break;
+            case "CANCEL UPDATE EVENT":
+                showMessages();
                 break;
             case "LOG OUT":
                 logOut();
@@ -207,6 +219,16 @@ public abstract class ClientController implements ActionListener {
                     String name = command.split(": ")[1];
                     System.out.println("Delete: User " + name);
                     client.deleteUser(name);
+                } else if (command.contains("UPDATE EVENT")) {
+                    String id = command.split(": ")[1];
+                    System.out.println("Update: Event " + id);
+                    /*
+                    client.getUser().getEvent(id).setTitle();
+                    client.getUser().getEvent(id).setDescription();
+                    client.getUser().getEvent(id).setAlarm();
+                    client.getUser().getEvent(id).setDate();
+                    client.getUser().getEvent(id).putGuest();
+                    */
                 } else {
                     throw new RuntimeException("Unknown command!");
                 }

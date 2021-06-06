@@ -94,6 +94,10 @@ public class Event implements Serializable, Comparable {
         this.guests = guests;
     }
 
+    public void putGuest(String name) {
+        this.guests.put(name, false);
+    }
+
     public boolean containsGuest(String name) {
         return this.guests.containsKey(name);
     }
