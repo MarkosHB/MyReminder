@@ -81,6 +81,7 @@ public class Client extends NetworkClient implements Runnable {
                             user = (User) input.readObject();
                             frame.showMainPanel();
                             frame.showEvents();
+                            frame.showMessages();
                             System.out.println("Sign in: OK -- " + user);
                             break;
                         case "DELETE USER: OK":
@@ -99,6 +100,11 @@ public class Client extends NetworkClient implements Runnable {
                             frame.showMessages();
                             frame.showEvents();
                             System.out.println("Create event: OK -- " + event);
+                            break;
+                        case "CHECK CONTACT: OK":
+                            user.addContact(((String) input.readObject()).toLowerCase());
+                            frame.showListContacts();
+                            System.out.println("Check contact: OK");
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
@@ -169,6 +175,19 @@ public class Client extends NetworkClient implements Runnable {
         try {
             output.writeObject("Delete user");
             output.writeObject(name);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeContact(String contact) {
+        user.removeContact(contact.toLowerCase());
+    }
+
+    public void addContact(String contact) {
+        try {
+            output.writeObject("Check Contact");
+            output.writeObject(contact);
         } catch (IOException e) {
             e.printStackTrace();
         }

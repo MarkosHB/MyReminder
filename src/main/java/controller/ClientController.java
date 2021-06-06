@@ -160,8 +160,17 @@ public abstract class ClientController implements ActionListener {
             case "CANCEL CREATE EVENT":
                 cancelCreateEvent();
                 break;
+            case "LIST CONTACTS":
+                frame.showListContacts();
+                break;
+            case "ADD CONTACT":
+                client.addContact(frame.getAddContactText());
+                break;
+            case "INVITE CONTACT":
+                frame.showMessages();
+                break;
             case "INVITE USER":
-                //showContactsPanel();
+                frame.showInvitationPanel();
                 break;
             case "CONFIRM INVITE USER":
                 //inviteUser();
@@ -219,6 +228,11 @@ public abstract class ClientController implements ActionListener {
                     String name = command.split(": ")[1];
                     System.out.println("Delete: User " + name);
                     client.deleteUser(name);
+                } else if (command.contains("DELETE CONTACT")) {
+                    String name = command.split(": ")[1];
+                    System.out.println("Delete: Contact " + name);
+                    client.removeContact(name);
+                    frame.showListContacts();
                 } else if (command.contains("UPDATE EVENT")) {
                     String id = command.split(": ")[1];
                     System.out.println("Update: Event " + id);

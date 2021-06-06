@@ -26,7 +26,12 @@ public class Alarm implements Runnable {
                 Thread.sleep(1000);
                 for (Event event : client.getUser().getEvents().values()) {
                     try {
-                        if (new Date().getMinutes() == event.getAlarm().getMinutes()) {
+                        Date now = new Date();
+                        if ((now.getMinutes() == event.getAlarm().getMinutes()) &&
+                                (now.getHours() == event.getAlarm().getHours()) &&
+                                (now.getDay() == event.getAlarm().getDate()) &&
+                                (now.getMonth() == event.getAlarm().getMonth()) &&
+                                (now.getYear() == event.getAlarm().getYear())) {
                             System.out.println("ALARMA: " + event.getTitle());
                             client.getUser().addMessage("ALARMA: " + event.getTitle());
                             event.setAlarm(null);

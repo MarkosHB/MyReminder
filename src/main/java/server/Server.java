@@ -115,6 +115,13 @@ public class Server extends MultiThreadServer implements Runnable {
                             event = (Event) input.readObject();
                             createEvent(event, output);
                             break;
+                        case "CHECK CONTACT":
+                            String contact = (String) input.readObject();
+                            if (db.containsUserName(contact)) {
+                                output.writeObject("CHECK CONTACT: OK");
+                                output.writeObject(contact);
+                            }
+                            break;
                         case "INVITATION":
                             event = (Event) input.readObject();
                             sendInvitation(event, output);

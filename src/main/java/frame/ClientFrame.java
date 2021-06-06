@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.PriorityBlockingQueue;
@@ -165,9 +164,23 @@ public abstract class ClientFrame extends JFrame {
     private JPanel usersPanel;
     private JScrollPane usersScrollPanel;
 
+    private JPanel listContactsPanel;
+    private JPanel contactsPanel;
+    private JScrollPane contactsScrollPanel;
+    private JPanel addContactPanel;
+    private JTextField addContactText;
+    private JButton addContactButton;
+
+    private JPanel invitePanel;
+    private JPanel inviteContactsPanel;
+    private JScrollPane inviteContactsScrollPanel;
+    private JButton inviteContactButton;
+
     private JPanel inboxPanel;
     private JPanel messagesPanel;
     private JScrollPane messagesScrollPanel;
+
+    ArrayList<JCheckBox> guestsButtons = new ArrayList<>();
 
     // Constructor
     public ClientFrame(String title, int posX, int posY, Client client) {
@@ -413,7 +426,7 @@ public abstract class ClientFrame extends JFrame {
 
         inviteUserPanel = new JPanel(new GridLayout(1, 1));
         inviteUserButton = new JButton("Invite user");
-        inviteUserPanel.add(inviteUserButton);
+        //inviteUserPanel.add(inviteUserButton);
 
         showEventButtons = new JPanel(new GridLayout(1, 2));
         confirmUpdateEvent = new JButton("Update");
@@ -441,6 +454,33 @@ public abstract class ClientFrame extends JFrame {
         usersPanel.setLayout(new BoxLayout(usersPanel, BoxLayout.Y_AXIS));
         usersScrollPanel = new JScrollPane(usersPanel);
         adminPanel.add(usersScrollPanel, BorderLayout.CENTER);
+
+        listContactsPanel = new JPanel(new BorderLayout());
+        listContactsPanel.add(new JLabel("Contacts:"), BorderLayout.NORTH);
+
+        contactsPanel = new JPanel();
+        contactsPanel.setLayout(new BoxLayout(contactsPanel, BoxLayout.Y_AXIS));
+        contactsScrollPanel = new JScrollPane(contactsPanel);
+        listContactsPanel.add(contactsScrollPanel, BorderLayout.CENTER);
+
+        addContactPanel = new JPanel(new GridLayout(2, 1));
+        addContactText = new JTextField("");
+        addContactButton = new JButton("Add contact");
+
+        addContactPanel.add(addContactText);
+        addContactPanel.add(addContactButton);
+        listContactsPanel.add(addContactPanel, BorderLayout.SOUTH);
+
+        invitePanel = new JPanel(new BorderLayout());
+        invitePanel.add(new JLabel("Contacts:"), BorderLayout.NORTH);
+
+        inviteContactsPanel = new JPanel();
+        inviteContactsPanel.setLayout(new BoxLayout(inviteContactsPanel, BoxLayout.Y_AXIS));
+        inviteContactsScrollPanel = new JScrollPane(inviteContactsPanel);
+        invitePanel.add(inviteContactsScrollPanel, BorderLayout.CENTER);
+
+        inviteContactButton = new JButton("Invite contact");
+        invitePanel.add(inviteContactButton, BorderLayout.SOUTH);
 
         inboxPanel = new JPanel(new BorderLayout());
         inboxPanel.add(new JLabel("Invitations and alerts:"), BorderLayout.NORTH);
@@ -498,6 +538,11 @@ public abstract class ClientFrame extends JFrame {
         confirmUpdateEvent.addActionListener(myController);
         cancelUpdateEvent.addActionListener(myController);
 
+        inviteUserButton.addActionListener(myController);
+        inviteContactButton.addActionListener(myController);
+
+        addContactButton.addActionListener(myController);
+
     }
 
     // -----------------------------------------------------------------------------------
@@ -537,6 +582,8 @@ public abstract class ClientFrame extends JFrame {
         infoPanel.removeAll();
         if (client.getUser().isAdmin()) {
             infoPanel.add(adminButton);
+        } else {
+            infoPanel.add(new JLabel(client.getUser().getName()));
         }
         infoPanel.add(logOutButton);
         remove(signInPanel);
@@ -552,10 +599,12 @@ public abstract class ClientFrame extends JFrame {
         adminPanel.setVisible(false);
         inboxPanel.setVisible(false);
         showEventPanel.setVisible(false);
+        listContactsPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(inboxPanel);
         eastPanel.remove(showEventPanel);
+        eastPanel.remove(listContactsPanel);
         createEventTitleText.setText("");
         createEventDescriptionText.setText("");
         createEventDateText.setText(formatter.format(new Date()));
@@ -572,10 +621,12 @@ public abstract class ClientFrame extends JFrame {
         adminPanel.setVisible(false);
         inboxPanel.setVisible(false);
         createEventPanel.setVisible(false);
+        listContactsPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(inboxPanel);
         eastPanel.remove(createEventPanel);
+        eastPanel.remove(listContactsPanel);
         confirmUpdateEvent.setActionCommand("Update event: " + event.getId());
         showEventTitleText.setText(event.getTitle());
         showEventDescriptionText.setText(event.getDescription());
@@ -590,6 +641,10 @@ public abstract class ClientFrame extends JFrame {
             showEventAlarmText.setText("");
         }
         eastPanel.add(showEventPanel, BorderLayout.CENTER);
+        inviteUserPanel.remove(inviteUserButton);
+        if (event.getOwner().equals(client.getUser().getName())) {
+            inviteUserPanel.add(inviteUserButton);
+        }
         showEventPanel.setVisible(true);
         mainPanel.setVisible(true);
     }
@@ -601,18 +656,17 @@ public abstract class ClientFrame extends JFrame {
         createEventPanel.setVisible(false);
         adminPanel.setVisible(false);
         showEventPanel.setVisible(false);
+        listContactsPanel.setVisible(false);
+        invitePanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(createEventPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(showEventPanel);
+        eastPanel.remove(listContactsPanel);
+        eastPanel.remove(invitePanel);
         messagesPanel.removeAll();
         JPanel panel;
-        //eventDate.clear();
-        //eventTitle.clear();
-        //eventButton.clear();
-        // ArrayDeque<Message> messages = client.getUser().getMessages();
         PriorityBlockingQueue<Message> messages = new PriorityBlockingQueue<>(client.getUser().getMessages());
-        // for (Message message : messages) {
         while (messages.size() > 0) {
             Message message = messages.poll();
             panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
@@ -632,15 +686,14 @@ public abstract class ClientFrame extends JFrame {
         createEventPanel.setVisible(false);
         inboxPanel.setVisible(false);
         showEventPanel.setVisible(false);
+        listContactsPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(createEventPanel);
         eastPanel.remove(inboxPanel);
         eastPanel.remove(showEventPanel);
+        eastPanel.remove(listContactsPanel);
         usersPanel.removeAll();
         JPanel panel;
-        //eventDate.clear();
-        //eventTitle.clear();
-        //eventButton.clear();
         PriorityBlockingQueue<String> users = new PriorityBlockingQueue<>(client.getUsers().keySet());
         while (users.size() > 0) {
             String user = users.poll();
@@ -664,9 +717,6 @@ public abstract class ClientFrame extends JFrame {
         eventsPanel.setVisible(false);
         eventsPanel.removeAll();
         JPanel panel;
-        //eventDate.clear();
-        //eventTitle.clear();
-        //eventButton.clear();
         PriorityBlockingQueue<Event> events = new PriorityBlockingQueue<>(client.getUser().getEvents().values());
         while (events.size() > 0) {
             Event event = events.poll();
@@ -677,10 +727,12 @@ public abstract class ClientFrame extends JFrame {
             button.setActionCommand("More info: " + event.getId());
             button.addActionListener(controller);
             panel.add(button);
-            button = new JButton("Delete");
-            button.setActionCommand("Delete event: " + event.getId());
-            button.addActionListener(controller);
-            panel.add(button);
+            if (event.getOwner().equals(client.getUser().getName())) {
+                button = new JButton("Delete");
+                button.setActionCommand("Delete event: " + event.getId());
+                button.addActionListener(controller);
+                panel.add(button);
+            }
             eventsPanel.add(panel);
         }
 
@@ -729,6 +781,73 @@ public abstract class ClientFrame extends JFrame {
         confirmforgottenPasswordPanel.setVisible(true);
     }
 
+    public void showListContacts() {
+        mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        createEventPanel.setVisible(false);
+        inboxPanel.setVisible(false);
+        showEventPanel.setVisible(false);
+        adminPanel.setVisible(false);
+        invitePanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(createEventPanel);
+        eastPanel.remove(inboxPanel);
+        eastPanel.remove(showEventPanel);
+        eastPanel.remove(adminPanel);
+        eastPanel.remove(invitePanel);
+        contactsPanel.removeAll();
+        JPanel panel;
+        PriorityBlockingQueue<String> contacts = new PriorityBlockingQueue<>(client.getUser().getContacts());
+        while (contacts.size() > 0) {
+            String contact = contacts.poll();
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
+            panel.add(new JLabel(contact));
+            JButton button = new JButton("Delete");
+            button.setActionCommand("Delete contact: " + contact);
+            button.addActionListener(controller);
+            panel.add(button);
+            contactsPanel.add(panel);
+        }
+
+        eastPanel.add(listContactsPanel, BorderLayout.CENTER);
+        addContactText.setText("");
+        listContactsPanel.setVisible(true);
+        mainPanel.setVisible(true);
+    }
+
+    public void showInvitationPanel() {
+        mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        createEventPanel.setVisible(false);
+        inboxPanel.setVisible(false);
+        showEventPanel.setVisible(false);
+        adminPanel.setVisible(false);
+        invitePanel.setVisible(true);
+        eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(createEventPanel);
+        eastPanel.remove(inboxPanel);
+        eastPanel.remove(showEventPanel);
+        eastPanel.remove(adminPanel);
+        eastPanel.remove(listContactsPanel);
+        inviteContactsPanel.removeAll();
+        JPanel panel;
+        PriorityBlockingQueue<String> contacts = new PriorityBlockingQueue<>(client.getUser().getContacts());
+        while (contacts.size() > 0) {
+            String contact = contacts.poll();
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
+            // panel.add(new JLabel(contact));
+            JCheckBox button = new JCheckBox(contact);
+            panel.add(button);
+            guestsButtons.add(button);
+            inviteContactsPanel.add(panel);
+        }
+
+        eastPanel.add(invitePanel, BorderLayout.CENTER);
+        addContactText.setText("");
+        invitePanel.setVisible(true);
+        mainPanel.setVisible(true);
+    }
+
     // -----------------------------------------------------------------------------------
     // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
     // -----------------------------------------------------------------------------------
@@ -763,6 +882,10 @@ public abstract class ClientFrame extends JFrame {
 
     public String getCreateEventDescription() {
         return createEventDescriptionText.getText();
+    }
+
+    public String getAddContactText() {
+        return addContactText.getText();
     }
 
     public Date getCreateEventDate() throws ParseException {

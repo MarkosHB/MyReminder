@@ -16,7 +16,7 @@ public class User implements Serializable, Comparable {
     private ConcurrentSkipListMap<String, Event> events;
     //private ArrayDeque<Message> messages = new ArrayDeque<>();
     private PriorityBlockingQueue<Message> messages = new PriorityBlockingQueue<>();
-    private ArrayList<String> contacs = new ArrayList<>();
+    private PriorityBlockingQueue<String> contacs = new PriorityBlockingQueue<>();
     // Podria crear la clase Message y ponerle un campo que sea leido
 
     public User(String mail, String name, String password, String dni, boolean admin) {
@@ -118,6 +118,10 @@ public class User implements Serializable, Comparable {
         return messages;
     }
 
+    public PriorityBlockingQueue<String> getContacts() {
+        return contacs;
+    }
+
     /*
     public void addMessage(String message) {
         messages.addFirst(new Message(message));
@@ -126,6 +130,14 @@ public class User implements Serializable, Comparable {
 
     public void addMessage(String message) {
         messages.add(new Message(message));
+    }
+
+    public void addContact(String contact) {
+        contacs.add(contact);
+    }
+
+    public void removeContact(String contact) {
+        contacs.remove(contact);
     }
 
     @Override
