@@ -14,7 +14,6 @@ public class User implements Serializable, Comparable {
     private String dni;
     private boolean admin;
     private ConcurrentSkipListMap<String, Event> events;
-    //private ArrayDeque<Message> messages = new ArrayDeque<>();
     private PriorityBlockingQueue<Message> messages = new PriorityBlockingQueue<>();
     private PriorityBlockingQueue<String> contacts = new PriorityBlockingQueue<>();
     // Podria crear la clase Message y ponerle un campo que sea leido

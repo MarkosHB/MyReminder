@@ -927,4 +927,22 @@ public abstract class ClientFrame extends JFrame {
         return guestsButtons;
     }
 
+    public String getShowEventTitleText() {
+        return showEventTitleText.getText();
+    }
+
+    public String getShowEventDescriptionText() {
+        return showEventTitleText.getText();
+    }
+
+    public Date getShowEventDate() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return formatter.parse(showEventDateText.getText());
+    }
+
+    public Date getShowEventAlarm() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        return formatter.parse(showEventAlarmText.getText());
+    }
+
 }

@@ -241,6 +241,15 @@ public abstract class ClientController implements ActionListener {
                 } else if (command.contains("UPDATE EVENT")) {
                     String id = command.split(": ")[1];
                     System.out.println("Update: Event " + id);
+                    try {
+                        client.getUser().getEvent(id).setTitle(frame.getShowEventTitleText());
+                        client.getUser().getEvent(id).setDescription(frame.getShowEventDescriptionText());
+                        client.getUser().getEvent(id).setDate(frame.getShowEventDate());
+                        client.getUser().getEvent(id).setAlarm(frame.getShowEventAlarm());
+                        client.updateEvent(client.getUser().getEvent(id));
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
                     /*
                     client.getUser().getEvent(id).setTitle();
                     client.getUser().getEvent(id).setDescription();
@@ -310,6 +319,10 @@ public abstract class ClientController implements ActionListener {
 
     public void showAdmin() {
         client.receiveUsers();
+    }
+
+    public void updateEvent() {
+
     }
 
     public void logOut() {
