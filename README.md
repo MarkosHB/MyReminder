@@ -43,5 +43,30 @@
   </li>
 </ul>
 
+---
 
-
+<!-- *** Por hacer *** -->
+<h3> Trabajo asignado última semana </h3>
+<ul>
+  <li> Conexión con base de datos real
+    --> Tom y Madris
+  </li>
+  <li> Lista de contactos ✔️
+    --> Diego y Miguel + Ayuda de Pablo
+  </li>
+  <li> Invitaciones ✔️
+    --> Interfaz: Diego y Miguel; Funcionalidad: Pablo
+  </li>
+  <li> Alarmas ✔️
+    --> Pablo
+  </li>
+  <li> Patrón de diseño (Template Method) ✔️
+    --> Pablo
+  </li>
+  <li> Testeo del sistema
+    --> Samuel y Yussef
+  </li>
+  <li> Diapositivas ✔️
+    --> Marcos 
+  </li>
+</ul>
