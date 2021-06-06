@@ -67,7 +67,7 @@ public class Event implements Serializable, Comparable {
     }
 
     public void setAlarm(Date date) {
-        this.alarm = alarm;
+        this.alarm = date;
     }
 
     public String getDescription() {
@@ -120,4 +120,5 @@ public class Event implements Serializable, Comparable {
         Event e = (Event) o;
         return (this.date.compareTo(e.date));
     }
+
 }

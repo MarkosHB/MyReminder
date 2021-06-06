@@ -23,7 +23,7 @@ public class Alarm implements Runnable {
     public void run() {
         while(true) {
             try {
-                Thread.sleep(60000);
+                Thread.sleep(1000);
                 for (Event event : client.getUser().getEvents().values()) {
                     try {
                         if (new Date().getMinutes() == event.getAlarm().getMinutes()) {

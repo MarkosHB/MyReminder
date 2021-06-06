@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.PriorityBlockingQueue;
 
 /**
  * Clase para la ventana del cliente En ella crearemos la ventana y las
@@ -578,8 +579,16 @@ public abstract class ClientFrame extends JFrame {
         confirmUpdateEvent.setActionCommand("Update event: " + event.getId());
         showEventTitleText.setText(event.getTitle());
         showEventDescriptionText.setText(event.getDescription());
-        showEventDateText.setText(formatter.format(event.getDate()));
-        showEventAlarmText.setText(formatter.format(event.getAlarm()));
+        try {
+            showEventDateText.setText(formatter.format(event.getDate()));
+        } catch (NullPointerException e) {
+            showEventDateText.setText("");
+        }
+        try {
+            showEventAlarmText.setText(formatter.format(event.getAlarm()));
+        } catch (NullPointerException e) {
+            showEventAlarmText.setText("");
+        }
         eastPanel.add(showEventPanel, BorderLayout.CENTER);
         showEventPanel.setVisible(true);
         mainPanel.setVisible(true);
@@ -601,8 +610,11 @@ public abstract class ClientFrame extends JFrame {
         //eventDate.clear();
         //eventTitle.clear();
         //eventButton.clear();
-        ArrayDeque<Message> messages = client.getUser().getMessages();
-        for (Message message : messages) {
+        // ArrayDeque<Message> messages = client.getUser().getMessages();
+        PriorityBlockingQueue<Message> messages = new PriorityBlockingQueue<>(client.getUser().getMessages());
+        // for (Message message : messages) {
+        while (messages.size() > 0) {
+            Message message = messages.poll();
             panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
             panel.add(new JLabel(formatter.format(message.getDate())));
             panel.add(new JLabel(message.getMessage()));
@@ -629,8 +641,9 @@ public abstract class ClientFrame extends JFrame {
         //eventDate.clear();
         //eventTitle.clear();
         //eventButton.clear();
-        ArrayList<String> users = new ArrayList<>(client.getUsers().keySet());
-        for (String user : users) {
+        PriorityBlockingQueue<String> users = new PriorityBlockingQueue<>(client.getUsers().keySet());
+        while (users.size() > 0) {
+            String user = users.poll();
             panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
             panel.add(new JLabel(user));
             JButton button = new JButton("Delete");
@@ -654,21 +667,20 @@ public abstract class ClientFrame extends JFrame {
         //eventDate.clear();
         //eventTitle.clear();
         //eventButton.clear();
-        Event[] events = client.getUser().getEvents().values().toArray(new Event[0]);
-        for (int i = 0; i < client.getUser().getEvents().size(); i++) {
+        PriorityBlockingQueue<Event> events = new PriorityBlockingQueue<>(client.getUser().getEvents().values());
+        while (events.size() > 0) {
+            Event event = events.poll();
             panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 20, 5));
-            panel.add(new JLabel(formatter.format(events[i].getDate())));
-            panel.add(new JLabel(events[i].getTitle()));
+            panel.add(new JLabel(formatter.format(event.getDate())));
+            panel.add(new JLabel(event.getTitle()));
             JButton button = new JButton("More info");
-            button.setActionCommand("More info: " + events[i].getId());
+            button.setActionCommand("More info: " + event.getId());
             button.addActionListener(controller);
             panel.add(button);
             button = new JButton("Delete");
-            button.setActionCommand("Delete event: " + events[i].getId());
+            button.setActionCommand("Delete event: " + event.getId());
             button.addActionListener(controller);
             panel.add(button);
-            //panel.add(new JButton("More info"));
-            //panel.add(new JButton("Delete"));
             eventsPanel.add(panel);
         }
 

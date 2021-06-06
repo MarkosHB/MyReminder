@@ -7,7 +7,10 @@ import utils.User;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public class Server extends MultiThreadServer implements Runnable {
@@ -33,10 +36,26 @@ public class Server extends MultiThreadServer implements Runnable {
         socketWriter = new ConcurrentSkipListMap<>();
 
         db = Database.getInstance(); // Esto sustituye a users y mails
-        db.addUser("admin", new User("admin@uma.es", "admin", "1234", "0", true));
-        db.addUser("pablo", new User("pablo@uma.es", "pablo", "1234", "1", false));
-        db.addUser("miguel", new User("miguel@uma.es", "miguel", "1234", "2", false));
-        db.addUser("marcos", new User("marcos@uma.es", "marcos", "1234", "3", false));
+        db.addUser(new User("admin@uma.es", "admin", "1234", "0", true));
+        db.addUser(new User("pablo@uma.es", "pablo", "1234", "1", false));
+        db.addUser(new User("miguel@uma.es", "miguel", "1234", "2", false));
+        db.addUser(new User("marcos@uma.es", "marcos", "1234", "3", false));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+        try {
+            db.getUser("admin").putEvent(new Event("ADMIN_0", "Examen de SI",
+                    formatter.parse("11/06/2021 09:30"), formatter.parse("11/06/2021 08:00"),
+                    "Examen final de la asignatura Sistemas Inteligentes", "admin"));
+            db.getUser("admin").putEvent(new Event("ADMIN_1", "Examen de Software",
+                    formatter.parse("11/06/2021 23:55"), formatter.parse("11/06/2021 23:00"),
+                    "Entrega del proyecto de Introduccion a la Ingenieria Software", "admin"));
+            db.getUser("admin").putEvent(new Event("ADMIN_2", "Reunion grupal",
+                    formatter.parse("09/06/2021 11:00"), formatter.parse("09/06/2021 10:30"),
+                    "Reunion grupal para el proyecto de Software", "admin"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -156,7 +175,7 @@ public class Server extends MultiThreadServer implements Runnable {
         } else {
             // Introduzco el usuario y el mail
             // users.put(user.getName(), user);
-            db.addUser(user.getName(), user);
+            db.addUser(user);
             // mails.put(user.getMail(), user.getName());
             db.addMail(user.getMail(), user.getName());
             output.writeObject("Sign up: OK");

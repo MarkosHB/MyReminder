@@ -47,7 +47,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
         socketWriter = new ConcurrentSkipListMap<>();
 
         db = Database.getInstance(); // Esto sustituye a users y mails
-        db.addUser("admin", new User("admin@uma.es", "admin", "1234", "0", true));
+        db.addUser(new User("admin@uma.es", "admin", "1234", "0", true));
 
         ConnectionString connString = new ConnectionString(
                 "mongodb+srv://software:MyReminder@cluster0.cb2w0.mongodb.net/Software?w=majority");
@@ -62,7 +62,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
         for (Document user : dbUsers) {
             final Gson gson = new Gson();
             final User userInstance = gson.fromJson(user.toJson(), User.class);
-            db.addUser(user.getObjectId("_id").toString(), userInstance);
+            //db.addUser(user.getObjectId("_id").toString(), userInstance);
         }
 
         // users.insertOne(new Document("_id", "pblprz").append("Nombre", "Pablo"));
@@ -178,7 +178,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
         } else {
             // Introduzco el usuario y el mail
             // users.put(user.getName(), user);
-            db.addUser(user.getName(), user);
+            db.addUser(user);
             // mails.put(user.getMail(), user.getName());
             db.addMail(user.getMail(), user.getName());
             output.writeObject("Sign up: OK");

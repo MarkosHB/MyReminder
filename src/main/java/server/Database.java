@@ -45,8 +45,9 @@ public class Database {
         this.mails = mails;
     }
 
-    public void addUser(String key, User value) {
-        users.put(key, value);
+    public void addUser(User user) {
+        users.put(user.getName(), user);
+        mails.put(user.getMail(), user.getName());
     }
 
     public void removeUser(String key) {

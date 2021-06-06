@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.PriorityBlockingQueue;
 
-public class User implements Serializable {
+public class User implements Serializable, Comparable {
 
     private String mail;
     private String name;
@@ -14,8 +14,8 @@ public class User implements Serializable {
     private String dni;
     private boolean admin;
     private ConcurrentSkipListMap<String, Event> events;
-    // private PriorityBlockingQueue<Event> events2;
-    private ArrayDeque<Message> messages = new ArrayDeque<>();
+    //private ArrayDeque<Message> messages = new ArrayDeque<>();
+    private PriorityBlockingQueue<Message> messages = new PriorityBlockingQueue<>();
     private ArrayList<String> contacs = new ArrayList<>();
     // Podria crear la clase Message y ponerle un campo que sea leido
 
@@ -44,7 +44,8 @@ public class User implements Serializable {
         this.dni = null;
         this.admin = false;
         this.events = new ConcurrentSkipListMap<>();
-        this.messages = new ArrayDeque<>();
+        //this.messages = new ArrayDeque<>();
+        this.messages = new PriorityBlockingQueue<>();
     }
 
     public String getMail() {
@@ -107,12 +108,24 @@ public class User implements Serializable {
         this.events.remove(id);
     }
 
+    /*
     public ArrayDeque<Message> getMessages() {
         return messages;
     }
+    */
 
+    public PriorityBlockingQueue<Message> getMessages() {
+        return messages;
+    }
+
+    /*
     public void addMessage(String message) {
         messages.addFirst(new Message(message));
+    }
+    */
+
+    public void addMessage(String message) {
+        messages.add(new Message(message));
     }
 
     @Override
@@ -127,6 +140,12 @@ public class User implements Serializable {
 
     public boolean isCorrect() {
         return (!mail.equals("") && !name.equals("") && !password.equals("") && !dni.equals(""));
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        User u = (User) o;
+        return (this.name.compareTo(u.name));
     }
 
 }

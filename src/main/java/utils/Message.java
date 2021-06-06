@@ -2,7 +2,7 @@ package utils;
 
 import java.util.Date;
 
-public class Message {
+public class Message implements Comparable {
 
     private String message;
     private Date date;
@@ -54,6 +54,12 @@ public class Message {
 
     public void setRead(boolean read) {
         this.read = read;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Message m = (Message) o;
+        return (this.date.compareTo(m.date));
     }
 
 }
