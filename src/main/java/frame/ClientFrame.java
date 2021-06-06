@@ -137,6 +137,9 @@ public abstract class ClientFrame extends JFrame {
     private JLabel createEventAlarmLabel;
     private JTextField createEventAlarmText;
 
+    private JPanel inviteUserPanel;
+    private JButton inviteUserButton;
+
     private JPanel createEventButtons;
     private JButton confirmCreateEvent;
     private JButton cancelCreateEvent;
@@ -198,8 +201,6 @@ public abstract class ClientFrame extends JFrame {
         signInPanel.add(signInLabel, BorderLayout.NORTH);
 
         centerSignInPanel = new JPanel(new GridLayout(2, 1));
-        // centerInitialPanel.setLayout(new BoxLayout(centerInitialPanel,
-        // BoxLayout.Y_AXIS));
         userSignInPanel = new JPanel(new FlowLayout());
         userLabelSignInPanel = new JLabel("User: ");
         userTextSignInPanel = new JTextField(10);
@@ -211,10 +212,6 @@ public abstract class ClientFrame extends JFrame {
         passwordSignInPanel.add(passwordLabelSignInPanel);
         passwordSignInPanel.add(passwordTextSignInPanel);
 
-        // centerInitialPanel.add(userLabelInitialPanel);
-        // centerInitialPanel.add(userTextInitialPanel);
-        // centerInitialPanel.add(passwordLabelInitialPanel);
-        // centerInitialPanel.add(passwordTextInitialPanel);
         centerSignInPanel.add(userSignInPanel);
         centerSignInPanel.add(passwordSignInPanel);
         signInPanel.add(centerSignInPanel, BorderLayout.CENTER);
@@ -272,8 +269,7 @@ public abstract class ClientFrame extends JFrame {
         southSignUpPanel.add(goBackButton);
         signUpPanel.add(southSignUpPanel, BorderLayout.SOUTH);
 
-        // add(signUpPanel);
-
+        /* --------------------------- UNIFICAR EN UNO --------------------------- */
         // -------------------------- Forgotten Password Panel --------------------------
         forgottenPasswordPanel = new JPanel(new BorderLayout());
 
@@ -304,7 +300,6 @@ public abstract class ClientFrame extends JFrame {
         forgottenPasswordPanel.add(southforgottenPasswordPanel, BorderLayout.SOUTH);
 
         // ------------------- Accept Forgotten Password Panel -------------
-
         confirmforgottenPasswordPanel = new JPanel(new BorderLayout());
 
         centerconfirmforgottenPasswordPanel = new JPanel(new GridLayout(2, 1));
@@ -332,6 +327,7 @@ public abstract class ClientFrame extends JFrame {
         southconfirmforgottenPasswordPanel.add(acceptconfirmforgottenPasswordButton);
         southconfirmforgottenPasswordPanel.add(goBackconfirmforgottenPasswordButton);
         confirmforgottenPasswordPanel.add(southconfirmforgottenPasswordPanel, BorderLayout.SOUTH);
+        /* --------------------------- UNIFICAR EN UNO --------------------------- */
 
         // -------------------------- Main Panel --------------------------
         eventsPanel = new JPanel();
@@ -340,7 +336,6 @@ public abstract class ClientFrame extends JFrame {
         mainPanel = new JPanel(new BorderLayout());
 
         centerPanel = new JPanel(new BorderLayout());
-        // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         Icon icon3 = new ImageIcon(image.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         mainLabel = new JLabel(icon3);
         calendarPanel = new JScrollPane(eventsPanel);
@@ -362,18 +357,11 @@ public abstract class ClientFrame extends JFrame {
         logOutButton = new JButton("Log out");
         infoPanel.add(adminButton);
         infoPanel.add(logOutButton);
-        // Prueba -- Añadir
-        ArrayList<JPanel> mensajes2 = new ArrayList<>();
-        // TERMINA prueba
         auxiliarPanel = new JScrollPane();
-        // Con esto se cambia el tamaño del EAST
-        //eastPanel.setPreferredSize(new Dimension(240, 800));
-        eastPanel.setMinimumSize(new Dimension(240, 800));
+        eastPanel.setPreferredSize(new Dimension(240, 800));
         eastPanel.add(infoPanel, BorderLayout.NORTH);
         eastPanel.add(auxiliarPanel, BorderLayout.CENTER);
         mainPanel.add(eastPanel, BorderLayout.EAST);
-
-        // add(mainPanel);
 
         // Create Event Panel
         createEventPanel = new JPanel();
@@ -386,7 +374,7 @@ public abstract class ClientFrame extends JFrame {
         createEventDescriptionScroll = new JScrollPane(createEventDescriptionText);
         createEventDateLabel = new JLabel("Date");
         // createEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
-        createEventDateText = new JTextField("30/06/2021 10:00", 10); // PRUEBAS
+        createEventDateText = new JTextField("30/06/2021 10:00", 10);
         createEventAlarmLabel = new JLabel("Alarm");
         createEventAlarmText = new JTextField("05/06/2021 21:30", 10);
 
@@ -408,7 +396,7 @@ public abstract class ClientFrame extends JFrame {
         createEventPanel.add(createEventAlarmText);
         createEventPanel.add(createEventButtons);
 
-        // Show Event DetailsPanel
+        // Show Event Details Panel
         showEventPanel = new JPanel();
         showEventPanel.setLayout(new BoxLayout(showEventPanel, BoxLayout.Y_AXIS));
 
@@ -418,10 +406,13 @@ public abstract class ClientFrame extends JFrame {
         showEventDescriptionText = new JTextArea("", 30, 10);
         showEventDescriptionScroll = new JScrollPane(showEventDescriptionText);
         showEventDateLabel = new JLabel("Date");
-        // createEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
-        showEventDateText = new JTextField("30/06/2021 10:00", 10); // PRUEBAS
+        showEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
         showEventAlarmLabel = new JLabel("Alarm");
-        showEventAlarmText = new JTextField("05/06/2021 21:30", 10);
+        showEventAlarmText = new JTextField("DD/MM/YYYY hh:mm", 10);
+
+        inviteUserPanel = new JPanel(new GridLayout(1, 1));
+        inviteUserButton = new JButton("Invite user");
+        inviteUserPanel.add(inviteUserButton);
 
         showEventButtons = new JPanel(new GridLayout(1, 2));
         confirmUpdateEvent = new JButton("Update");
@@ -439,6 +430,7 @@ public abstract class ClientFrame extends JFrame {
         showEventPanel.add(showEventDateText);
         showEventPanel.add(showEventAlarmLabel);
         showEventPanel.add(showEventAlarmText);
+        showEventPanel.add(inviteUserPanel);
         showEventPanel.add(showEventButtons);
 
         adminPanel = new JPanel(new BorderLayout());
@@ -514,6 +506,8 @@ public abstract class ClientFrame extends JFrame {
         mainPanel.setVisible(false);
         remove(signUpPanel);
         remove(mainPanel);
+        userTextSignInPanel.setText("");
+        passwordTextSignInPanel.setText("");
         add(signInPanel);
         signInPanel.setVisible(true);
     }
@@ -524,6 +518,10 @@ public abstract class ClientFrame extends JFrame {
         mainPanel.setVisible(false);
         remove(signInPanel);
         remove(mainPanel);
+        mailTextSignUpPanel.setText("");
+        userTextSignUpPanel.setText("");
+        passwordTextSignUpPanel.setText("");
+        dniTextSignUpPanel.setText("");
         add(signUpPanel);
         signUpPanel.setVisible(true);
     }
@@ -544,12 +542,17 @@ public abstract class ClientFrame extends JFrame {
     }
 
     public void showCreateEventPanel() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
         eastPanel.remove(adminPanel);
         eastPanel.remove(inboxPanel);
+        createEventTitleText.setText("");
+        createEventDescriptionText.setText("");
+        createEventDateText.setText(formatter.format(new Date()));
+        createEventAlarmText.setText(formatter.format(new Date()));
         eastPanel.add(createEventPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
@@ -596,6 +599,32 @@ public abstract class ClientFrame extends JFrame {
         mainPanel.setVisible(true);
     }
 
+    public void showAdminFrame() {
+        mainPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(createEventPanel);
+        eastPanel.remove(inboxPanel);
+        usersPanel.removeAll();
+        JPanel panel;
+        //eventDate.clear();
+        //eventTitle.clear();
+        //eventButton.clear();
+        ArrayList<String> users = new ArrayList<>(client.getUsers().keySet());
+        for (String user : users) {
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
+            panel.add(new JLabel(user));
+            JButton button = new JButton("Delete");
+            button.setActionCommand("Delete user: " + user);
+            button.addActionListener(controller);
+            panel.add(button);
+            usersPanel.add(panel);
+        }
+
+        eastPanel.add(adminPanel, BorderLayout.CENTER);
+        mainPanel.setVisible(true);
+    }
+
     public void showEvents() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mainPanel.setVisible(false);
@@ -624,31 +653,6 @@ public abstract class ClientFrame extends JFrame {
         }
 
         eventsPanel.setVisible(true);
-        mainPanel.setVisible(true);
-    }
-
-    public void showAdminFrame() {
-        mainPanel.setVisible(false);
-        auxiliarPanel.setVisible(false);
-        eastPanel.remove(auxiliarPanel);
-        eastPanel.remove(createEventPanel);
-        usersPanel.removeAll();
-        JPanel panel;
-        //eventDate.clear();
-        //eventTitle.clear();
-        //eventButton.clear();
-        ArrayList<String> users = new ArrayList<>(client.getUsers().keySet());
-        for (String user : users) {
-            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
-            panel.add(new JLabel(user));
-            JButton button = new JButton("Delete");
-            button.setActionCommand("Delete user: " + user);
-            button.addActionListener(controller);
-            panel.add(button);
-            usersPanel.add(panel);
-        }
-
-        eastPanel.add(adminPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
 
