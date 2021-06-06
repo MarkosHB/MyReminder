@@ -51,22 +51,22 @@
   <li> Conexión con base de datos real
     --> Tom y Madris
   </li>
-  <li> Lista de contactos -HECHO-
+  <li> Lista de contactos ✔️
     --> Diego y Miguel + Ayuda de Pablo
   </li>
   <li> Invitaciones
     --> Diego, Miguel y Pablo
   </li>
-  <li> Alarmas *HECHO*
+  <li> Alarmas ✔️
     --> Pablo
   </li>
-  <li> Patrón de diseño (Template Method) -HECHO-
+  <li> Patrón de diseño (Template Method) ✔️
     --> Pablo
   </li>
   <li> Testeo del sistema
     --> Samuel y Yussef
   </li>
-  <li> Diapositivas -HECHO-
+  <li> Diapositivas ✔️
     --> Marcos 
   </li>
 </ul>
