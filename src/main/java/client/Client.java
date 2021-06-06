@@ -100,10 +100,9 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Guest deleting event");
                             break;
                         case "UPDATE EVENT":
-                            System.out.println(user);
                             event = new Event((Event) input.readUnshared());
-                            user.addMessage("UPDATE: " + event.getTitle());
                             user.putEvent(event);
+                            user.addMessage("UPDATE: " + event.getTitle());
                             System.out.println(user);
                             frame.showEvents();
                             frame.showMessages();

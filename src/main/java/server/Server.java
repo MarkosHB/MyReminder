@@ -305,14 +305,9 @@ public class Server extends MultiThreadServer implements Runnable {
     }
 
     public void updateEvent(Event event) throws IOException {
-        System.out.println(db.getUser(event.getOwner()).getEvent(event.getId()));
         db.getUser(event.getOwner()).putEvent(event);
-        System.out.println(db.getUser(event.getOwner()).getEvent(event.getId()));
-        // Comparo los nuevos invitados con los que había anteriormente
         for (String guestName : event.getGuests().keySet()) {
-            System.out.println(db.getUser(guestName).getEvent(event.getId()));
             db.getUser(guestName).putEvent(event);
-            System.out.println(db.getUser(guestName).getEvent(event.getId()));
             // Si hay algun invitado le envio un mensaje si está activo
             if (socketWriter.containsKey(guestName)) {
                 // Se puede enviar el evento y que el cliente lo actualice

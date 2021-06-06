@@ -908,7 +908,7 @@ public abstract class ClientFrame extends JFrame {
     }
 
     public String getShowEventDescriptionText() {
-        return showEventTitleText.getText();
+        return showEventDescriptionText.getText();
     }
 
     public Date getShowEventDate() throws ParseException {

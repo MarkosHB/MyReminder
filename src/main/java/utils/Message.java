@@ -60,7 +60,7 @@ public class Message implements Serializable, Comparable {
     @Override
     public int compareTo(Object o) {
         Message m = (Message) o;
-        return (this.date.compareTo(m.date));
+        return -(this.date.compareTo(m.date));
     }
 
 }

@@ -235,9 +235,9 @@ public abstract class ClientController implements ActionListener {
                         client.getUser().getEvent(id).setDate(frame.getShowEventDate());
                         client.getUser().getEvent(id).setAlarm(frame.getShowEventAlarm());
                         client.updateEvent(client.getUser().getEvent(id));
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
-                    }
+                        frame.showEvents();
+                        frame.showMessages();
+                    } catch (ParseException ignore) { }
                     /*
                     client.getUser().getEvent(id).setTitle();
                     client.getUser().getEvent(id).setDescription();
