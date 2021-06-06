@@ -54,8 +54,8 @@
   <li> Lista de contactos ✔️
     --> Diego y Miguel + Ayuda de Pablo
   </li>
-  <li> Invitaciones
-    --> Diego, Miguel y Pablo
+  <li> Invitaciones ✔️
+    --> Interfaz: Diego y Miguel; Funcionalidad: Pablo
   </li>
   <li> Alarmas ✔️
     --> Pablo
