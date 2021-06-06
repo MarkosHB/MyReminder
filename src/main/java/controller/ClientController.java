@@ -5,9 +5,11 @@ import frame.ClientFrame;
 import utils.Event;
 import utils.User;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 /**
  * Clase para el controlador del cliente En ella crearemos el controlador y las
@@ -167,6 +169,7 @@ public abstract class ClientController implements ActionListener {
                 client.addContact(frame.getAddContactText());
                 break;
             case "INVITE CONTACT":
+                inviteContacts();
                 frame.showMessages();
                 break;
             case "INVITE USER":
@@ -311,6 +314,23 @@ public abstract class ClientController implements ActionListener {
         System.out.println("Log out: " + client.getUser());
         client.setUser(null);
         frame.showSignIn();
+    }
+
+    public void inviteContacts() {
+        int i = 0;
+        ArrayList<JCheckBox> buttons = frame.getGuestsButtons();
+        for (JCheckBox button: buttons) {
+            if (button.isSelected()) {
+                frame.getActualEvent().putGuest(button.getActionCommand());
+                ++i;
+            }
+        }
+        System.out.println("Actual: " + frame.getActualEvent());
+        if (i != 0) {
+            client.getUser().putEvent(frame.getActualEvent());
+            client.inviteGuests(new Event(frame.getActualEvent()));
+        }
+
     }
 
 }

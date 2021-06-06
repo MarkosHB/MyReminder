@@ -6,6 +6,7 @@ import utils.Event;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -21,17 +22,14 @@ public class Alarm implements Runnable {
 
     @Override
     public void run() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         while(true) {
             try {
                 Thread.sleep(1000);
+                Date now = new Date();
                 for (Event event : client.getUser().getEvents().values()) {
                     try {
-                        Date now = new Date();
-                        if ((now.getMinutes() == event.getAlarm().getMinutes()) &&
-                                (now.getHours() == event.getAlarm().getHours()) &&
-                                (now.getDay() == event.getAlarm().getDate()) &&
-                                (now.getMonth() == event.getAlarm().getMonth()) &&
-                                (now.getYear() == event.getAlarm().getYear())) {
+                        if (formatter.format(now).equals(formatter.format(event.getAlarm()))) {
                             System.out.println("ALARMA: " + event.getTitle());
                             client.getUser().addMessage("ALARMA: " + event.getTitle());
                             event.setAlarm(null);

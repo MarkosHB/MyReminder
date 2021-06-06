@@ -78,7 +78,7 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Sign up: OK");
                             break;
                         case "SIGN IN: OK":
-                            user = (User) input.readObject();
+                            user = (User) input.readUnshared();
                             frame.showMainPanel();
                             frame.showEvents();
                             frame.showMessages();
@@ -108,9 +108,14 @@ public class Client extends NetworkClient implements Runnable {
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
-                            event = (Event) input.readObject();
+                            event = (Event) input.readUnshared();
                             user.putEvent(event);
+                            frame.showEvents();
+                            user.addMessage("INVITATION: " + event.getTitle());
+                            frame.showMessages();
                             System.out.println(event);
+                            //user = (User) input.readUnshared();
+                            //user.putEvent(event);
                             break;
                         default:
                             System.out.println(line);
@@ -188,6 +193,15 @@ public class Client extends NetworkClient implements Runnable {
         try {
             output.writeObject("Check Contact");
             output.writeObject(contact);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void inviteGuests(Event event) {
+        try {
+            output.writeObject("Invitation");
+            output.writeUnshared(event);
         } catch (IOException e) {
             e.printStackTrace();
         }

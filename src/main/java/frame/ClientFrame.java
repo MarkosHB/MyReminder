@@ -181,6 +181,7 @@ public abstract class ClientFrame extends JFrame {
     private JScrollPane messagesScrollPanel;
 
     ArrayList<JCheckBox> guestsButtons = new ArrayList<>();
+    private Event actualEvent;
 
     // Constructor
     public ClientFrame(String title, int posX, int posY, Client client) {
@@ -616,6 +617,7 @@ public abstract class ClientFrame extends JFrame {
 
     public void showEventDetails(Event event) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        actualEvent = event;
         mainPanel.setVisible(false);
         auxiliarPanel.setVisible(false);
         adminPanel.setVisible(false);
@@ -642,8 +644,26 @@ public abstract class ClientFrame extends JFrame {
         }
         eastPanel.add(showEventPanel, BorderLayout.CENTER);
         inviteUserPanel.remove(inviteUserButton);
+        showEventButtons.remove(confirmUpdateEvent);
+        showEventButtons.remove(cancelUpdateEvent);
         if (event.getOwner().equals(client.getUser().getName())) {
             inviteUserPanel.add(inviteUserButton);
+            showEventTitleText.setEditable(true);
+            showEventDescriptionText.setEditable(true);
+            showEventDateText.setEditable(true);
+            showEventAlarmText.setEditable(true);
+            showEventButtons.setLayout(new GridLayout(1, 2));
+            showEventButtons.add(confirmUpdateEvent);
+            cancelUpdateEvent.setText("Cancel");
+            showEventButtons.add(cancelUpdateEvent);
+        } else {
+            showEventTitleText.setEditable(false);
+            showEventDescriptionText.setEditable(false);
+            showEventDateText.setEditable(false);
+            showEventAlarmText.setEditable(false);
+            showEventButtons.setLayout(new GridLayout(1, 1));
+            cancelUpdateEvent.setText("Continue");
+            showEventButtons.add(cancelUpdateEvent);
         }
         showEventPanel.setVisible(true);
         mainPanel.setVisible(true);
@@ -830,6 +850,7 @@ public abstract class ClientFrame extends JFrame {
         eastPanel.remove(adminPanel);
         eastPanel.remove(listContactsPanel);
         inviteContactsPanel.removeAll();
+        guestsButtons.clear();
         JPanel panel;
         PriorityBlockingQueue<String> contacts = new PriorityBlockingQueue<>(client.getUser().getContacts());
         while (contacts.size() > 0) {
@@ -896,6 +917,14 @@ public abstract class ClientFrame extends JFrame {
     public Date getCreateEventAlarm() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.parse(createEventAlarmText.getText());
+    }
+
+    public Event getActualEvent() {
+        return actualEvent;
+    }
+
+    public ArrayList<JCheckBox> getGuestsButtons() {
+        return guestsButtons;
     }
 
 }

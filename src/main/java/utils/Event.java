@@ -15,6 +15,16 @@ public class Event implements Serializable, Comparable {
     private String owner;
     private ConcurrentSkipListMap<String, Boolean> guests; // Name and: true if accepted, false if pending
 
+    public Event (Event event) {
+        this.id = event.id;
+        this.title = event.title;
+        this.date = event.date;
+        this.alarm = event.alarm;
+        this.description = event.description;
+        this.owner = event.owner;
+        this.guests = event.guests.clone();
+    }
+
     public Event(String id, String title, Date date, Date alarm, String description, String owner, ArrayList<String> guests) {
         this.id = id.toUpperCase();
         this.title = title;

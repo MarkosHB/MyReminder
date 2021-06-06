@@ -1,8 +1,9 @@
 package utils;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message implements Comparable {
+public class Message implements Serializable, Comparable {
 
     private String message;
     private Date date;

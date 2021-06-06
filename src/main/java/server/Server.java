@@ -123,7 +123,7 @@ public class Server extends MultiThreadServer implements Runnable {
                             }
                             break;
                         case "INVITATION":
-                            event = (Event) input.readObject();
+                            event = (Event) input.readUnshared();
                             sendInvitation(event, output);
                             break;
                         case "ANSWER INVITATION":
@@ -202,7 +202,7 @@ public class Server extends MultiThreadServer implements Runnable {
                 // Introduzco el Writer y le envío la información completa del usuario
                 socketWriter.put(user.getName(), output);
                 output.writeObject("Sign in: OK");
-                output.writeObject(userAux);
+                output.writeUnshared(userAux);
             } else {
                 output.writeObject("Sign in: Error. Incorrect password");
             }
@@ -248,13 +248,20 @@ public class Server extends MultiThreadServer implements Runnable {
         // Comparo los nuevos invitados con los que había anteriormente
         // Event eventAux = users.get(event.getOwner()).getEvent(event.getId());
         Event eventAux = db.getUser(event.getOwner()).getEvent(event.getId());
+        System.out.println("SERVER1: " + eventAux);
+        System.out.println("SERVER2: " + event);
         for (String guestName : event.getGuests().keySet()) {
+            System.out.println("SERVER3: " + guestName);
+            db.getUser(guestName).putEvent(event);
+            db.getUser(guestName).addMessage("INVITATION: " + event.getTitle());
+            System.out.println("SERVER4: " +  db.getUser(guestName));
             // Si hay algun invitado nuevo le envio un mensaje si está activo
             if (!eventAux.containsGuest(guestName)) {
                 if (socketWriter.containsKey(guestName)) {
                     // Se puede enviar el evento y que el cliente lo actualice
                     socketWriter.get(guestName).writeObject("Invitation");
-                    socketWriter.get(guestName).writeObject(event);
+                    socketWriter.get(guestName).writeUnshared(event);
+                    //socketWriter.get(guestName).writeUnshared(db.getUser(guestName));
                     /*
                      * // Tambien se puede enviar el usuario completo actualizado y el cliente
                      * simplemente lo copia socketWriter.get(name).writeObject("Invitation");
