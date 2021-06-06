@@ -7,9 +7,6 @@ import utils.User;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.text.ParseException;
 
 /**
@@ -172,19 +169,44 @@ public abstract class ClientController implements ActionListener {
             case "LOG OUT":
                 logOut();
                 break;
+            case "FORGOTTEN PASSWORD":
+                frame.showForgottenPassword();
+                System.out.println("Forgotten password panel");
+                break;
+            // ----- need to loop confirm (true/false)
+            case "CONFIRM FORGOTTEN PASSWORD":
+                frame.showConfirmForgottenPassword();
+                System.out.println("confirm password -> Accept password");
+                break;
+            case "GO BACK SING IN":
+                frame.showSignIn();
+                System.out.println("Go back sing in");
+                break;
+            case "NEW PASSWORD PANEL":
+                frame.showSignIn();
+                System.out.println("Accept password");
+                break;
+            case "GO BACK FORGOTTEN PASSWORD":
+                frame.showForgottenPassword();
+                System.out.println("Sign in panel");
+                break;
             default:
                 System.out.println(command);
                 if (command.contains("MORE INFO")) {
                     String id = command.split(": ")[1];
                     System.out.println("More info: Event " + client.getUser().getEvent(id).getTitle());
-                    client.getUser().getEvent(id);
-                    frame.showEventDetails();
-                } else if (command.contains("DELETE")) {
+                    //client.getUser().getEvent(id);
+                    frame.showEventDetails(client.getUser().getEvent(id));
+                } else if (command.contains("DELETE EVENT")) {
                     String id = command.split(": ")[1];
                     System.out.println("Delete: Event " + client.getUser().getEvent(id).getTitle());
                     client.getUser().removeEvent(id);
                     // Hay que informar al servidor
                     frame.showEvents();
+                } else if (command.contains("DELETE USER")) {
+                    String name = command.split(": ")[1];
+                    System.out.println("Delete: User " + name);
+                    client.deleteUser(name);
                 } else {
                     throw new RuntimeException("Unknown command!");
                 }
@@ -236,12 +258,12 @@ public abstract class ClientController implements ActionListener {
     }
 
     public void cancelCreateEvent() {
-        frame.showMessagesPanel();
+        frame.showMessages();
         System.out.println("Cancel create event");
     }
 
     public void showMessages() {
-        frame.showMessagesPanel();
+        frame.showMessages();
         System.out.println("Messages panel");
     }
 

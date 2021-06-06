@@ -615,7 +615,7 @@ public class ClientFrameV3 extends JFrame {
         remove(mainPanel);
         add(forgottenPasswordPanel);
         forgottenPasswordPanel.setVisible(true);
-    };
+    }
 
     public void showConfirmForgottenPassword() {
         signInPanel.setVisible(false);
@@ -631,7 +631,7 @@ public class ClientFrameV3 extends JFrame {
         remove(mainPanel);
         add(confirmforgottenPasswordPanel);
         confirmforgottenPasswordPanel.setVisible(true);
-    };
+    }
 
     public void showMainPanel() {
         signInPanel.setVisible(false);

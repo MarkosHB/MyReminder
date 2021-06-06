@@ -49,6 +49,10 @@ public class Database {
         users.put(key, value);
     }
 
+    public void removeUser(String key) {
+        users.remove(key);
+    }
+
     public User getUser(String key) {
         return users.get(key);
     }

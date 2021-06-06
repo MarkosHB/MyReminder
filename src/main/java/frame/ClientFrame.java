@@ -3,17 +3,16 @@ package frame;
 import client.Client;
 import controller.ClientController;
 import utils.Event;
-import utils.User;
+import utils.Message;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.concurrent.ConcurrentSkipListSet;
 
 /**
  * Clase para la ventana del cliente En ella crearemos la ventana y las
@@ -75,21 +74,35 @@ public abstract class ClientFrame extends JFrame {
 
     // Forgotten Password Panel
     private JPanel forgottenPasswordPanel;
-    private JLabel etiquetaemailpanel3;
-    private JLabel etiquetadnipanel3;
-    private JTextField textoemailpanel3;
-    private JTextField textodnipanel3;
-    private JButton botonconfirmarpanel3;
-    private JButton botonvolveratraspanel3;
+    private JLabel forgottenPasswordPanelLabel;
 
-    // panel 4
-    private JPanel panel4;
-    private JTextField textousuariopanel4;
-    private JTextField textocontraseñapanel4;
-    private JLabel etiquetausuariopanel4;
-    private JLabel etiquetacontraseñapanel4;
-    private JButton botoncontinuarpanel4;
-    private JButton botonvolveratraspanel4;
+    private JPanel centerforgottenPasswordPanel;
+    private JPanel emailforgottenPasswordPanel;
+    private JLabel emailLabelforgottenPasswordPanel;
+    private JTextField emailtextforgottenPasswordPanel;
+    private JPanel dniforgottenPasswordPanel;
+    private JLabel dniLabelforgottenPasswordPanel;
+    private JTextField dnitextforgottenPasswordPanel;
+
+    private JPanel southforgottenPasswordPanel;
+    private JButton acceptforgottenPasswordButton;
+    private JButton goBackforgottenPasswordButton;
+
+    // confirm forgotten password
+    private JPanel confirmforgottenPasswordPanel;
+    private JLabel confirmforgottenPasswordPanelLabel;
+
+    private JPanel centerconfirmforgottenPasswordPanel;
+    private JPanel emailconfirmforgottenPasswordPanel;
+    private JLabel emailLabelconfirmforgottenPasswordPanel;
+    private JTextField emailtextconfirmforgottenPasswordPanel;
+    private JPanel dniconfirmforgottenPasswordPanel;
+    private JLabel dniLabelconfirmforgottenPasswordPanel;
+    private JTextField dnitextconfirmforgottenPasswordPanel;
+
+    private JPanel southconfirmforgottenPasswordPanel;
+    private JButton acceptconfirmforgottenPasswordButton;
+    private JButton goBackconfirmforgottenPasswordButton;
 
     // Main Panel
     JPanel mainPanel;
@@ -109,19 +122,7 @@ public abstract class ClientFrame extends JFrame {
     //private JPanel auxiliarPanel;
     private JScrollPane auxiliarPanel;
 
-    private JLabel messagesLabel;
-    private JPanel messagesPanel;
-    private JScrollPane inboxPanel;
-
     private JPanel eventsPanel;
-    /*
-    private ArrayDeque<JPanel> eventsList;
-    private ArrayDeque<JLabel> eventDate;
-    private ArrayDeque<JLabel> eventTitle;
-    private ArrayDeque<JButton> eventButton;
-    private ArrayDeque<JButton> deleteEventButton;
-    private ButtonGroup eventButtons;
-    */
 
     // Create Event Panel
     private JPanel createEventPanel;
@@ -140,11 +141,29 @@ public abstract class ClientFrame extends JFrame {
     private JButton confirmCreateEvent;
     private JButton cancelCreateEvent;
 
+    private JPanel showEventPanel;
+
+    private JLabel showEventTitleLabel;
+    private JTextField showEventTitleText;
+    private JLabel showEventDescriptionLabel;
+    private JTextArea showEventDescriptionText;
+    private JScrollPane showEventDescriptionScroll;
+    private JLabel showEventDateLabel;
+    private JTextField showEventDateText;
+    private JLabel showEventAlarmLabel;
+    private JTextField showEventAlarmText;
+
+    private JPanel showEventButtons;
+    private JButton confirmUpdateEvent;
+    private JButton cancelUpdateEvent;
+
     private JPanel adminPanel;
     private JPanel usersPanel;
     private JScrollPane usersScrollPanel;
 
-    // -------------------------- TERMINA NUEVO --------------------------
+    private JPanel inboxPanel;
+    private JPanel messagesPanel;
+    private JScrollPane messagesScrollPanel;
 
     // Constructor
     public ClientFrame(String title, int posX, int posY, Client client) {
@@ -168,16 +187,11 @@ public abstract class ClientFrame extends JFrame {
     // Crea la ventana del usuario
     private void createGUI() {
 
-        // Hay distintos tipos de Layout, como BorderLayout, BoxLayout o FlowLayout
-        // (buscar información)
         setLayout(new BorderLayout());
-
-        // -------------------------- NUEVO --------------------------
 
         // -------------------------- Sign In Panel --------------------------
         signInPanel = new JPanel(new BorderLayout());
 
-        // myReminderLabel = new JLabel("MyReminder");
         ImageIcon image = new ImageIcon("images/myReminder.png");
         Icon icon = new ImageIcon(image.getImage().getScaledInstance(260, 260, Image.SCALE_DEFAULT));
         signInLabel = new JLabel(icon);
@@ -260,21 +274,68 @@ public abstract class ClientFrame extends JFrame {
 
         // add(signUpPanel);
 
-        // -------------------------- Forgotten Password Panel
-        // --------------------------
+        // -------------------------- Forgotten Password Panel --------------------------
+        forgottenPasswordPanel = new JPanel(new BorderLayout());
+
+        centerforgottenPasswordPanel = new JPanel(new GridLayout(2, 1));
+        emailforgottenPasswordPanel = new JPanel(new FlowLayout());
+        emailLabelforgottenPasswordPanel = new JLabel("Email: ");
+        emailtextforgottenPasswordPanel = new JTextField(10);
+        emailforgottenPasswordPanel.add(emailLabelforgottenPasswordPanel);
+        emailforgottenPasswordPanel.add(emailtextforgottenPasswordPanel);
+        dniforgottenPasswordPanel = new JPanel(new FlowLayout());
+        dniLabelforgottenPasswordPanel = new JLabel("DNI: ");
+        dnitextforgottenPasswordPanel = new JPasswordField(10);
+        dniforgottenPasswordPanel.add(dniLabelforgottenPasswordPanel);
+        dniforgottenPasswordPanel.add(dnitextforgottenPasswordPanel);
+
+        centerforgottenPasswordPanel.add(emailforgottenPasswordPanel);
+        centerforgottenPasswordPanel.add(dniforgottenPasswordPanel);
+        forgottenPasswordPanel.add(centerforgottenPasswordPanel, BorderLayout.CENTER);
+
+        southforgottenPasswordPanel = new JPanel(new GridLayout(1, 2));
+        acceptforgottenPasswordButton = new JButton("Confirm Password");
+        acceptforgottenPasswordButton.setActionCommand("Confirm forgotten password");
+        goBackforgottenPasswordButton = new JButton("Go back");
+        goBackforgottenPasswordButton.setActionCommand("Go back sing in");
+
+        southforgottenPasswordPanel.add(acceptforgottenPasswordButton);
+        southforgottenPasswordPanel.add(goBackforgottenPasswordButton);
+        forgottenPasswordPanel.add(southforgottenPasswordPanel, BorderLayout.SOUTH);
+
+        // ------------------- Accept Forgotten Password Panel -------------
+
+        confirmforgottenPasswordPanel = new JPanel(new BorderLayout());
+
+        centerconfirmforgottenPasswordPanel = new JPanel(new GridLayout(2, 1));
+        emailconfirmforgottenPasswordPanel = new JPanel(new FlowLayout());
+        emailLabelconfirmforgottenPasswordPanel = new JLabel("Email/User: ");
+        emailtextconfirmforgottenPasswordPanel = new JTextField(10);
+        emailconfirmforgottenPasswordPanel.add(emailLabelconfirmforgottenPasswordPanel);
+        emailconfirmforgottenPasswordPanel.add(emailtextconfirmforgottenPasswordPanel);
+        dniconfirmforgottenPasswordPanel = new JPanel(new FlowLayout());
+        dniLabelconfirmforgottenPasswordPanel = new JLabel("New password: ");
+        dnitextconfirmforgottenPasswordPanel = new JPasswordField(10);
+        dniconfirmforgottenPasswordPanel.add(dniLabelconfirmforgottenPasswordPanel);
+        dniconfirmforgottenPasswordPanel.add(dnitextconfirmforgottenPasswordPanel);
+
+        centerconfirmforgottenPasswordPanel.add(emailconfirmforgottenPasswordPanel);
+        centerconfirmforgottenPasswordPanel.add(dniconfirmforgottenPasswordPanel);
+        confirmforgottenPasswordPanel.add(centerconfirmforgottenPasswordPanel, BorderLayout.CENTER);
+
+        southconfirmforgottenPasswordPanel = new JPanel(new GridLayout(1, 2));
+        acceptconfirmforgottenPasswordButton = new JButton("Confirm new password");
+        acceptconfirmforgottenPasswordButton.setActionCommand("new password panel");
+        goBackconfirmforgottenPasswordButton = new JButton("Go back");
+        goBackconfirmforgottenPasswordButton.setActionCommand("Go back forgotten password");
+
+        southconfirmforgottenPasswordPanel.add(acceptconfirmforgottenPasswordButton);
+        southconfirmforgottenPasswordPanel.add(goBackconfirmforgottenPasswordButton);
+        confirmforgottenPasswordPanel.add(southconfirmforgottenPasswordPanel, BorderLayout.SOUTH);
 
         // -------------------------- Main Panel --------------------------
-        // PRUEBA DE EVENTOS
         eventsPanel = new JPanel();
         eventsPanel.setLayout(new BoxLayout(eventsPanel, BoxLayout.Y_AXIS));
-        /*
-        eventsList = new ArrayDeque<>();
-        eventDate = new ArrayDeque<>();
-        eventTitle = new ArrayDeque<>();
-        eventButton = new ArrayDeque<>();
-        deleteEventButton = new ArrayDeque<>();
-        */
-        // TERMINA PRUEBA
 
         mainPanel = new JPanel(new BorderLayout());
 
@@ -282,21 +343,6 @@ public abstract class ClientFrame extends JFrame {
         // centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         Icon icon3 = new ImageIcon(image.getImage().getScaledInstance(60, 60, Image.SCALE_DEFAULT));
         mainLabel = new JLabel(icon3);
-        /*
-         * JPanel eventsPanel = new JPanel(); eventsPanel.setLayout(new
-         * BoxLayout(eventsPanel, BoxLayout.Y_AXIS)); // Prueba ArrayList<JPanel>
-         * mensajes = new ArrayList<>(); JPanel fila = new JPanel(new FlowLayout());
-         * JLabel labelPrueba = new JLabel("Texto de prueba"); fila.add(labelPrueba);
-         * JButton botonPrueba = new JButton("Aceptar"); fila.add(botonPrueba); JButton
-         * botonPrueba2 = new JButton("Denegar"); fila.add(botonPrueba2); JPanel fila2 =
-         * new JPanel(new FlowLayout()); JLabel labelPrueba2 = new
-         * JLabel("Texto de prueba 2"); fila2.add(labelPrueba2); JButton botonPrueba3 =
-         * new JButton("Aceptar"); fila2.add(botonPrueba3); JButton botonPrueba4 = new
-         * JButton("Denegar"); fila2.add(botonPrueba4); mensajes.add(fila);
-         * mensajes.add(fila2); for (JPanel mensaje: mensajes) {
-         * eventsPanel.add(mensaje); } eventsPanel.add(fila); calendarPanel = new
-         * JScrollPane(eventsPanel); // TERMINA prueba
-         */
         calendarPanel = new JScrollPane(eventsPanel);
         buttonsMainPanel = new JPanel(new GridLayout(1, 3));
         createEventButton = new JButton("Create event");
@@ -321,7 +367,8 @@ public abstract class ClientFrame extends JFrame {
         // TERMINA prueba
         auxiliarPanel = new JScrollPane();
         // Con esto se cambia el tamaño del EAST
-        eastPanel.setPreferredSize(new Dimension(240, 800));
+        //eastPanel.setPreferredSize(new Dimension(240, 800));
+        eastPanel.setMinimumSize(new Dimension(240, 800));
         eastPanel.add(infoPanel, BorderLayout.NORTH);
         eastPanel.add(auxiliarPanel, BorderLayout.CENTER);
         mainPanel.add(eastPanel, BorderLayout.EAST);
@@ -361,6 +408,39 @@ public abstract class ClientFrame extends JFrame {
         createEventPanel.add(createEventAlarmText);
         createEventPanel.add(createEventButtons);
 
+        // Show Event DetailsPanel
+        showEventPanel = new JPanel();
+        showEventPanel.setLayout(new BoxLayout(showEventPanel, BoxLayout.Y_AXIS));
+
+        showEventTitleLabel = new JLabel("Title");
+        showEventTitleText = new JTextField(10);
+        showEventDescriptionLabel = new JLabel("Description");
+        showEventDescriptionText = new JTextArea("", 30, 10);
+        showEventDescriptionScroll = new JScrollPane(showEventDescriptionText);
+        showEventDateLabel = new JLabel("Date");
+        // createEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
+        showEventDateText = new JTextField("30/06/2021 10:00", 10); // PRUEBAS
+        showEventAlarmLabel = new JLabel("Alarm");
+        showEventAlarmText = new JTextField("05/06/2021 21:30", 10);
+
+        showEventButtons = new JPanel(new GridLayout(1, 2));
+        confirmUpdateEvent = new JButton("Update");
+        confirmUpdateEvent.setActionCommand("Update event");
+        cancelUpdateEvent = new JButton("Cancel");
+        cancelUpdateEvent.setActionCommand("Cancel update event");
+        showEventButtons.add(confirmUpdateEvent);
+        showEventButtons.add(cancelUpdateEvent);
+
+        showEventPanel.add(showEventTitleLabel);
+        showEventPanel.add(showEventTitleText);
+        showEventPanel.add(showEventDescriptionLabel);
+        showEventPanel.add(showEventDescriptionScroll);
+        showEventPanel.add(showEventDateLabel);
+        showEventPanel.add(showEventDateText);
+        showEventPanel.add(showEventAlarmLabel);
+        showEventPanel.add(showEventAlarmText);
+        showEventPanel.add(showEventButtons);
+
         adminPanel = new JPanel(new BorderLayout());
         adminPanel.add(new JLabel("Users:"), BorderLayout.NORTH);
 
@@ -369,116 +449,13 @@ public abstract class ClientFrame extends JFrame {
         usersScrollPanel = new JScrollPane(usersPanel);
         adminPanel.add(usersScrollPanel, BorderLayout.CENTER);
 
-        ////////////////////////// PANEL 3 ///////////////////////////////
+        inboxPanel = new JPanel(new BorderLayout());
+        inboxPanel.add(new JLabel("Invitations and alerts:"), BorderLayout.NORTH);
 
-        /*
-         * panel3 = new JPanel(); panel3.setBackground(Color.orange);
-         * panel3.setBounds(0, 0, 960, 540); panel3.setLayout(null);
-         * panel3.setVisible(false);
-         * 
-         * // etiqueta --> Email etiquetaemailpanel3 = new JLabel("Email");
-         * etiquetaemailpanel3.setBounds(300, 70, 50, 50);
-         * panel3.add(etiquetaemailpanel3); // campo de texto --> Email textoemailpanel3
-         * = new JTextField(); textoemailpanel3.setBounds(300, 110, 300, 30);
-         * panel3.add(textoemailpanel3); // etiqueta --> DNI etiquetadnipanel3 = new
-         * JLabel("DNI"); etiquetadnipanel3.setBounds(300, 140, 100, 50);
-         * panel3.add(etiquetadnipanel3); // campo de texto --> DNI textodnipanel3 = new
-         * JTextField(); textodnipanel3.setBounds(300, 180, 300, 30);
-         * panel3.add(textodnipanel3);
-         * 
-         * //boton confirmar botonconfirmarpanel3 = new JButton("Confirmar");
-         * botonconfirmarpanel3.setBounds(380, 230, 160, 40);
-         * panel3.add(botonconfirmarpanel3);
-         * //botonconfirmarpanel3.addActionListener(this);
-         * 
-         * //boton volver atras botonvolveratraspanel3 = new JButton("volver atras");
-         * botonvolveratraspanel3.setBounds(20, 440, 150, 40);
-         * panel3.add(botonvolveratraspanel3);
-         * //botonvolveratraspanel3.addActionListener(this); add(panel3);
-         * 
-         * ////////////////////////// PANEL 4 ///////////////////
-         * 
-         * panel4 = new JPanel(); panel4.setBackground(Color.orange);
-         * panel4.setBounds(0, 0, 960, 540); panel4.setLayout(null);
-         * panel4.setVisible(false);
-         * 
-         * // etiqueta --> Usuario etiquetausuariopanel4 = new
-         * JLabel("Usuario (No modificar el campo, ERROR!!)");
-         * etiquetausuariopanel4.setBounds(300, 70, 250, 50);
-         * panel4.add(etiquetausuariopanel4); // campo de texto --> Usuario
-         * textousuariopanel4 = new JTextField(); textousuariopanel4.setBounds(300, 110,
-         * 300, 30); panel4.add(textousuariopanel4); // etiqueta --> Nueva contraseña
-         * etiquetacontraseñapanel4 = new JLabel("Nueva contraseña");
-         * etiquetacontraseñapanel4.setBounds(300, 140, 150, 50);
-         * panel4.add(etiquetacontraseñapanel4); // campo de texto --> Nueva contraseña
-         * textocontraseñapanel4 = new JTextField();
-         * textocontraseñapanel4.setBounds(300, 180, 300, 30);
-         * panel4.add(textocontraseñapanel4);
-         * 
-         * //boton continuar botoncontinuarpanel4 = new JButton("Continuar");
-         * botoncontinuarpanel4.setBounds(380, 230, 160, 40);
-         * panel4.add(botoncontinuarpanel4);
-         * //botoncontinuarpanel4.addActionListener(this);
-         * 
-         * 
-         * //boton volver atras botonvolveratraspanel4 = new JButton("volver atras");
-         * botonvolveratraspanel4.setBounds(20, 440, 150, 40);
-         * panel4.add(botonvolveratraspanel4);
-         * 
-         * add(panel4);
-         * 
-         * //////////////////////////////// Panel Cliente /////////////////////////////
-         * 
-         * panel5 = new JPanel(); panel5.setBackground(Color.orange);
-         * panel5.setBounds(0,0,960,540); panel5.setLayout(null);
-         * panel5.setVisible(false);
-         * 
-         * panel5_1 = new JPanel(); panel5_1.setBackground(Color.lightGray);
-         * panel5_1.setBounds(40,100, 550,320); panel5_1.setLayout(null);
-         * panel5_1.setVisible(true);
-         * 
-         * panel5_2 = new JPanel(); panel5_2.setBackground(Color.lightGray);
-         * panel5_2.setBounds(630,100, 300,370); panel5_2.setLayout(null);
-         * panel5_2.setVisible(true);
-         * 
-         * panel5.add(panel5_1); panel5.add(panel5_2);
-         * 
-         * 
-         * // etiqueta calendario etiquetacalendario = new JLabel("Calendario");
-         * etiquetacalendario.setBounds(240, 40, 100, 50);
-         * panel5_1.add(etiquetacalendario);
-         * 
-         * // etiqueta myreminder etiquetamyreminder = new JLabel("Myreminder");
-         * etiquetamyreminder.setBounds(280, 40, 100, 50);
-         * panel5.add(etiquetamyreminder);
-         * 
-         * //boton Crear evento botoncrearevento = new JButton("Bandeja de entrada");
-         * botoncrearevento.setBounds(40, 430, 130, 40); panel5.add(botoncrearevento);
-         * ///////cambiar por bandeja de entrada
-         * 
-         * //boton cambiar vista botoncambiarvista = new JButton("Cambiar Vista");
-         * botoncambiarvista.setBounds(240, 430, 130, 40);
-         * panel5.add(botoncambiarvista);
-         * 
-         * 
-         * //boton lista de contactos botonlistadecontactos= new
-         * JButton("Lista de conctactos"); botonlistadecontactos.setBounds(430, 430,
-         * 160, 40); panel5.add(botonlistadecontactos);
-         * 
-         * //boton perfil botonperfil= new JButton("Perfil"); botonperfil.setBounds(730,
-         * 40, 70, 40); panel5.add(botonperfil);
-         * 
-         * //boton cerrar sesion botoncerrarsesion = new JButton("Cerrar Sesión");
-         * botoncerrarsesion.setBounds(810, 40, 120, 40); panel5.add(botoncerrarsesion);
-         * //botoncerrarsesion.addActionListener(this);
-         * 
-         * 
-         * // Creamos el controlador y activamos los botones //ControllerClient
-         * controller = new ControllerClient(this); //this.controller(controller);
-         * 
-         * add(panel5);
-         */
-        // -------------------------- TERMINA NUEVO --------------------------
+        messagesPanel = new JPanel();
+        messagesPanel.setLayout(new BoxLayout(messagesPanel, BoxLayout.Y_AXIS));
+        messagesScrollPanel = new JScrollPane(messagesPanel);
+        inboxPanel.add(messagesScrollPanel, BorderLayout.CENTER);
 
         // Creamos el controlador y activamos los botones
         //controller = new ClientController(this, client);
@@ -518,6 +495,12 @@ public abstract class ClientFrame extends JFrame {
 
         adminButton.addActionListener(myController);
         logOutButton.addActionListener(myController);
+
+        acceptforgottenPasswordButton.addActionListener(myController);
+        goBackforgottenPasswordButton.addActionListener(myController);
+
+        acceptconfirmforgottenPasswordButton.addActionListener(myController);
+        goBackconfirmforgottenPasswordButton.addActionListener(myController);
 
     }
 
@@ -565,26 +548,26 @@ public abstract class ClientFrame extends JFrame {
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(adminPanel);
+        eastPanel.remove(inboxPanel);
         eastPanel.add(createEventPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
 
-    public void showEventDetails() {
+    public void showEventDetails(Event event) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
-        // Poner que se muestre otro panel que debo crear
-        eastPanel.add(createEventPanel, BorderLayout.CENTER);
-        mainPanel.setVisible(true);
-    }
-
-    public void showMessagesPanel() {
-        signInPanel.setVisible(false);
-        signUpPanel.setVisible(false);
-        mainPanel.setVisible(false);
+        eastPanel.remove(adminPanel);
+        eastPanel.remove(inboxPanel);
         eastPanel.remove(createEventPanel);
-        eastPanel.add(auxiliarPanel, BorderLayout.CENTER);
+        showEventTitleText.setText(event.getTitle());
+        showEventDescriptionText.setText(event.getDescription());
+        showEventDateText.setText(formatter.format(event.getDate()));
+        showEventAlarmText.setText(formatter.format(event.getAlarm()));
+        eastPanel.add(showEventPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
     }
 
@@ -592,6 +575,25 @@ public abstract class ClientFrame extends JFrame {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         mainPanel.setVisible(false);
         eventsPanel.setVisible(false);
+        auxiliarPanel.setVisible(false);
+        eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(createEventPanel);
+        eastPanel.remove(adminPanel);
+        messagesPanel.removeAll();
+        JPanel panel;
+        //eventDate.clear();
+        //eventTitle.clear();
+        //eventButton.clear();
+        ArrayDeque<Message> messages = client.getUser().getMessages();
+        for (Message message : messages) {
+            panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
+            panel.add(new JLabel(formatter.format(message.getDate())));
+            panel.add(new JLabel(message.getMessage()));
+            messagesPanel.add(panel);
+        }
+
+        eastPanel.add(inboxPanel, BorderLayout.CENTER);
+        mainPanel.setVisible(true);
     }
 
     public void showEvents() {
@@ -613,7 +615,7 @@ public abstract class ClientFrame extends JFrame {
             button.addActionListener(controller);
             panel.add(button);
             button = new JButton("Delete");
-            button.setActionCommand("Delete: " + events[i].getId());
+            button.setActionCommand("Delete event: " + events[i].getId());
             button.addActionListener(controller);
             panel.add(button);
             //panel.add(new JButton("More info"));
@@ -629,6 +631,8 @@ public abstract class ClientFrame extends JFrame {
         mainPanel.setVisible(false);
         auxiliarPanel.setVisible(false);
         eastPanel.remove(auxiliarPanel);
+        eastPanel.remove(createEventPanel);
+        usersPanel.removeAll();
         JPanel panel;
         //eventDate.clear();
         //eventTitle.clear();
@@ -638,7 +642,7 @@ public abstract class ClientFrame extends JFrame {
             panel = new JPanel(new FlowLayout(FlowLayout.TRAILING, 5, 5));
             panel.add(new JLabel(user));
             JButton button = new JButton("Delete");
-            button.setActionCommand("Delete: " + client.getUsers());
+            button.setActionCommand("Delete user: " + user);
             button.addActionListener(controller);
             panel.add(button);
             usersPanel.add(panel);
@@ -646,6 +650,47 @@ public abstract class ClientFrame extends JFrame {
 
         eastPanel.add(adminPanel, BorderLayout.CENTER);
         mainPanel.setVisible(true);
+    }
+
+    /*
+    public void showForgottenPassword() {
+        signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
+        // ------------------
+        forgottenPasswordPanel.setVisible(false);
+        confirmforgottenPasswordPanel.setVisible(false);
+        // -------------------
+        mainPanel.setVisible(false);
+        remove(signInPanel);
+        remove(signUpPanel);
+        remove(confirmforgottenPasswordPanel);
+        remove(mainPanel);
+        add(forgottenPasswordPanel);
+        forgottenPasswordPanel.setVisible(true);
+    }
+    */
+
+    public void showForgottenPassword() {
+        signInPanel.setVisible(false);
+        remove(signInPanel);
+        add(forgottenPasswordPanel);
+        forgottenPasswordPanel.setVisible(true);
+    }
+
+    public void showConfirmForgottenPassword() {
+        signInPanel.setVisible(false);
+        signUpPanel.setVisible(false);
+        // -----------------
+        forgottenPasswordPanel.setVisible(false);
+        confirmforgottenPasswordPanel.setVisible(false);
+        // -----------------
+        mainPanel.setVisible(false);
+        remove(signInPanel);
+        remove(signUpPanel);
+        remove(forgottenPasswordPanel);
+        remove(mainPanel);
+        add(confirmforgottenPasswordPanel);
+        confirmforgottenPasswordPanel.setVisible(true);
     }
 
     // -----------------------------------------------------------------------------------
@@ -692,12 +737,6 @@ public abstract class ClientFrame extends JFrame {
     public Date getCreateEventAlarm() throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.parse(createEventAlarmText.getText());
-    }
-
-    public void showConfirmForgottenPassword() {
-    }
-
-    public void showForgottenPassword() {
     }
 
 }

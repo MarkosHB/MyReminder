@@ -34,7 +34,9 @@ public class Server extends MultiThreadServer implements Runnable {
 
         db = Database.getInstance(); // Esto sustituye a users y mails
         db.addUser("admin", new User("admin@uma.es", "admin", "1234", "0", true));
-        db.addUser("pablo", new User("pablo@uma.es", "pablo", "1234", "1", true));
+        db.addUser("pablo", new User("pablo@uma.es", "pablo", "1234", "1", false));
+        db.addUser("miguel", new User("miguel@uma.es", "miguel", "1234", "2", false));
+        db.addUser("marcos", new User("marcos@uma.es", "marcos", "1234", "3", false));
 
     }
 
@@ -101,6 +103,12 @@ public class Server extends MultiThreadServer implements Runnable {
                         case "ANSWER INVITATION":
                             event = (Event) input.readObject();
                             answerInvitation(event, output);
+                            break;
+                        case "DELETE USER":
+                            System.out.println("Deleting user");
+                            db.removeUser(((String) input.readObject()).toLowerCase());
+                            output.writeObject("Delete user: OK");
+                            output.writeUnshared(db.getUsers());
                             break;
                         case "FORGOTTEN PASSWORD":
                             User aux;
@@ -178,7 +186,7 @@ public class Server extends MultiThreadServer implements Runnable {
     private void sendUsers(ObjectOutputStream output) throws IOException {
         System.out.println("Server sending users: " + db.getUsers());
         output.writeObject("Get users: OK");
-        output.writeObject(db.getUsers());
+        output.writeUnshared(db.getUsers());
     }
 
     private void createEvent(Event event, ObjectOutputStream output) throws IOException {

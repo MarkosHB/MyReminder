@@ -10,11 +10,11 @@ import utils.User;
 */
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
- * Clase para el cliente En ella crearemos el cliente y las respectivas
+ * Clase para el cliente
+ * En ella crearemos el cliente y las respectivas
  * funciones asociadas a este Más concretamente, se realizará la comunicación
  * con el servidor y se tratarán los mensajes recibidos por este
  */
@@ -24,11 +24,6 @@ public class Client extends NetworkClient implements Runnable {
     private final int posY;
     private ClientFrame frame;
 
-    /**
-     * EJEMPLO DE VARIABLES PARA WHATSAPP: private final Long number; private String
-     * name; private ConcurrentSkipListMap<Long, String> contacts; private
-     * ConcurrentLinkedDeque<Chat> chats; private Chat chosenChat;
-     */
     private String name;
     private User user;
     private ConcurrentSkipListMap<String, User> users;
@@ -44,11 +39,6 @@ public class Client extends NetworkClient implements Runnable {
 
         super("localhost", 8080);
 
-        /**
-         * EJEMPLO DE CONTRUCTOR PARA WHATSAPP: this.number = number; this.name = name;
-         * contacts = new ConcurrentSkipListMap<>(); chats = new
-         * ConcurrentLinkedDeque<>(); chosenChat = null;
-         */
         this.name = name;
         this.user = null;
         this.users = null;
@@ -92,15 +82,20 @@ public class Client extends NetworkClient implements Runnable {
                             frame.showMainPanel();
                             System.out.println("Sign in: OK -- " + user);
                             break;
-                        case "GET USERS: OK":
-                            users = (ConcurrentSkipListMap) input.readObject();
+                        case "DELETE USER: OK":
+                            users = (ConcurrentSkipListMap) input.readUnshared();
                             frame.showAdminFrame();
-                            System.out.println("Get users: OK -- " + users);
+                            System.out.println("Delete user: OK");
+                            break;
+                        case "GET USERS: OK":
+                            users = (ConcurrentSkipListMap) input.readUnshared();
+                            frame.showAdminFrame();
+                            System.out.println("Receive users: OK -- " + users);
                             break;
                         case "CREATE EVENT: OK":
                             event = (Event) input.readObject();
                             user.putEvent(event);
-                            frame.showMessagesPanel();
+                            frame.showMessages();
                             frame.showEvents();
                             System.out.println("Create event: OK -- " + event);
                             break;
@@ -164,6 +159,15 @@ public class Client extends NetworkClient implements Runnable {
     public void receiveUsers() {
         try {
             output.writeObject("Get users");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteUser(String name) {
+        try {
+            output.writeObject("Delete user");
+            output.writeObject(name);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -25,19 +25,18 @@ public class Alarm implements Runnable {
             try {
                 Thread.sleep(60000);
                 Event[] events = client.getUser().getEvents().values().toArray(new Event[0]);
-                for (int i = 0; i < events.length; i++) {
+                for (Event event : events) {
                     try {
-                        if ((new Date().getTime() - events[i].getAlarm().getTime()) < (60*1000)) {
+                        if ((new Date().getTime() - event.getAlarm().getTime()) < (60 * 1000)) {
                             //client.getUser().addMessage();
-                            System.out.println("ALARMA: " + events[i].getTitle());
-                            events[i].setAlarm(null);
+                            System.out.println("ALARMA: " + event.getTitle());
+                            client.getUser().addMessage("ALARMA: " + event.getTitle());
+                            event.setAlarm(null);
                             frame.showMessages();
                         }
                     } catch (NullPointerException ignore) { }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            } catch (Exception ignore) { }
         }
     }
 
