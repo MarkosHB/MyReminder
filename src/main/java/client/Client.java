@@ -223,6 +223,7 @@ public class Client extends NetworkClient implements Runnable {
         try {
             if (!user.getContacts().contains(contact)) {
                 output.writeObject("Check Contact");
+                output.writeUnshared(new User(user));
                 output.writeObject(contact);
             }
         } catch (IOException e) {

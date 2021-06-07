@@ -553,6 +553,7 @@ public abstract class ClientFrame extends JFrame {
         signInPanel.setVisible(false);
         signUpPanel.setVisible(false);
         mainPanel.setVisible(false);
+        infoPanel.setVisible(false);
         infoPanel.removeAll();
         if (client.getUser().isAdmin()) {
             infoPanel.add(adminButton);
@@ -560,6 +561,7 @@ public abstract class ClientFrame extends JFrame {
             infoPanel.add(new JLabel(client.getUser().getName()));
         }
         infoPanel.add(logOutButton);
+        infoPanel.setVisible(true);
         remove(signInPanel);
         remove(signUpPanel);
         remove(forgottenPasswordPanel);

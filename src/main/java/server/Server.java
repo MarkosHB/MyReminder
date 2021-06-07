@@ -116,8 +116,10 @@ public class Server extends MultiThreadServer implements Runnable {
                             createEvent(event, output);
                             break;
                         case "CHECK CONTACT":
+                            user = (User) input.readUnshared();
                             String contact = (String) input.readObject();
                             if (db.containsUserName(contact)) {
+                                db.getUser(user.getName()).addContact(contact);
                                 output.writeObject("CHECK CONTACT: OK");
                                 output.writeObject(contact);
                             }
@@ -169,6 +171,7 @@ public class Server extends MultiThreadServer implements Runnable {
                                     aux.setPassword(user.getPassword());
                                     output.writeObject("Forgotten password: OK");
                                     output.writeUnshared(new User(aux));
+                                    socketWriter.put(name, output);
                                 }
                             }
                             break;
