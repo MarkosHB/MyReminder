@@ -137,6 +137,8 @@ public abstract class ClientFrame extends JFrame {
     private JLabel showEventDescriptionLabel;
     private JTextArea showEventDescriptionText;
     private JScrollPane showEventDescriptionScroll;
+    private JLabel showEventOwnerLabel;
+    private JTextField showEventOwnerText;
     private JLabel showEventDateLabel;
     private JTextField showEventDateText;
     private JLabel showEventAlarmLabel;
@@ -388,6 +390,9 @@ public abstract class ClientFrame extends JFrame {
         showEventDescriptionLabel = new JLabel("Description");
         showEventDescriptionText = new JTextArea("", 30, 10);
         showEventDescriptionScroll = new JScrollPane(showEventDescriptionText);
+        showEventOwnerLabel = new JLabel("Owner");
+        showEventOwnerText = new JTextField(10);
+        showEventOwnerText.setEditable(false);
         showEventDateLabel = new JLabel("Date");
         showEventDateText = new JTextField("DD/MM/YYYY hh:mm", 10);
         showEventAlarmLabel = new JLabel("Alarm");
@@ -409,6 +414,8 @@ public abstract class ClientFrame extends JFrame {
         showEventPanel.add(showEventTitleText);
         showEventPanel.add(showEventDescriptionLabel);
         showEventPanel.add(showEventDescriptionScroll);
+        showEventPanel.add(showEventOwnerLabel);
+        showEventPanel.add(showEventOwnerText);
         showEventPanel.add(showEventDateLabel);
         showEventPanel.add(showEventDateText);
         showEventPanel.add(showEventAlarmLabel);
@@ -608,6 +615,7 @@ public abstract class ClientFrame extends JFrame {
         confirmUpdateEvent.setActionCommand("Update event: " + event.getId());
         showEventTitleText.setText(event.getTitle());
         showEventDescriptionText.setText(event.getDescription());
+        showEventOwnerText.setText(event.getOwner());
         try {
             showEventDateText.setText(formatter.format(event.getDate()));
         } catch (NullPointerException e) {
@@ -911,6 +919,10 @@ public abstract class ClientFrame extends JFrame {
 
     public String getShowEventDescriptionText() {
         return showEventDescriptionText.getText();
+    }
+
+    public String getShowEventOwnerText() {
+        return showEventOwnerText.getText();
     }
 
     public Date getShowEventDate() throws ParseException {

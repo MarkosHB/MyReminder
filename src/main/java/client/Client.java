@@ -252,7 +252,8 @@ public class Client extends NetworkClient implements Runnable {
     public void updateEvent(Event event) {
         try {
             output.writeObject("Update event");
-            output.writeUnshared(event);
+            System.out.println("Sending from " + user.getName() + ": " + event);
+            output.writeUnshared(new Event(event));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -289,6 +290,10 @@ public class Client extends NetworkClient implements Runnable {
 
     public ConcurrentSkipListMap getUsers() {
         return users;
+    }
+
+    public String getName() {
+        return name;
     }
 
     // public ClientController getController() { //Usado en tests

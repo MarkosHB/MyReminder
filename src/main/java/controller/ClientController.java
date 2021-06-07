@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Clase para el controlador del cliente En ella crearemos el controlador y las
@@ -285,7 +286,7 @@ public abstract class ClientController implements ActionListener {
 
     public void createEvent() {
         try {
-            Event event = new Event(client.getUser().getName() + cont++, frame.getCreateEventTitle(),
+            Event event = new Event(client.getName() + "_" + cont++, frame.getCreateEventTitle(),
                     frame.getCreateEventDate(), frame.getCreateEventAlarm(),
                     frame.getCreateEventDescription(), client.getUser().getName());
             System.out.println("Create event: " + event);

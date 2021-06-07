@@ -101,7 +101,7 @@ public class Server extends MultiThreadServer implements Runnable {
                 if (!line.equalsIgnoreCase("")) {
                     switch (line.toUpperCase()) {
                         case "SIGN UP":
-                            user = (User) input.readObject();
+                            user = new User((User) input.readObject());
                             signUp(user, output);
                             break;
                         case "SIGN IN":
@@ -155,6 +155,7 @@ public class Server extends MultiThreadServer implements Runnable {
                         case "UPDATE EVENT":
                             System.out.println("Updating event");
                             event = new Event((Event) input.readUnshared());
+                            System.out.println("Received: " + event);
                             updateEvent(event);
                             break;
                         case "FORGOTTEN PASSWORD":
@@ -226,7 +227,7 @@ public class Server extends MultiThreadServer implements Runnable {
                 // Introduzco el Writer y le envío la información completa del usuario
                 socketWriter.put(user.getName(), output);
                 output.writeObject("Sign in: OK");
-                output.writeUnshared(userAux);
+                output.writeUnshared(new User(userAux));
             } else {
                 output.writeObject("Sign in: Error. Incorrect password");
             }
@@ -309,13 +310,16 @@ public class Server extends MultiThreadServer implements Runnable {
 
     public void updateEvent(Event event) throws IOException {
         db.getUser(event.getOwner()).putEvent(event);
+        System.out.println("Updating: " + event);
         for (String guestName : event.getGuests().keySet()) {
+            System.out.println("Sending to: "+ guestName);
             db.getUser(guestName).putEvent(event);
+            db.getUser(guestName).addMessage("UPDATE: " + event.getTitle());
             // Si hay algun invitado le envio un mensaje si está activo
             if (socketWriter.containsKey(guestName)) {
                 // Se puede enviar el evento y que el cliente lo actualice
                 socketWriter.get(guestName).writeObject("Update event");
-                socketWriter.get(guestName).writeUnshared(event);
+                socketWriter.get(guestName).writeUnshared(new Event(event));
                 //socketWriter.get(guestName).writeUnshared(db.getUser(guestName));
             }
         }
