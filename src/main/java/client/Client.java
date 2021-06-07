@@ -109,7 +109,7 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Guest updating event");
                             break;
                         case "GET USERS: OK":
-                            users = (ConcurrentSkipListMap) input.readUnshared();
+                            users = new ConcurrentSkipListMap<>((ConcurrentSkipListMap) input.readUnshared());
                             frame.showAdminFrame();
                             System.out.println("Receive users: OK -- " + users);
                             break;
@@ -123,6 +123,7 @@ public class Client extends NetworkClient implements Runnable {
                         case "CHECK CONTACT: OK":
                             user.addContact(((String) input.readObject()));
                             System.out.println("Check contact: OK");
+                            frame.showMainPanel();
                             frame.showListContacts();
                             break;
                         case "INVITATION":
