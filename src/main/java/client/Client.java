@@ -123,8 +123,8 @@ public class Client extends NetworkClient implements Runnable {
                         case "CHECK CONTACT: OK":
                             user.addContact(((String) input.readObject()));
                             System.out.println("Check contact: OK");
-                            frame.showMainPanel();
-                            frame.showListContacts();
+                            frame.showMessages();
+                            //frame.showEvents();
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
