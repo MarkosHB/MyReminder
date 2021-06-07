@@ -315,8 +315,8 @@ public abstract class ClientController implements ActionListener {
     }
 
     public void logOut() {
-        System.out.println("Log out: " + client.getUser());
-        client.setUser(null);
+        client.logOut();
+        //client.setUser(null);
         frame.showSignIn();
     }
 

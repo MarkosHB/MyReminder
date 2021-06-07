@@ -122,7 +122,7 @@ public class Event implements Serializable, Comparable {
 
     @Override
     public String toString() {
-        return "EVENT: " + title + " -> date = " + date + ", owner = " + owner + ", guests = " + guests;
+        return "EVENT - " + id + ": " + title + " -> date = " + date + ", owner = " + owner + ", guests = " + guests;
     }
 
     @Override

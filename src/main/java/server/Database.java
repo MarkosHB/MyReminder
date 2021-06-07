@@ -46,7 +46,7 @@ public class Database {
     }
 
     public void addUser(User user) {
-        users.put(user.getName(), user);
+        users.put(user.getName(), new User(user));
         mails.put(user.getMail(), user.getName());
     }
 

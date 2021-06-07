@@ -24,7 +24,7 @@ public class User implements Serializable, Comparable {
         this.password = user.password;
         this.dni = user.dni;
         this.admin = user.admin;
-        this.events = user.events;
+        this.events = user.events.clone();
         this.messages = new PriorityBlockingQueue<>(user.messages);
         this.contacts = new PriorityBlockingQueue<>(user.contacts);
     }

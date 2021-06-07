@@ -114,7 +114,7 @@ public class Client extends NetworkClient implements Runnable {
                             System.out.println("Receive users: OK -- " + users);
                             break;
                         case "CREATE EVENT: OK":
-                            event = (Event) input.readObject();
+                            event = new Event((Event) input.readObject());
                             user.putEvent(event);
                             frame.showMessages();
                             frame.showEvents();
@@ -127,7 +127,7 @@ public class Client extends NetworkClient implements Runnable {
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
-                            event = (Event) input.readUnshared();
+                            event = new Event((Event) input.readUnshared());
                             user.putEvent(event);
                             frame.showEvents();
                             user.addMessage("INVITATION: " + event.getTitle());
@@ -174,7 +174,7 @@ public class Client extends NetworkClient implements Runnable {
         try {
             this.user = user;
             output.writeObject("Sign up");
-            output.writeObject(user);
+            output.writeUnshared(new User(user));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -183,7 +183,7 @@ public class Client extends NetworkClient implements Runnable {
     public void signIn(User user) {
         try {
             output.writeObject("Sign in");
-            output.writeObject(user);
+            output.writeUnshared(new User(user));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -192,7 +192,7 @@ public class Client extends NetworkClient implements Runnable {
     public void createEvent(Event event) {
         try {
             output.writeObject("Create event");
-            output.writeObject(event);
+            output.writeUnshared(new Event(event));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -234,7 +234,7 @@ public class Client extends NetworkClient implements Runnable {
     public void inviteGuests(Event event) {
         try {
             output.writeObject("Invitation");
-            output.writeUnshared(event);
+            output.writeUnshared(new Event(event));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -243,7 +243,8 @@ public class Client extends NetworkClient implements Runnable {
     public void deleteEvent(Event event) {
         try {
             output.writeObject("Delete event");
-            output.writeUnshared(event);
+            output.writeUnshared(new Event(event));
+            user.removeEvent(event.getId());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -262,7 +263,18 @@ public class Client extends NetworkClient implements Runnable {
     public void forgottenPassword(User user) {
         try {
             output.writeObject("Forgotten password");
-            output.writeUnshared(user);
+            output.writeUnshared(new User(user));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void logOut() {
+        try {
+            System.out.println("Log out: " + user);
+            output.writeObject("Log out");
+            output.writeUnshared(new User(user));
+            user = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
