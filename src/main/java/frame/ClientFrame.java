@@ -701,6 +701,7 @@ public abstract class ClientFrame extends JFrame {
         eastPanel.remove(inboxPanel);
         eastPanel.remove(showEventPanel);
         eastPanel.remove(invitePanel);
+        eastPanel.remove(listContactsPanel);
         usersPanel.removeAll();
         JPanel panel;
         PriorityBlockingQueue<String> users = new PriorityBlockingQueue<>(client.getUsers().keySet());

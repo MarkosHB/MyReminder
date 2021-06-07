@@ -122,8 +122,8 @@ public class Client extends NetworkClient implements Runnable {
                             break;
                         case "CHECK CONTACT: OK":
                             user.addContact(((String) input.readObject()));
-                            frame.showListContacts();
                             System.out.println("Check contact: OK");
+                            frame.showListContacts();
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
