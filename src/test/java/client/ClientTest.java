@@ -8,6 +8,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +26,8 @@ class ClientTest {
 	static User TestUser;
 	static Event TestEvent;
 	static Database db;
-
+	
+	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		ScheduledExecutorService service = new ScheduledThreadPoolExecutor(4 + 1);
@@ -39,6 +41,7 @@ class ClientTest {
 	static void tearDownAfterClass() throws Exception {
 		serv = null;
 		cli = null;
+		
 	}
 
 	@BeforeEach
@@ -64,9 +67,10 @@ class ClientTest {
 	void createEventTest() throws Exception {
 		Event resultEvent = null;
 		cli.createEvent(TestEvent);
+		
 		Thread.sleep(100); // Esperando a la propagacion la accion
+		System.out.println(db.getUser(TestEvent.getOwner()).getEvents());
 		resultEvent = db.getUser(TestEvent.getOwner()).getEvent(TestEvent.getId()); // Obtiene evento almacenado
 		assertEquals(TestEvent.getId(), resultEvent.getId(), "No se cre� el evento");
 	}
-
 }
