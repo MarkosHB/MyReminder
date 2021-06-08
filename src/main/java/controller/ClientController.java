@@ -342,5 +342,9 @@ public abstract class ClientController implements ActionListener {
         client.forgottenPassword(user);
         System.out.println("Confirm forgotten password: " + user);
     }
+    
+    public void setFrame(ClientFrame fr) {  //Usado en tests
+		this.frame = fr;
+	}
 
 }
