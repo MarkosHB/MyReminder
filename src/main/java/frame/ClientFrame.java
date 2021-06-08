@@ -940,5 +940,9 @@ public abstract class ClientFrame extends JFrame {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         return formatter.parse(showEventAlarmText.getText());
     }
+    
+    public ClientController getController() { //Usado en tests
+		return this.controller;
+	}
 
 }
