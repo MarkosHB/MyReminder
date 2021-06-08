@@ -88,10 +88,11 @@ class ClientControllerTest {
 	
 	
 	@Test
-	void signUpUserTest() { 
+	void signUpUserTest() throws InterruptedException { 
 		//SIMULANDO QUE EL USUARIO INTENTA HACER SING-UP		
 		ActionEvent act = new ActionEvent(this, 0, "SIGN UP");
 		cont.actionPerformed(act);
+		Thread.sleep(2000);
 		
 		//Comprobando si se us� los metodos de prueba
 		verify(mockframe, atLeast(1)).getMailTextSignUp();
@@ -127,13 +128,5 @@ class ClientControllerTest {
 	}
 	
 	
-/*	@Test //Prueba en clase Client mientras se implementa en ClientController
-	void createEventTest() throws Exception {
-		Event resultEvent;
-		cli.createEvent(TestEvent);
-		Thread.sleep(500); //Esperando a la propagacion la accion
-		resultEvent = db.getUser(TestEvent.getOwner()).getEvent(TestEvent.getId()); //Obtiene evento almacenado
-		assertEquals(TestEvent.getId(), resultEvent.getId(), "No se cre� el evento");	
-	} */
 	
 }
