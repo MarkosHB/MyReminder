@@ -309,8 +309,8 @@ public class Client extends NetworkClient implements Runnable {
         return name;
     }
 
-    // public ClientController getController() { //Usado en tests
-    // return this.frame.getContainer();
-    // }
+    public ClientController getController() { //Usado en tests
+	   return this.frame.getController();
+     }
 
 }
