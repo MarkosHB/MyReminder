@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.mongodb.*;
 import com.mongodb.client.*;
 import com.mongodb.client.MongoClient;
+import com.mongodb.client.model.Filters;
 
 import org.bson.*;
+import org.bson.conversions.Bson;
 
 //import org.slf4j.Logger;
 
@@ -21,33 +23,25 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 public class ServerWithMongoTemplate extends MultiThreadServer implements Runnable {
 
     private String name;
     private MongoCollection<Document> users;
-    // private ConcurrentSkipListMap<String, User> users; // Name -> User
-    // private ConcurrentSkipListMap<String, String> mails; // Mail -> Name
+    private MongoCollection<Document> events;
 
-    private Database db; // Esto sustituye a users y mails
-
-    // Socket -> Write (One per user)
-    // private ConcurrentSkipListMap<String, PrintWriter> socketWriter;
     private ConcurrentSkipListMap<String, ObjectOutputStream> socketWriter;
 
-    // Constructor
     public ServerWithMongoTemplate(String name) {
 
         super(8080);
         this.name = name;
-        // users = new ConcurrentSkipListMap<>();
-        // users.put("admin", new User("admin@uma.es", "admin", "1234", "0", true));
-        // mails = new ConcurrentSkipListMap<>();
-        socketWriter = new ConcurrentSkipListMap<>();
 
         db = Database.getInstance(); // Esto sustituye a users y mails
         db.addUser(new User("admin@uma.es", "admin", "1234", "0", true));
+        socketWriter = new ConcurrentSkipListMap<>();
 
         ConnectionString connString = new ConnectionString(
                 "mongodb+srv://software:MyReminder@cluster0.cb2w0.mongodb.net/Software?w=majority");
@@ -56,16 +50,10 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
         MongoClient mongoClient = MongoClients.create(settings);
         MongoDatabase database = mongoClient.getDatabase("Software");
         users = database.getCollection("Users");
+        users = database.getCollection("Events");
 
         // Caching process
-        FindIterable<Document> dbUsers = users.find();
-        for (Document user : dbUsers) {
-            final Gson gson = new Gson();
-            final User userInstance = gson.fromJson(user.toJson(), User.class);
-            //db.addUser(user.getObjectId("_id").toString(), userInstance);
-        }
 
-        // users.insertOne(new Document("_id", "pblprz").append("Nombre", "Pablo"));
         // Document prueba = users.find(new Document("_id", "pblprz")).first();
         // System.out.println(prueba);
     }
@@ -132,20 +120,20 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
                             answerInvitation(event, output);
                             break;
                         case "FORGOTTEN PASSWORD":
-                            User aux;
-                            user = (User) input.readObject();
-                            String name;
-                            // if (mails.containsKey(user.getMail())) {
-                            if (db.containsMail(user.getMail())) {
-                                // name = mails.get(user.getMail());
-                                name = db.getUserName(user.getMail());
-                                // aux = users.get(name);
-                                aux = db.getUser(name);
-                                if (user.getDni().equals(aux.getDni())) {
-                                    aux.setPassword(user.getPassword());
-                                }
-                            }
-                            break;
+                            throw new Error("How to recover password?");
+                        // User aux;
+                        // user = (User) input.readObject();
+                        // String name;
+                        // // if (mails.containsKey(user.getMail())) {
+                        // if (db.containsMail(user.getMail())) {
+                        // // name = mails.get(user.getMail());
+                        // name = db.getUserName(user.getMail());
+                        // // aux = users.get(name);
+                        // aux = db.getUser(name);
+                        // if (user.getDni().equals(aux.getDni())) {
+                        // aux.setPassword(user.getPassword());
+                        // }
+                        // }
                         default:
                             throw new RuntimeException("Unknown command!");
                     }
@@ -172,33 +160,36 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
 
     private void signUp(User user, ObjectOutputStream output) throws IOException {
         // Compruebo que el mail y el nombre de usuario utilizado no existan
-        // if (mails.containsKey(user.getMail()) || users.containsKey(user.getName())) {
-        if (db.containsMail(user.getMail()) || db.containsUserName(user.getName())) {
+        Document existingUser = users
+                .find(Filters.or(Filters.eq("_id", user.getMail()), Filters.eq("name", user.getName()))).first();
+        final Gson gson = new Gson();
+        final User userInstance = gson.fromJson(existingUser.toJson(), User.class);
+        if (userInstance != null) {
             output.writeObject("Sign up: Error. User already exists");
         } else {
-            // Introduzco el usuario y el mail
-            // users.put(user.getName(), user);
-            db.addUser(user);
-            // mails.put(user.getMail(), user.getName());
-            db.addMail(user.getMail(), user.getName());
+            // _id = email
+            Document userDocument = Document.parse(gson.toJson(user));
+            userDocument.remove("email");
+            userDocument.append("_id", user.getMail());
+            // Guardar eventos como Array asi la db sabe que hay un campo events tipo array
+            Event events[] = {};
+            userDocument.append("events", events);
+            users.insertOne(userDocument);
             output.writeObject("Sign up: OK");
         }
     }
 
     private void signIn(User user, ObjectOutputStream output) throws IOException {
-        // Compruebo que el nombre de usuario existe
-        // if (!users.containsKey(user.getName())) {
-        if (!db.containsUserName(user.getName())) {
+        Document existingUser = users.find(Filters.eq("name", user.getName())).first();
+        final Gson gson = new Gson();
+        final User userInstance = gson.fromJson(existingUser.toJson(), User.class);
+        if (userInstance == null) {
             output.writeObject("Sign in: Error. User doesn't exist");
         } else {
-            // User userAux = users.get(user.getName());
-            User userAux = db.getUser(user.getName());
-            // Compruebo que la contraseña coincide
-            if (user.correctPassword(userAux.getPassword())) {
-                // Introduzco el Writer y le envío la información completa del usuario
+            if (user.correctPassword(userInstance.getPassword())) {
                 socketWriter.put(user.getName(), output);
                 output.writeObject("Sign in: OK");
-                output.writeObject(userAux);
+                output.writeObject(userInstance);
             } else {
                 output.writeObject("Sign in: Error. Incorrect password");
             }
@@ -208,18 +199,23 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
     private void createEvent(Event event, ObjectOutputStream output) throws IOException {
         // Introduzco el evento
         // User user = users.get(event.getOwner());
-        User user = db.getUser(event.getOwner());
-        user.putEvent(event);
+        Document existingUser = users.find(Filters.eq("_id", event.getOwner())).first();
+        final Gson gson = new Gson();
+        final User userInstance = gson.fromJson(existingUser.toJson(), User.class);
+        userInstance.putEvent(event);
+
+        events.insertOne(Document.parse(gson.toJson(event)));
+
         output.writeObject("Create event: OK");
         output.writeObject(event);
         // Compruebo los invitados, actualizo sus eventos y les envío un mensaje si
         // están activos
         for (String guestName : event.getGuests().keySet()) {
-            // if (users.containsKey(guestName)) {
-            if (db.containsUserName(guestName)) {
+            Document guestDocument = users.find(Filters.eq("name", guestName)).first();
+            final User guestInstance = gson.fromJson(guestDocument.toJson(), User.class);
+            if (guestInstance != null) {
                 // user = users.get(guestName);
-                user = db.getUser(guestName);
-                user.putEvent(event);
+                guestInstance.putEvent(event);
                 if (socketWriter.containsKey(guestName)) {
                     // Se puede enviar el evento y que el cliente lo actualice
                     socketWriter.get(guestName).writeObject("Invitation");
@@ -237,7 +233,10 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
     private void sendInvitation(Event event, ObjectOutputStream output) throws IOException {
         // Comparo los nuevos invitados con los que había anteriormente
         // Event eventAux = users.get(event.getOwner()).getEvent(event.getId());
-        Event eventAux = db.getUser(event.getOwner()).getEvent(event.getId());
+        Document existingUser = users.find(Filters.eq("_id", event.getOwner())).first();
+        final Gson gson = new Gson();
+        final User userInstance = gson.fromJson(existingUser.toJson(), User.class);
+        Event eventAux = userInstance.getEvent(event.getId());
         for (String guestName : event.getGuests().keySet()) {
             // Si hay algun invitado nuevo le envio un mensaje si está activo
             if (!eventAux.containsGuest(guestName)) {
@@ -260,20 +259,27 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
     private void answerInvitation(Event event, ObjectOutputStream output) throws IOException {
         // Actualizo el evento del propietario y de los invitados
         // users.get(event.getOwner()).putEvent(event);
-        db.getUser(event.getOwner()).putEvent(event);
+        Document existingUser = users.find(Filters.eq("_id", event.getOwner())).first();
+        final Gson gson = new Gson();
+        final User userInstance = gson.fromJson(existingUser.toJson(), User.class);
+        userInstance.putEvent(event);
         for (String guestName : event.getGuests().keySet()) {
-            // users.get(guestName).putEvent(event);
-            db.getUser(guestName).putEvent(event);
-            // Si hay algun invitado activo le envio un mensaje
-            if (socketWriter.containsKey(guestName)) {
-                // Se puede enviar el evento y que el cliente lo actualice
-                socketWriter.get(guestName).writeObject("Invitation");
-                socketWriter.get(guestName).writeObject(event);
-                /*
-                 * // Tambien se puede enviar el usuario completo actualizado y el cliente
-                 * simplemente lo copia socketWriter.get(name).writeObject("Invitation");
-                 * socketWriter.get(name).writeObject(user);
-                 */
+            Document guestDocument = users.find(Filters.eq("name", guestName)).first();
+            final User guestInstance = gson.fromJson(guestDocument.toJson(), User.class);
+            if (guestInstance != null) {
+                // user = users.get(guestName);
+                guestInstance.putEvent(event);
+                // Si hay algun invitado activo le envio un mensaje
+                if (socketWriter.containsKey(guestName)) {
+                    // Se puede enviar el evento y que el cliente lo actualice
+                    socketWriter.get(guestName).writeObject("Invitation");
+                    socketWriter.get(guestName).writeObject(event);
+                    /*
+                     * // Tambien se puede enviar el usuario completo actualizado y el cliente
+                     * simplemente lo copia socketWriter.get(name).writeObject("Invitation");
+                     * socketWriter.get(name).writeObject(user);
+                     */
+                }
             }
         }
     }

@@ -12,9 +12,10 @@ import java.io.*;
 import java.net.Socket;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import controller.ClientController;
+
 /**
- * Clase para el cliente
- * En ella crearemos el cliente y las respectivas
+ * Clase para el cliente En ella crearemos el cliente y las respectivas
  * funciones asociadas a este Más concretamente, se realizará la comunicación
  * con el servidor y se tratarán los mensajes recibidos por este
  */
@@ -124,7 +125,7 @@ public class Client extends NetworkClient implements Runnable {
                             user.addContact(((String) input.readObject()));
                             System.out.println("Check contact: OK");
                             frame.showMessages();
-                            //frame.showEvents();
+                            // frame.showEvents();
                             break;
                         case "INVITATION":
                             System.out.println("Invitation");
@@ -134,8 +135,8 @@ public class Client extends NetworkClient implements Runnable {
                             user.addMessage("INVITATION: " + event.getTitle());
                             frame.showMessages();
                             System.out.println(event);
-                            //user = (User) input.readUnshared();
-                            //user.putEvent(event);
+                            // user = (User) input.readUnshared();
+                            // user.putEvent(event);
                             break;
                         case "DELETE YOURSELF":
                             user = null;
@@ -150,7 +151,7 @@ public class Client extends NetworkClient implements Runnable {
                             break;
                         default:
                             System.out.println(line);
-                            //throw new RuntimeException("Unknown command!");
+                            // throw new RuntimeException("Unknown command!");
                     }
                 }
             }
@@ -168,7 +169,8 @@ public class Client extends NetworkClient implements Runnable {
     }
 
     // -----------------------------------------------------------------------------------
-    // -------------------------------- FUNCIONES CREADAS --------------------------------
+    // -------------------------------- FUNCIONES CREADAS
+    // --------------------------------
     // -----------------------------------------------------------------------------------
 
     public void signUp(User user) {
@@ -282,7 +284,8 @@ public class Client extends NetworkClient implements Runnable {
     }
 
     // -----------------------------------------------------------------------------------
-    // --------------------------- GETTERS, SETTERS AND CLEARS ---------------------------
+    // --------------------------- GETTERS, SETTERS AND CLEARS
+    // ---------------------------
     // -----------------------------------------------------------------------------------
 
     /*
@@ -309,8 +312,8 @@ public class Client extends NetworkClient implements Runnable {
         return name;
     }
 
-    public ClientController getController() { //Usado en tests
-	   return this.frame.getController();
-     }
+    public ClientController getController() { // Usado en tests
+        return this.frame.getController();
+    }
 
 }
