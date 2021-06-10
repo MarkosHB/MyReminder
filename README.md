@@ -63,7 +63,7 @@
   <li> Patrón de diseño (Template Method) ✔️
     --> Pablo
   </li>
-  <li> Testeo del sistema
+  <li> Testeo del sistema ✔️
     --> Samuel y Yussef
   </li>
   <li> Diapositivas ✔️
