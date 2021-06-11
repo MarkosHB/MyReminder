@@ -12,9 +12,9 @@
 <h2> Instrucciones de uso </h2>
 <p align="justify">
   Para ejecutar la aplicación se puede hacer siguiendo cualquiera de las siguientes instrucciones:
-  1. Si está en macOS o Linux, descargue el directorio completo del proyecto y ejecute el script MyReminder, con eso debería ser suficiente.
-  2. Si lo anterior no le funcionó, ejecute el .jar con el comando: java -Djdk.tls.client.protocols=TLSv1.2 -jar g6-myreminder.jar
-  3. Si tampoco lo ha conseguido, descargue el proyecto en IntelliJ y ejecute la clase Demo.
+  <ul> 1. Si está en macOS o Linux, descargue el directorio completo del proyecto y ejecute el script MyReminder. </ul>
+  <ul> 2. Si lo anterior no le funcionó, ejecute el .jar con el comando: java -Djdk.tls.client.protocols=TLSv1.2 -jar g6-myreminder.jar </ul>
+  <ul> 3. Si tampoco le funcionó el punto anterior, descargue el proyecto en IntelliJ y ejecute la clase Demo. </ul>
 </p>
   
 
