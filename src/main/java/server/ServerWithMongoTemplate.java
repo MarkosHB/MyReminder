@@ -31,7 +31,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
     private String name;
     private MongoCollection<Document> users;
     private MongoCollection<Document> events;
-
+    private Database db;
     private ConcurrentSkipListMap<String, ObjectOutputStream> socketWriter;
 
     public ServerWithMongoTemplate(String name) {
@@ -71,7 +71,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
          * socket.getOutputStream(); ObjectOutputStream objectOutputStream = new
          * ObjectOutputStream(outputStream);
          * objectOutputStream.writeObject(List<Message> messages);
-         * 
+         *
          * // EJEMPLO DE COMO RECIBIR OBJETOS InputStream inputStream =
          * socket.getInputStream(); ObjectInputStream objectInputStream = new
          * ObjectInputStream(inputStream); List<Message> listOfMessages =
@@ -91,7 +91,7 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
          * // Leemos mensaje de presentación del cliente line = input.readLine(); words
          * = line.split(" "); System.out.println("Number: " + words[0] + " -> " +
          * "Name: " + words[1] + "\n");
-         * 
+         *
          * // Guardamos PrintWriter para el cliente socketWriter.put(words[0], output);
          */
 
@@ -120,20 +120,21 @@ public class ServerWithMongoTemplate extends MultiThreadServer implements Runnab
                             answerInvitation(event, output);
                             break;
                         case "FORGOTTEN PASSWORD":
-                            throw new Error("How to recover password?");
-                        // User aux;
-                        // user = (User) input.readObject();
-                        // String name;
-                        // // if (mails.containsKey(user.getMail())) {
-                        // if (db.containsMail(user.getMail())) {
-                        // // name = mails.get(user.getMail());
-                        // name = db.getUserName(user.getMail());
-                        // // aux = users.get(name);
-                        // aux = db.getUser(name);
-                        // if (user.getDni().equals(aux.getDni())) {
-                        // aux.setPassword(user.getPassword());
-                        // }
-                        // }
+                            User aux;
+                            user = (User) input.readObject();
+                            String name;
+                            Document userWithMail = users.find(Filters.eq("_id", user.getMail())).first();
+                            final Gson gson = new Gson();
+                            final User userInstance = gson.fromJson(userWithMail.toJson(), User.class);
+                            if (userInstance != null) {
+                                // name = mails.get(user.getMail());
+                                Document userWithName = users.find(Filters.eq("name", userInstance.getName())).first();
+                                final User auxUser = gson.fromJson(userWithName.toJson(), User.class);
+                                if (userInstance.getDni().equals(auxUser.getDni())) {
+                                    users.findOneAndUpdate(Filters.eq("_id", user.getMail()),
+                                            new Document("password", user.getPassword()));
+                                }
+                            }
                         default:
                             throw new RuntimeException("Unknown command!");
                     }
