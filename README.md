@@ -9,15 +9,6 @@
  <p align="center"> <img src="./Logo & Presentación/MyReminderLogo.png" height = "200px" width = "200px" class="center" > </p>
 
 
-<h2> Instrucciones de uso </h2>
-<p align="justify">
-  Para ejecutar la aplicación se puede hacer siguiendo cualquiera de las siguientes instrucciones:
-  <ul> 1. Si está en macOS o Linux, descargue el directorio completo del proyecto y ejecute el script MyReminder. </ul>
-  <ul> 2. Si lo anterior no le funcionó, ejecute el .jar con el comando: java -Djdk.tls.client.protocols=TLSv1.2 -jar g6-myreminder.jar </ul>
-  <ul> 3. Si tampoco le funcionó el punto anterior, descargue el proyecto en IntelliJ y ejecute la clase Demo. </ul>
-</p>
-  
-
 <!-- *** SECCION PRESEMTACION *** -->
 <h2> 📌 Nuestro equipo </h2>
 <ul>
@@ -51,3 +42,14 @@
     <ul> Diego - Samuel - Miguel - Yussef </ul>
   </li>
 </ul>
+
+
+
+<h2> Instrucciones de uso </h2>
+<p align="justify">
+  Para ejecutar la aplicación se puede hacer siguiendo cualquiera de las siguientes instrucciones:
+  <ul> 1. Si está en macOS o Linux, descargue el directorio completo del proyecto y ejecute el script MyReminder. </ul>
+  <ul> 2. Si lo anterior no le funcionó, ejecute el .jar con el comando: java -Djdk.tls.client.protocols=TLSv1.2 -jar g6-myreminder.jar </ul>
+  <ul> 3. Si tampoco le funcionó el punto anterior, descargue el proyecto en IntelliJ y ejecute la clase Demo. </ul>
+</p>
+  
